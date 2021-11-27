@@ -345,7 +345,7 @@ server {
         proxy_pass 127.0.0.1:${nodeport};
     }
     } " >> /etc/nginx/nginx.conf
-    ehco "落地nginx tcp端口为:${ngport1}"
+    echo "落地nginx tcp端口为:${ngport1}"
     elif [ "$cNum" = "2" ] ;then
     sed -i '$d' /etc/nginx/nginx.conf
     read -p "输入落地nginx ip:" ngip1
@@ -362,7 +362,7 @@ server {
         proxy_pass ${ngip1}:${ngport2};
     }
     } " >> /etc/nginx/nginx.conf
-    ehco "中转监听的tcp端口为:${zzport}"
+    echo "中转监听的tcp端口为:${zzport}"
 fi
 sleep 1
 systemctl restart nginx
