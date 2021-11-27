@@ -358,3 +358,4 @@ server {
     } " >> /etc/nginx/nginx.conf
     ehco "中转监听的tcp端口为:${zzport}"
 fi
+fi
