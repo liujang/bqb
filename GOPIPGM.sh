@@ -173,6 +173,12 @@ cd GOPIP && chmod +x run.sh && ./run.sh
 echo "已经对接完成！！!。"
 sleep 2
 cd
+crontab -l > conf
+echo "@reboot ./GOPIP/run.sh" >> conf
+crontab conf
+rm -f conf
+echo "已设置开机自动运行后端"
+cd
 elif [ "$aNum" = "3" ] ;then
 apt-get update -y && apt install nginx -y
 cd
