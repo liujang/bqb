@@ -201,7 +201,7 @@ nohup udp2raw_amd64 -s -l0.0.0.0:${tcpport1} -r127.0.0.1:${udpport2} -k "passwd"
 echo '
 nohup speederv2_amd64 -s -l127.0.0.1:${udpport2}  -r127.0.0.1:${udpport1} --mode 0 -f2:4 --timeout 1 >> /dev/null 2>&1 &
 nohup udp2raw_amd64 -s -l0.0.0.0:${tcpport1} -r127.0.0.1:${udpport2} -k "passwd" --raw-mode faketcp -a >> /dev/null 2>&1 &
-' >> /ziqi.sh
+' >> ziqi.sh
 echo "落地机udp伪装加速的外网端口为:${tcpport1}"
 elif [ "$bNum" = "2" ] ;then
 read -p "输入落地机的外网ip:" ip1
@@ -213,12 +213,12 @@ nohup speederv2_amd64 -c -l0.0.0.0:${udpport4} -r127.0.0.1:${udpport3} --mode 0 
 echo '
 nohup udp2raw_amd64  -c -l127.0.0.1:${udpport3} -r${ip1}:${tcpport2} -k "passwd" --raw-mode faketcp>> /dev/null 2>&1 &
 nohup speederv2_amd64 -c -l0.0.0.0:${udpport4} -r127.0.0.1:${udpport3} --mode 0 -f2:4 --timeout 1 >> /dev/null 2>&1 &
+' >> ziqi.sh
 echo "最终的外网udp端口为:${udpport4}"
-' >> /ziqi.sh
 fi
 cd
 crontab -l > conf
-echo "@reboot /ziqi.sh" >> conf
+echo "@reboot ziqi.sh" >> conf
 crontab conf
 rm -f conf
 echo "已设置开机自动运行udp隧道"
