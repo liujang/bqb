@@ -346,7 +346,7 @@ server {
     }
     } " >> /etc/nginx/nginx.conf
     ehco "落地nginx tcp端口为:${ngport1}"
-    elif [ "$aNum" = "2" ] ;then
+    elif [ "$cNum" = "2" ] ;then
     sed -i '$d' /etc/nginx/nginx.conf
     read -p "输入落地nginx ip:" ngip1
     read -p "输入落地nginx 域名:" nodeym2
