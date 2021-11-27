@@ -16,7 +16,7 @@ echo -e "
  ${GREEN} 7.安装内核
  ${GREEN} 8.删除防火墙
  ${GREEN} 9.增加swap
- ${GREEN} 10.tcp隧道(tls)
+ ${GREEN} 10.安装udp隧道工具
  "
  read -p "输入选项:" aNum
  if [ "$aNum" = "1" ];then
@@ -177,16 +177,6 @@ bash <(curl -Ls https://raw.githubusercontent.com/XrayR-project/XrayR-release/ma
 cd
 elif [ "$aNum" = "6" ] ;then
 cd
-wget -N --no-check-certificate "https://github.91chi.fun//https://raw.githubusercontent.com/liujang/bqb/main/ziqi.sh" && chmod +x ziqi.sh && ./ziqi.sh
-mkdir udp && cd udp
-wget https://github.91chi.fun//https://github.com/wangyu-/udp2raw/releases/download/20200818.0/udp2raw_binaries.tar.gz
-wget https://github.91chi.fun//https://github.com/wangyu-/UDPspeeder/releases/download/20210116.0/speederv2_binaries.tar.gz
-tar -xzvf udp2raw_binaries.tar.gz
-tar -xzvf speederv2_binaries.tar.gz
-mv udp2raw_amd64 /usr/bin/ && chmod +x /usr/bin/udp2raw_amd64
-mv speederv2_amd64 /usr/bin/ && chmod +x /usr/bin/speederv2_amd64
-export PATH="$PATH:/usr/bin"
-cd
 echo -e "
  ${GREEN} 1.落地机
  ${GREEN} 2.中转机
@@ -286,5 +276,14 @@ echo " ###########设置开机自启动############"
 echo '/mnt/swap swap swap defaults 0 0' >> /etc/fstab
 echo "All done！Thanks for using this shell script"
 elif [ "$aNum" = "10" ] ;then
-echo "代开发"
+wget -N --no-check-certificate "https://github.91chi.fun//https://raw.githubusercontent.com/liujang/bqb/main/ziqi.sh" && chmod +x ziqi.sh && ./ziqi.sh
+mkdir udp && cd udp
+wget https://github.91chi.fun//https://github.com/wangyu-/udp2raw/releases/download/20200818.0/udp2raw_binaries.tar.gz
+wget https://github.91chi.fun//https://github.com/wangyu-/UDPspeeder/releases/download/20210116.0/speederv2_binaries.tar.gz
+tar -xzvf udp2raw_binaries.tar.gz
+tar -xzvf speederv2_binaries.tar.gz
+mv udp2raw_amd64 /usr/bin/ && chmod +x /usr/bin/udp2raw_amd64
+mv speederv2_amd64 /usr/bin/ && chmod +x /usr/bin/speederv2_amd64
+export PATH="$PATH:/usr/bin"
+cd
 fi
