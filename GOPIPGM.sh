@@ -6,6 +6,43 @@ BLUE="\033[0;36m"
 FUCHSIA="\033[0;35m"
 echo "export PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:~/bin:$PATH" >> ~/.bashrc
 source ~/.bashrc
+if [[ "$EUID" -ne 0 ]]; then
+    echo "false"
+  else
+    echo "true"
+  fi
+if [[ -f /etc/redhat-release ]]; then
+		release="centos"
+	elif cat /etc/issue | grep -q -E -i "debian"; then
+		release="debian"
+	elif cat /etc/issue | grep -q -E -i "ubuntu"; then
+		release="ubuntu"
+	elif cat /etc/issue | grep -q -E -i "centos|red hat|redhat"; then
+		release="centos"
+	elif cat /proc/version | grep -q -E -i "debian"; then
+		release="debian"
+	elif cat /proc/version | grep -q -E -i "ubuntu"; then
+		release="ubuntu"
+	elif cat /proc/version | grep -q -E -i "centos|red hat|redhat"; then
+		release="centos"
+    fi
+    
+     if [[ $release = "ubuntu" || $release = "debian" ]]; then
+    PM='apt'
+  elif [[ $release = "centos" ]]; then
+    PM='yum'
+  else
+    exit 1
+  fi
+  # PM='apt'
+  if [ $PM = 'apt' ] ; then
+    apt-get install -y cron
+    service cron start
+elif [ $PM = 'yum' ]; then 
+    yum install -y vixie-cron
+    yum install -y crontabs
+    service cron start
+fi
 echo -e "
  ${GREEN} 1.centos禁用selinux
  ${GREEN} 2.对接ssr
@@ -59,16 +96,11 @@ if [[ -f /etc/redhat-release ]]; then
     apt-get update -y
     apt-get install vim curl git wget zip unzip python3 python3-pip git -y
     apt install net-tools -y
-    apt-get install -y cron
-    service cron start
 elif [ $PM = 'yum' ]; then 
     yum update -y
     systemctl stop initial-setup-text
     yum install net-tools -y
     yum install vim curl git wget zip unzip python3 python3-pip git -y
-    yum install -y vixie-cron
-    yum install -y crontabs
-    service cron start
     sed -i '1s/python/'python2'/' /bin/yum
     sed -i '1s/python22/'python2'/' /bin/yum
     sed -i '1s/python/'python2'/' /usr/libexec/urlgrabber-ext-down
