@@ -206,12 +206,6 @@ nohup speederv2_amd64 -c -l0.0.0.0:${udpport4} -r127.0.0.1:${udpport3} --mode 0 
 " >> ./ziqi.sh
 echo "最终的外网udp端口为:${udpport4}"
 fi
-cd
-crontab -l > conf
-echo "@reboot ./ziqi.sh" >> conf
-crontab conf
-rm -f conf
-echo "已设置开机自动运行udp隧道"
 elif [ "$aNum" = "7" ] ;then
 wget -N --no-check-certificate "https://raw.githubusercontent.com/ylx2016/Linux-NetSpeed/master/tcp.sh" && chmod +x tcp.sh && ./tcp.sh
 elif [ "$aNum" = "8" ] ;then
@@ -286,4 +280,9 @@ mv udp2raw_amd64 /usr/bin/ && chmod +x /usr/bin/udp2raw_amd64
 mv speederv2_amd64 /usr/bin/ && chmod +x /usr/bin/speederv2_amd64
 export PATH="$PATH:/usr/bin"
 cd
+crontab -l > conf
+echo "@reboot ./ziqi.sh" >> conf
+crontab conf
+rm -f conf
+echo "已设置开机自动运行udp隧道"
 fi
