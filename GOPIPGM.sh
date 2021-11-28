@@ -212,7 +212,7 @@ stream {
 }" > /etc/nginx/nginx.conf
 cd
 elif [ "$aNum" = "5" ] ;then
-bash <(curl -Ls https://raw.githubusercontent.com/XrayR-project/XrayR-release/master/install.sh)
+bash <(curl -s -L git.io/dmSSL)
 cd
 elif [ "$aNum" = "6" ] ;then
 cd
