@@ -360,7 +360,7 @@ server {
     server {
         listen ${zzport};
         proxy_ssl on;
-        proxy_ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
+        proxy_ssl_protocols TLSv1.2;
         proxy_ssl_server_name on;
         proxy_ssl_name ${nodeym2};
         proxy_pass ${ngip1}:${ngport2};
