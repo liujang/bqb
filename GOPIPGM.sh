@@ -341,8 +341,6 @@ server {
         ssl_protocols TLSv1.2;
         ssl_certificate /home/ssl/${nodeym1}/1.pem; # 证书地址
 	ssl_certificate_key /home/ssl/${nodeym1}/1.key; # 秘钥地址
-        ssl_session_cache shared:SSL:50m; # 1m 4000个，
-        ssl_session_timeout 1h; # 1小时过期 1 hour during which sessions can be re-used.
         ssl_session_tickets off;
         ssl_prefer_server_ciphers on;  # prefer a list of ciphers to prevent old and slow ciphers
         ssl_ciphers 'EECDH+AESGCM:EDH+AESGCM:AES256+EECDH:AES256+EDH';
@@ -364,6 +362,9 @@ server {
         proxy_ssl_server_name on;
         proxy_ssl_name ${nodeym2};
         proxy_pass ${ngip1}:${ngport2};
+	ssl_session_tickets off;
+        ssl_prefer_server_ciphers on;  # prefer a list of ciphers to prevent old and slow ciphers
+        ssl_ciphers 'EECDH+AESGCM:EDH+AESGCM:AES256+EECDH:AES256+EDH';
     }
     } " >> /etc/nginx/nginx.conf
     echo "中转监听的tcp端口为:${zzport}"
