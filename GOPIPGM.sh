@@ -331,10 +331,10 @@ echo -e "
  "
 read -p "输入选项:" cNum
 if [ "$cNum" = "1" ] ;then
-sed -i '$d' /etc/nginx/nginx.conf
 read -p "输入域名:" nodeym1
 read -p "输入被转发的端口:" nodeport
 read -p "输入监听端口(外网)1:" ngport1
+sed -i '$d' /etc/nginx/nginx.conf
 echo "
 server {
         listen ${ngport1} ssl;
@@ -351,11 +351,11 @@ server {
     } " >> /etc/nginx/nginx.conf
     echo "落地nginx tcp端口为:${ngport1}"
     elif [ "$cNum" = "2" ] ;then
-    sed -i '$d' /etc/nginx/nginx.conf
     read -p "输入落地nginx ip:" ngip1
     read -p "输入落地nginx 域名:" nodeym2
     read -p "输入落地nginx tcp端口2:" ngport2
     read -p "输入中转监听 tcp端口:" zzport
+    sed -i '$d' /etc/nginx/nginx.conf
     echo "
     server {
         listen ${zzport};
