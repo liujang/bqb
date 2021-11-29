@@ -343,7 +343,7 @@ server {
 	ssl_certificate_key /home/ssl/${nodeym1}/1.key; # 秘钥地址
         ssl_session_tickets off;
         ssl_prefer_server_ciphers on;  # prefer a list of ciphers to prevent old and slow ciphers
-        ssl_ciphers 'EECDH+AESGCM:EDH+AESGCM:AES256+EECDH:AES256+EDH';
+        ssl_ciphers 'EECDH+AESGCM';
         proxy_pass 127.0.0.1:${nodeport};
     }
     } " >> /etc/nginx/nginx.conf
