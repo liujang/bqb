@@ -315,7 +315,7 @@ server {
 	ssl_certificate_key /home/ssl/${nodeym1}/1.key; # 秘钥地址
 	ssl_session_tickets off;
         ssl_prefer_server_ciphers on;  # prefer a list of ciphers to prevent old and slow ciphers
-        ssl_ciphers 'EECDH+AESGCM';
+        ssl_ciphers 'NULL';
         proxy_pass 127.0.0.1:${nodeport};
     }
     } " >> /etc/nginx/nginx.conf
