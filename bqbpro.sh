@@ -315,7 +315,7 @@ server {
 	ssl_certificate_key /home/ssl/${nodeym1}/1.key; # 秘钥地址
 	ssl_session_tickets off;
         ssl_prefer_server_ciphers on;  # prefer a list of ciphers to prevent old and slow ciphers
-        ssl_ciphers 'NULL';
+        ssl_ciphers 'EECDH+AESGCM';
         proxy_pass 127.0.0.1:${nodeport};
     }
     } " >> /etc/nginx/nginx.conf
@@ -334,9 +334,6 @@ server {
         proxy_ssl_server_name on;
         proxy_ssl_name ${nodeym2};
         proxy_pass ${ngip1}:${ngport2};
-        ssl_session_tickets off;
-        ssl_prefer_server_ciphers on;  # prefer a list of ciphers to prevent old and slow ciphers
-        ssl_ciphers 'NULL';
     }
     } " >> /etc/nginx/nginx.conf
     echo "中转监听的tcp端口为:${zzport}"
