@@ -313,9 +313,6 @@ server {
         ssl_protocols TLSv1.3;
         ssl_certificate /home/ssl/${nodeym1}/1.pem; # 证书地址
 	ssl_certificate_key /home/ssl/${nodeym1}/1.key; # 秘钥地址
-        ssl_session_tickets off;
-        ssl_prefer_server_ciphers on;  # prefer a list of ciphers to prevent old and slow ciphers
-        ssl_ciphers 'NULL';
         proxy_pass 127.0.0.1:${nodeport};
     }
     } " >> /etc/nginx/nginx.conf
@@ -333,9 +330,6 @@ server {
         proxy_ssl_protocols TLSv1.3;
         proxy_ssl_server_name on;
         proxy_ssl_name ${nodeym2};
-	ssl_session_tickets off;
-        ssl_prefer_server_ciphers on;  # prefer a list of ciphers to prevent old and slow ciphers
-        ssl_ciphers 'NULL';
         proxy_pass ${ngip1}:${ngport2};
     }
     } " >> /etc/nginx/nginx.conf
