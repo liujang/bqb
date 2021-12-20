@@ -197,10 +197,10 @@ if [ "$bNum" = "1" ];then
 read -p "输入被加速的udp端口1:" udpport1
 read -p "输入监听的udp端口2:" udpport2
 read -p "输入监听的伪装tcp端口(外网端口):" tcpport1
-nohup speederv2_amd64 -s -l127.0.0.1:${udpport2} -r127.0.0.1:${udpport1}  -f20:10 -k "passwd" --mode 0 -q1 >> /dev/null 2>&1 &
+nohup speederv2_amd64 -s -l127.0.0.1:${udpport2} -r127.0.0.1:${udpport1}  -f20:10 -k "passwd" --mode 0 >> /dev/null 2>&1 &
 nohup udp2raw_amd64 -s -l0.0.0.0:${tcpport1} -r127.0.0.1:${udpport2} -k "passwd" --raw-mode faketcp -a >> /dev/null 2>&1 &
 echo "
-nohup speederv2_amd64 -s -l127.0.0.1:${udpport2}  -r127.0.0.1:${udpport1} --mode 0 -f2:4 --timeout 1 >> /dev/null 2>&1 &
+nohup speederv2_amd64 -s -l127.0.0.1:${udpport2} -r127.0.0.1:${udpport1}  -f20:10 -k "passwd" --mode 0 >> /dev/null 2>&1 &
 nohup udp2raw_amd64 -s -l0.0.0.0:${tcpport1} -r127.0.0.1:${udpport2} -k "passwd" --raw-mode faketcp -a >> /dev/null 2>&1 &
 " >> ./ziqi.sh
 echo "落地机udp伪装加速的外网端口为:${tcpport1}"
@@ -209,10 +209,10 @@ read -p "输入落地机的外网ip:" ip1
 read -p "输入落地机udp伪装加速的外网端口:" tcpport2
 read -p "输入中转机监听的udp端口3(内外网都行):" udpport3
 read -p "输入中转机监听的udp端口4（外网）:" udpport4
-nohup udp2raw_amd64  -c -l127.0.0.1:${udpport3} -r${ip1}:${tcpport2} -k "passwd" --raw-mode faketcp>> /dev/null 2>&1 &
+nohup udp2raw_amd64  -c -l127.0.0.1:${udpport3} -r${ip1}:${tcpport2} -k "passwd" --raw-mode faketcp >> /dev/null 2>&1 &
 nohup speederv2_amd64 -c -l0.0.0.0:${udpport4} -r127.0.0.1:${udpport3} -f20:10 -k "passwd" --mode 0 >> /dev/null 2>&1 &
 echo "
-nohup udp2raw_amd64  -c -l127.0.0.1:${udpport3} -r${ip1}:${tcpport2} -k "passwd" --raw-mode faketcp>> /dev/null 2>&1 &
+nohup udp2raw_amd64  -c -l127.0.0.1:${udpport3} -r${ip1}:${tcpport2} -k "passwd" --raw-mode faketcp >> /dev/null 2>&1 &
 nohup speederv2_amd64 -c -l0.0.0.0:${udpport4} -r127.0.0.1:${udpport3} -f20:10 -k "passwd" --mode 0 >> /dev/null 2>&1 &
 " >> ./ziqi.sh
 echo "最终的外网udp端口为:${udpport4}"
