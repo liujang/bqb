@@ -233,13 +233,12 @@ echo "落地机udp伪装加速的外网端口为:${udpport2}"
 elif [ "$bNum" = "2" ] ;then
 read -p "输入落地机的外网ip:" ip1
 read -p "输入落地机udp伪装加速的外网端口:" tcpport2
-read -p "输入中转机监听的udp端口3(内外网都行):" udpport3
 read -p "输入中转机监听的udp端口4（外网）:" udpport4
-nohup pingtunnel -type client -l 127.0.0.1:${udpport3} -s ${ip1} -t ${ip1}:${tcpport2} >> /dev/null 2>&1 &
-nohup speederv2_amd64 -c -l0.0.0.0:${udpport4} -r127.0.0.1:${udpport3} -f20:10 -k "passwd" --mode 0 >> /dev/null 2>&1 &
+nohup pingtunnel -type client -l 127.0.0.1:${tcpport2} -s ${ip1} -t ${ip1}:${tcpport2} >> /dev/null 2>&1 &
+nohup speederv2_amd64 -c -l0.0.0.0:${udpport4} -r127.0.0.1:${tcpport2} -f20:10 -k "passwd" --mode 0 >> /dev/null 2>&1 &
 echo "
-nohup pingtunnel -type client -l 127.0.0.1:${udpport3} -s ${ip1} -t ${ip1}:${tcpport2} >> /dev/null 2>&1 &
-nohup speederv2_amd64 -c -l0.0.0.0:${udpport4} -r127.0.0.1:${udpport3} -f20:10 -k "passwd" --mode 0 >> /dev/null 2>&1 &
+nohup pingtunnel -type client -l 127.0.0.1:${tcpport2} -s ${ip1} -t ${ip1}:${tcpport2} >> /dev/null 2>&1 &
+nohup speederv2_amd64 -c -l0.0.0.0:${udpport4} -r127.0.0.1:${tcpport2} -f20:10 -k "passwd" --mode 0 >> /dev/null 2>&1 &
 " >> ./ziqi.sh
 echo "最终的外网udp端口为:${udpport4}"
 fi
