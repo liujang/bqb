@@ -227,7 +227,6 @@ read -p "输入监听的udp端口2(外网):" udpport2
 nohup pingtunnel -type server >> /dev/null 2>&1 &
 nohup speederv2_amd64 -s -l0.0.0.0:${udpport2} -r127.0.0.1:${udpport1}  -f20:10 -k "passwd" --mode 0 >> /dev/null 2>&1 &
 echo "
-nohup pingtunnel -type server >> /dev/null 2>&1 &
 nohup speederv2_amd64 -s -l0.0.0.0:${udpport2} -r127.0.0.1:${udpport1}  -f20:10 -k "passwd" --mode 0 >> /dev/null 2>&1 &
 " >> ./ziqi.sh
 echo "落地机udp伪装加速的外网端口为:${udpport2}"
