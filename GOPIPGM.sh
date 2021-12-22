@@ -36,11 +36,12 @@ if [[ -f /etc/redhat-release ]]; then
   fi
   # PM='apt'
   if [ $PM = 'apt' ] ; then
-    apt-get install -y cron
+    apt-get install cron unzip lsof -y
     service cron start
 elif [ $PM = 'yum' ]; then 
     yum install -y vixie-cron
     yum install -y crontabs
+    yum install unzip lsof -y
     service cron start
 fi
 echo -e "
