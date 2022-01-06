@@ -64,121 +64,93 @@ echo "3s后重启系统"
 sleep 3
 reboot
 elif [ "$aNum" = "2" ] ;then
-if [[ "$EUID" -ne 0 ]]; then
-    echo "false"
-  else
-    echo "true"
-  fi
-if [[ -f /etc/redhat-release ]]; then
-		release="centos"
-	elif cat /etc/issue | grep -q -E -i "debian"; then
-		release="debian"
-	elif cat /etc/issue | grep -q -E -i "ubuntu"; then
-		release="ubuntu"
-	elif cat /etc/issue | grep -q -E -i "centos|red hat|redhat"; then
-		release="centos"
-	elif cat /proc/version | grep -q -E -i "debian"; then
-		release="debian"
-	elif cat /proc/version | grep -q -E -i "ubuntu"; then
-		release="ubuntu"
-	elif cat /proc/version | grep -q -E -i "centos|red hat|redhat"; then
-		release="centos"
-    fi
-    
-     if [[ $release = "ubuntu" || $release = "debian" ]]; then
-    PM='apt'
-  elif [[ $release = "centos" ]]; then
-    PM='yum'
-  else
-    exit 1
-  fi
-  # PM='apt'
-  if [ $PM = 'apt' ] ; then
-    apt-get update -y
-    apt-get install vim curl git wget zip unzip python3 python3-pip git -y
-    apt install net-tools -y
-elif [ $PM = 'yum' ]; then 
-    yum update -y
-    systemctl stop initial-setup-text
-    yum install net-tools -y
-    yum install vim curl git wget zip unzip python3 python3-pip git -y
-    sed -i '1s/python/'python2'/' /bin/yum
-    sed -i '1s/python22/'python2'/' /bin/yum
-    sed -i '1s/python/'python2'/' /usr/libexec/urlgrabber-ext-down
-    sed -i '1s/python22/'python2'/' /usr/libexec/urlgrabber-ext-down
-fi
+bash <(curl -Ls https://raw.githubusercontent.com/XrayR-project/XrayR-release/master/install.sh)
 cd
-pip3 install --upgrade pip
-echo -e
-git clone https://github.com/lizhe0608/GOPIP.git
-echo -e
-cd GOPIP
-pip3 install -r requirements.txt
-sleep 5
-cp apiconfig.py userapiconfig.py && cp config.json user-config.json
-echo -e
-read -p "请输入后端多少小时测速一次(默认720小时，一个月):" speedtestnum
- [ -z "${speedtestnum}" ] && speedtestnum=720
-    echo
-    echo "---------------------------"
-    echo "speedtestnum = ${speedtestnum}"
-    echo "---------------------------"
-    sed -i '5s/6/'${speedtestnum}'/' userapiconfig.py
-    echo
-echo -e "
- ${GREEN} 1.web
- ${GREEN} 2.db
- "
- read -p "输入你要的对接方式:" aNum
-if [ "$aNum" = "1" ];then
-read -p "请输入网站域名(末尾不要有/,列如www.baidu.com):" webapi1
-sleep 1
-sed -i '16s/123456/'${webapi1}'/' userapiconfig.py
-read -p "请输入网站mukey:" key
- echo "网站mukey为：${key}"
- sleep 1
- sed -i '17s/123/'${key}'/' userapiconfig.py
- read -p "请输入节点序号:" node
- echo "节点序号为：${node}"
- sleep 1
- sed -i '2s/0/'${node}'/' userapiconfig.py
- elif [ "$aNum" = "2" ] ;then
- sed -i '14s/modwebapi/glzjinmod/' userapiconfig.py
- read -p "请输入数据库地址:" ip
- echo "数据库地址为：${ip}"
- sleep 1
- sed -i '23s/127.0.0.1/'${ip}'/' userapiconfig.py
- read -p "请输入数据库用户名:" user
- echo "数据库用户名为：${user}"
- sleep 1
- sed -i '25s/ss/'${user}'/' userapiconfig.py
- read -p "请输入数据库名:" db
- echo "数据库名为：${db}"
- sleep 1
- sed -i '27s/shadowsocks/'${db}'/' userapiconfig.py
- read -p "请输入数据库密码:" passwd
- echo "数据库密码为：${passwd}"
- sleep 1
- sed -i '26s/ss/'${passwd}'/' userapiconfig.py
- read -p "请输入节点序号:" node
- echo "节点序号为：${node}"
- sleep 1
- sed -i '2s/0/'${node}'/' userapiconfig.py
-  else
-            echo "你他妈是猪吗，就两个数字给你选，你都选错，滚！！！"
-            fi
+rm -rf /etc/XrayR/config.yml
+read -p "输入对接域名(例如www.baidu.com):" ym
+read -p "输入节点id:" nodeid
+read -p "输入mukey:" mukey
+echo "
+Log:
+  Level: none # Log level: none, error, warning, info, debug 
+  AccessPath: # /etc/XrayR/access.Log
+  ErrorPath: # /etc/XrayR/error.log
+DnsConfigPath: # /etc/XrayR/dns.json # Path to dns config, check https://xtls.github.io/config/base/dns/ for help
+RouteConfigPath: # /etc/XrayR/route.json # Path to route config, check https://xtls.github.io/config/base/route/ for help
+OutboundConfigPath: # /etc/XrayR/custom_outbound.json # Path to custom outbound config, check https://xtls.github.io/config/base/outbound/ for help
+ConnetionConfig:
+  Handshake: 4 # Handshake time limit, Second
+  ConnIdle: 30 # Connection idle time limit, Second
+  UplinkOnly: 2 # Time limit when the connection downstream is closed, Second
+  DownlinkOnly: 4 # Time limit when the connection is closed after the uplink is closed, Second
+  BufferSize: 64 # The internal cache size of each connection, kB 
+Nodes:
+  -
+    PanelType: "V2board" # Panel type: SSpanel, V2board, PMpanel, , Proxypanel
+    ApiConfig:
+      ApiHost: "https://${ym}"
+      ApiKey: "${mukey}"
+      NodeID: ${nodeid}
+      NodeType: Shadowsocks # Node type: V2ray, Shadowsocks, Trojan, Shadowsocks-Plugin
+      Timeout: 30 # Timeout for the api request
+      EnableVless: false # Enable Vless for V2ray Type
+      EnableXTLS: false # Enable XTLS for V2ray and Trojan
+      SpeedLimit: 0 # Mbps, Local settings will replace remote settings, 0 means disable
+      DeviceLimit: 0 # Local settings will replace remote settings, 0 means disable
+      RuleListPath: # ./rulelist Path to local rulelist file
+    ControllerConfig:
+      ListenIP: 0.0.0.0 # IP address you want to listen
+      SendIP: 0.0.0.0 # IP address you want to send pacakage
+      UpdatePeriodic: 60 # Time to update the nodeinfo, how many sec.
+      EnableDNS: false # Use custom DNS config, Please ensure that you set the dns.json well
+      DNSType: AsIs # AsIs, UseIP, UseIPv4, UseIPv6, DNS strategy
+      EnableProxyProtocol: false # Only works for WebSocket and TCP
+      EnableFallback: false # Only support for Trojan and Vless
+      FallBackConfigs:  # Support multiple fallbacks
+        -
+          SNI: # TLS SNI(Server Name Indication), Empty for any
+          Path: # HTTP PATH, Empty for any
+          Dest: 80 # Required, Destination of fallback, check https://xtls.github.io/config/fallback/ for details.
+          ProxyProtocolVer: 0 # Send PROXY protocol version, 0 for dsable
+      CertConfig:
+        CertMode: none # Option about how to get certificate: none, file, http, dns. Choose "none" will forcedly disable the tls config.
+        CertDomain: "node1.test.com" # Domain to cert
+        CertFile: ./cert/node1.test.com.cert # Provided if the CertMode is file
+        KeyFile: ./cert/node1.test.com.key
+        Provider: alidns # DNS cert provider, Get the full support list here: https://go-acme.github.io/lego/dns/
+        Email: test@me.com
+        DNSEnv: # DNS ENV option used by DNS provider
+          ALICLOUD_ACCESS_KEY: aaa
+          ALICLOUD_SECRET_KEY: bbb
+  # -
+  #   PanelType: "V2board" # Panel type: SSpanel, V2board
+  #   ApiConfig:
+  #     ApiHost: "http://127.0.0.1:668"
+  #     ApiKey: "123"
+  #     NodeID: 4
+  #     NodeType: Shadowsocks # Node type: V2ray, Shadowsocks, Trojan
+  #     Timeout: 30 # Timeout for the api request
+  #     EnableVless: false # Enable Vless for V2ray Type
+  #     EnableXTLS: false # Enable XTLS for V2ray and Trojan
+  #     SpeedLimit: 0 # Mbps, Local settings will replace remote settings
+  #     DeviceLimit: 0 # Local settings will replace remote settings
+  #   ControllerConfig:
+  #     ListenIP: 0.0.0.0 # IP address you want to listen
+  #     UpdatePeriodic: 10 # Time to update the nodeinfo, how many sec.
+  #     EnableDNS: false # Use custom DNS config, Please ensure that you set the dns.json well
+  #     CertConfig:
+  #       CertMode: dns # Option about how to get certificate: none, file, http, dns
+  #       CertDomain: "node1.test.com" # Domain to cert
+  #       CertFile: ./cert/node1.test.com.cert # Provided if the CertMode is file
+  #       KeyFile: ./cert/node1.test.com.pem
+  #       Provider: alidns # DNS cert provider, Get the full support list here: https://go-acme.github.io/lego/dns/
+  #       Email: test@me.com
+  #       DNSEnv: # DNS ENV option used by DNS provider
+  #         ALICLOUD_ACCESS_KEY: aaa
+  #         ALICLOUD_SECRET_KEY: bbb
+" > /etc/XrayR/config.yml
 cd
-rm -rf /usr/bin/python
-ln -s /usr/bin/python3  /usr/bin/python
-cd GOPIP && chmod +x run.sh && ./run.sh
-echo "已经对接完成！！!。"
-sleep 2
-cd
-crontab -l > conf
-echo "@reboot ./GOPIP/run.sh" >> conf
-crontab conf
-rm -f conf
-echo "已设置开机自动运行后端"
+XrayR restart
 cd
 elif [ "$aNum" = "3" ] ;then
 apt-get update -y && apt install nginx -y
