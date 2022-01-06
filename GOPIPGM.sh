@@ -36,7 +36,6 @@ if [[ -f /etc/redhat-release ]]; then
   fi
   # PM='apt'
   if [ $PM = 'apt' ] ; then
-    apt update -y
     apt-get install cron unzip lsof wget curl -y
     service cron start
 elif [ $PM = 'yum' ]; then 
