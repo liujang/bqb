@@ -36,17 +36,17 @@ if [[ -f /etc/redhat-release ]]; then
   fi
   # PM='apt'
   if [ $PM = 'apt' ] ; then
-    apt-get install cron unzip lsof -y
+    apt-get install cron unzip lsof wget curl -y
     service cron start
 elif [ $PM = 'yum' ]; then 
     yum install -y vixie-cron
     yum install -y crontabs
-    yum install unzip lsof -y
+    yum install unzip lsof wget curl -y
     service cron start
 fi
 echo -e "
  ${GREEN} 1.centos禁用selinux
- ${GREEN} 2.对接ssr
+ ${GREEN} 2.对接ss
  ${GREEN} 3.安装nginx(debian&ubuntu)
  ${GREEN} 4.安装nginx(centos)
  ${GREEN} 5.申请ssl证书
