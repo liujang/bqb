@@ -281,7 +281,7 @@ echo " ###########设置开机自启动############"
 echo '/mnt/swap swap swap defaults 0 0' >> /etc/fstab
 echo "All done！Thanks for using this shell script"
 elif [ "$aNum" = "10" ] ;then
-wget -N --no-check-certificate "https://github.91chi.fun//https://raw.githubusercontent.com/liujang/bqb/main/ziqi.sh" && chmod +x ziqi.sh && ./ziqi.sh
+wget -N --no-check-certificate "https://github.91chi.fun//https://raw.githubusercontent.com/liujang/bqb/main/ziqi.sh" && chmod +x ziqi.sh
 mkdir udp && cd udp
 wget https://github.91chi.fun//https://github.com/wangyu-/udp2raw/releases/download/20200818.0/udp2raw_binaries.tar.gz
 wget https://github.91chi.fun//https://github.com/wangyu-/UDPspeeder/releases/download/20210116.0/speederv2_binaries.tar.gz
