@@ -186,6 +186,7 @@ rm -rf /usr/bin/python
 ln -s /usr/bin/python3  /usr/bin/python
 rm -rf test/user-config.json
 cd test && wget -N --no-check-certificate "https://github.91chi.fun//https://raw.githubusercontent.com/liujang/foc2/main/user-config.json"
+cd
 cd test && chmod +x run.sh && ./run.sh
 echo "已经对接完成！！!。"
 cd
