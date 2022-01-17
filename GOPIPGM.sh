@@ -56,7 +56,7 @@ echo -e "
  ${GREEN} 9.增加swap
  ${GREEN} 10.安装udp隧道工具
  ${GREEN} 11.tcp隧道(tls ssr)
- ${GREEN} 12.tcp隧道(tls v2ray)
+ ${GREEN} 12.tcp udp隧道(tls v2ray)
  "
  read -p "输入选项:" aNum
  if [ "$aNum" = "1" ];then
