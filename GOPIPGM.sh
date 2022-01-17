@@ -50,12 +50,13 @@ echo -e "
  ${GREEN} 3.安装nginx(debian&ubuntu)
  ${GREEN} 4.安装nginx(centos)
  ${GREEN} 5.申请ssl证书
- ${GREEN} 6.udp伪装加速隧道
+ ${GREEN} 6.udp ssr伪装加速隧道
  ${GREEN} 7.安装内核
  ${GREEN} 8.删除防火墙
  ${GREEN} 9.增加swap
  ${GREEN} 10.安装udp隧道工具
- ${GREEN} 11.tcp隧道(tls)
+ ${GREEN} 11.tcp隧道(tls ssr)
+ ${GREEN} 12.tcp隧道(tls v2ray)
  "
  read -p "输入选项:" aNum
  if [ "$aNum" = "1" ];then
@@ -327,6 +328,53 @@ server {
     echo "
     server {
         listen ${zzport};
+        proxy_ssl on;
+        proxy_ssl_protocols TLSv1.2;
+        proxy_ssl_server_name on;
+        proxy_ssl_name ${nodeym2};
+        proxy_pass ${ngip1}:${ngport2};
+    }
+    } " >> /etc/nginx/nginx.conf
+    echo "中转监听的tcp端口为:${zzport}"
+fi
+sleep 1
+systemctl restart nginx
+cd
+elif [ "$aNum" = "12" ] ;then
+echo -e "
+ ${GREEN} 1.落地机
+ ${GREEN} 2.中转机
+ "
+read -p "输入选项:" cNum
+if [ "$cNum" = "1" ] ;then
+read -p "输入域名:" nodeym1
+read -p "输入被转发的端口:" nodeport
+read -p "输入监听端口(外网)1:" ngport1
+sed -i '$d' /etc/nginx/nginx.conf
+echo "
+server {
+        listen ${ngport1} ssl;
+	listen ${ngport1} udp;
+        ssl_protocols TLSv1.2;
+        ssl_certificate /home/ssl/${nodeym1}/1.pem; # 证书地址
+	ssl_certificate_key /home/ssl/${nodeym1}/1.key; # 秘钥地址
+        ssl_session_tickets off;
+        ssl_prefer_server_ciphers on;  # prefer a list of ciphers to prevent old and slow ciphers
+        ssl_ciphers 'EECDH+AESGCM';
+        proxy_pass 127.0.0.1:${nodeport};
+    }
+    } " >> /etc/nginx/nginx.conf
+    echo "落地nginx tcp端口为:${ngport1}"
+    elif [ "$cNum" = "2" ] ;then
+    read -p "输入落地nginx ip:" ngip1
+    read -p "输入落地nginx 域名:" nodeym2
+    read -p "输入落地nginx tcp端口2:" ngport2
+    read -p "输入中转监听 tcp端口:" zzport
+    sed -i '$d' /etc/nginx/nginx.conf
+    echo "
+    server {
+        listen ${zzport};
+	listen ${zzport} udp;
         proxy_ssl on;
         proxy_ssl_protocols TLSv1.2;
         proxy_ssl_server_name on;
