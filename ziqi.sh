@@ -6,4 +6,3 @@ BLUE="\033[0;36m"
 FUCHSIA="\033[0;35m"
 echo "export PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:~/bin:$PATH" >> ~/.bashrc
 source ~/.bashrc
-nohup pingtunnel -type server >> /dev/null 2>&1 &
