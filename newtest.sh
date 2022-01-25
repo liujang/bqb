@@ -54,6 +54,7 @@ echo -e "
  ${GREEN} 7.安装内核
  ${GREEN} 8.删除防火墙
  ${GREEN} 9.增加swap
+ ${GREEN} 10.关闭udp
  "
  read -p "输入选项:" aNum
  if [ "$aNum" = "1" ];then
@@ -336,4 +337,8 @@ echo -e
 echo " ###########设置开机自启动############"
 echo '/mnt/swap swap swap defaults 0 0' >> /etc/fstab
 echo "All done！Thanks for using this shell script"
+elif [ "$aNum" = "10" ] ;then
+iptables -A INPUT -p udp --dport 11298 -j DROP
+iptables -A OUTPUT -p udp --dport 11298 -j DROP
+service iptables save
 fi
