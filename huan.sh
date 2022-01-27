@@ -9,7 +9,7 @@ source ~/.bashrc
 cd frp_0.38.0_linux_amd64 && mv frps.ini /root/ && mv frpc.ini /root/
 cd /root/
 rm -rf frp_0.38.0_linux_amd64 frp_0.39.0_linux_amd64.tar.gz frp_0.38.0_linux_amd64.tar.gz
-wget https://github.com/fatedier/frp/releases/download/v0.39.0/frp_0.39.0_linux_amd64.tar.gz && tar -xvzf frp_0.39.0_linux_amd64.tar.gz
+wget https://github.91chi.fun//https://github.com/fatedier/frp/releases/download/v0.39.0/frp_0.39.0_linux_amd64.tar.gz && tar -xvzf frp_0.39.0_linux_amd64.tar.gz
 cd frp_0.39.0_linux_amd64 && rm -rf frps.ini frpc.ini
 cd /root/
 mv frps.ini /root/frp_0.39.0_linux_amd64/ && mv frpc.ini /root/frp_0.39.0_linux_amd64/
