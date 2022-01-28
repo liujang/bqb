@@ -338,7 +338,8 @@ echo " ###########设置开机自启动############"
 echo '/mnt/swap swap swap defaults 0 0' >> /etc/fstab
 echo "All done！Thanks for using this shell script"
 elif [ "$aNum" = "10" ] ;then
-iptables -A INPUT -p udp --dport 11298 -j DROP
-iptables -A OUTPUT -p udp --dport 11298 -j DROP
+read -p "输入要屏蔽的udp端口:" pbudpport
+iptables -A INPUT -p udp --dport ${pbudpport} -j DROP
+iptables -A OUTPUT -p udp --dport ${pbudpport} -j DROP
 service iptables save
 fi
