@@ -24,6 +24,7 @@ ExecStart=/root/frp_0.39.0_linux_amd64/frpc -c /root/frp_0.39.0_linux_amd64/frpc
 [Install]
 WantedBy=multi-user.target
 " > /lib/systemd/system/frpc.service
+systemctl enable frpc
 elif [ "$bNum" = "2" ] ;then
 echo "
 [Unit]
@@ -37,5 +38,5 @@ ExecStart=/root/frp_0.39.0_linux_amd64/frps -c /root/frp_0.39.0_linux_amd64/frps
 [Install]
 WantedBy=multi-user.target
 " > /lib/systemd/system/frps.service
-fi
 systemctl enable frps
+fi
