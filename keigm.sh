@@ -86,7 +86,7 @@ ConnetionConfig:
   BufferSize: 64 # The internal cache size of each connection, kB 
 Nodes:
   -
-    PanelType: "V2board" # Panel type: SSpanel, V2board, PMpanel, , Proxypanel
+    PanelType: "SSpanel" # Panel type: SSpanel, V2board, PMpanel, , Proxypanel
     ApiConfig:
       ApiHost: "https://${ym}"
       ApiKey: "${mukey}"
