@@ -22,34 +22,26 @@ echo -e "
  "
  read -p "输入选项:" bNum
 if [ "$bNum" = "1" ];then
-echo -e "
- ${GREEN} 1.广德1(gzdeMPLS1) 
- ${GREEN} 2.广港1(gzhkMPLS1)
- ${GREEN} 3.广港2(gzhkMPLS2)
- ${GREEN} 4.沪美1(shusMPLS1)
- ${GREEN} 5.苏日1(jsjpMPLS1)
- "
- read -p "请输入括号里的代号:" mplsdh
+ read -p "请输入中转机域名:" zzym
+ read -p "请输入中转机监听端口:" zzport1
  cd
- wget -N --no-check-certificate "https://h5ai.ljfxz.net/bqbmpls/${mplsdh}/luodi/client.crt"
- wget -N --no-check-certificate "https://h5ai.ljfxz.net/bqbmpls/${mplsdh}/luodi/client.key"
- wget -N --no-check-certificate "https://h5ai.ljfxz.net/bqbmpls/${mplsdh}/luodi/ca.crt"
- cd frp_${frp_v}_linux_amd64 && rm -rf frpc.ini && wget -N --no-check-certificate "https://h5ai.ljfxz.net/bqbmpls/${mplsdh}/luodi/frpc.ini"
+ cd frp_${frp_v}_linux_amd64
+ echo "
+[common]
+server_addr = ${zzym}
+server_port = ${zzport1}
+tcp_mux = false
+tls_enable = true" > frpc.ini
  systemctl restart frpc
  elif [ "$bNum" = "2" ];then
-echo -e "
- ${GREEN} 1.广德1(gzdeMPLS1) 
- ${GREEN} 2.广港1(gzhkMPLS1)
- ${GREEN} 3.广港2(gzhkMPLS2)
- ${GREEN} 4.沪美1(shusMPLS1)
- ${GREEN} 5.苏日1(jsjpMPLS1)
- "
- read -p "请输入括号里的代号:" mplsdh
+read -p "请输入中转机监听端口:" zzport2
  cd
- wget -N --no-check-certificate "https://h5ai.ljfxz.net/bqbmpls/${mplsdh}/zhongzhuan/server.crt"
- wget -N --no-check-certificate "https://h5ai.ljfxz.net/bqbmpls/${mplsdh}/zhongzhuan/server.key"
- wget -N --no-check-certificate "https://h5ai.ljfxz.net/bqbmpls/${mplsdh}/zhongzhuan/ca.crt"
- cd frp_${frp_v}_linux_amd64 && rm -rf frps.ini && wget -N --no-check-certificate "https://h5ai.ljfxz.net/bqbmpls/${mplsdh}/zhongzhuan/frps.ini"
+ cd frp_${frp_v}_linux_amd64
+ echo "
+[common]
+bind_port = ${zzport2}
+tcp_mux = false
+tls_only = true" > frps.ini
  systemctl restart frps
  fi
  elif [ "$aNum" = "2" ];then
