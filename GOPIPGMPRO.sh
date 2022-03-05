@@ -46,8 +46,7 @@ tls_only = true" > frps.ini
  fi
  elif [ "$aNum" = "2" ];then
  cd
- read -p "请选择协议(tcp udp):" ${xy}
- if [ "$bNum" = "1" ];then
+ read -p "请输入协议(tcp udp):" ${xy}
  read -p "请输入代理名称(不可重复):" dlname
  read -p "输入ss节点ip:" ssip
  read -p "输入ss节点端口:" ssport
