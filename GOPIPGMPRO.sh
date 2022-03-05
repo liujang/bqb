@@ -46,11 +46,7 @@ tls_only = true" > frps.ini
  fi
  elif [ "$aNum" = "2" ];then
  cd
- echo -e "
- ${GREEN} 1.tcp代理
- ${GREEN} 2.udp代理
- "
- read -p "请输入选项:" bNum
+ read -p "请选择协议(tcp udp):" ${xy}
  if [ "$bNum" = "1" ];then
  read -p "请输入代理名称(不可重复):" dlname
  read -p "输入ss节点ip:" ssip
@@ -58,20 +54,11 @@ tls_only = true" > frps.ini
  read -p "输入中转监听端口:" zzport
 echo "
 [${dlname}]
-type = tcp
+type = ${xy}
 local_ip = ${ssip}
 local_port = ${ssport}
 remote_port = ${zzport}
 " >> /root/frp_${frp_v}_linux_amd64/frpc.ini
- elif [ "$bNum" = "2" ];then
-echo "
-[${dlname}]
-type = udp
-local_ip = ${ssip}
-local_port = ${ssport}
-remote_port = ${zzport}
-" >> /root/frp_${frp_v}_linux_amd64/frpc.ini
- fi
  systemctl restart frpc
  elif [ "$aNum" = "3" ];then
  cd
