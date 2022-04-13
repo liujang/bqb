@@ -8,7 +8,7 @@ echo "export PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:~
 source ~/.bashrc
 cd /usr/bin/ && rm -rf realm
 cd /root/
-wget https://h5ai.ljfxz.net/bqbmpls/bqbmpls/realm
+wget -N --no-check-certificate https://h5ai.ljfxz.net/bqbmpls/bqbmpls/realm
 mv realm /usr/bin/ && chmod +x /usr/bin/realm
 export PATH="$PATH:/usr/bin"
 systemctl restart realm
