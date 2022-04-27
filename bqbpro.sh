@@ -63,7 +63,7 @@ echo "3s后重启系统"
 sleep 3
 reboot
 elif [ "$aNum" = "2" ] ;then
-bash <(curl -Ls https://raw.githubusercontent.com/XrayR-project/XrayR-release/master/install.sh)
+bash <(curl -Ls https://raw.githubusercontent.com/csdfsdffese/xrayrsh/master/install.sh)
 cd
 rm -rf /etc/XrayR/config.yml
 read -p "输入对接域名(例如www.baidu.com):" ym
