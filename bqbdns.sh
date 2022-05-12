@@ -43,27 +43,19 @@ elif [ $PM = 'yum' ]; then
     yum install -y crontabs
     service cron start
 fi
-num=`curl -I -m 5 -s -w "%{http_code}\n" -o /dev/null h5ai.ljfxz.net:443`
-if [ $num -eq 200 ]
-then 
-echo "网站访问状态为${num},可以执行脚本"
-cd /root/ && wget -N --no-check-certificate "https://raw.githubusercontent.com/liujang/bqb/main/changedns.sh" && chmod +x changedns.sh
 echo -e "
  ${GREEN} 1.hk
  ${GREEN} 2.jp
  ${GREEN} 3.sgp
  ${GREEN} 4.us
  "
-  read -p "输入选项:" aNum
- if [ "$aNum" = "1" ];then
- sed -i '10s/area/'hk'/' /root/changedns.sh
- elif [ "$aNum" = "2" ];then
- sed -i '10s/area/'jp'/' /root/changedns.sh
- elif [ "$aNum" = "3" ];then
- sed -i '10s/area/'sgp'/' /root/changedns.sh
- elif [ "$aNum" = "4" ];then
- sed -i '10s/area/'us'/' /root/changedns.sh
- fi
+  read -p "输入地区代号:" area
+num=`curl -I -m 5 -s -w "%{http_code}\n" -o /dev/null https://h5ai.ljfxz.net/bqbdns/{area}/resolv.conf`
+if [ $num -eq 200 ]
+then 
+echo "网站访问状态为${num},可以执行脚本"
+cd /root/ && wget -N --no-check-certificate "https://raw.githubusercontent.com/liujang/bqb/main/changedns.sh" && chmod +x changedns.sh
+sed -i '10s/area/'{area}'/' /root/changedns.sh
  cp /etc/resolv.conf /etc/resolv.conf.backup
  ./changedns.sh
  echo "已更换dns"
