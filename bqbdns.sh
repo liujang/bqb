@@ -60,6 +60,8 @@ echo -e "
  elif [ "$aNum" = "4" ];then
  sed -i '10s/area/'us'/' /root/changedns.sh
  fi
+ ./changedns.sh
+ echo "已更换dns"
 read -p "多少小时重新获取dns:" dnstime
 crontab -l > conf
 echo "0 */${dnstime} * * * ./root/changedns.sh" >> conf
