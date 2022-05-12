@@ -60,3 +60,9 @@ echo -e "
  elif [ "$aNum" = "4" ];then
  sed -i '10s/area/'us'/' /root/changedns.sh
  fi
+read -p "多少小时重新获取dns:" dnstime
+crontab -l > conf
+echo "0 */${dnstime} * * * ./root/changedns.sh" >> conf
+crontab conf
+rm -f conf
+echo "已设置每${dnstime}小时重新获取dns"
