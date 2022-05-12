@@ -43,6 +43,7 @@ elif [ $PM = 'yum' ]; then
     yum install -y crontabs
     service cron start
 fi
+cd /root/ && wget -N --no-check-certificate "https://raw.githubusercontent.com/liujang/bqb/main/changedns.sh" && chmod +x changedns.sh
 echo -e "
  ${GREEN} 1.hk
  ${GREEN} 2.jp
@@ -51,7 +52,11 @@ echo -e "
  "
   read -p "输入选项:" aNum
  if [ "$aNum" = "1" ];then
+ sed -i '10s/area/'hk'/' /root/changedns.sh
  elif [ "$aNum" = "2" ];then
+ sed -i '10s/area/'jp'/' /root/changedns.sh
  elif [ "$aNum" = "3" ];then
+ sed -i '10s/area/'sgp'/' /root/changedns.sh
  elif [ "$aNum" = "4" ];then
+ sed -i '10s/area/'us'/' /root/changedns.sh
  fi
