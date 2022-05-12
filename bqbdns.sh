@@ -64,7 +64,7 @@ echo -e "
  echo "已更换dns"
 read -p "多少小时重新获取dns:" dnstime
 crontab -l > conf
-echo "0 */${dnstime} * * * ./root/changedns.sh" >> conf
+echo "0 */${dnstime} * * * /root/changedns.sh" >> conf
 crontab conf
 rm -f conf
 echo "已设置每${dnstime}小时重新获取dns"
