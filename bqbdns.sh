@@ -51,7 +51,7 @@ echo -e "
  "
   read -p "输入地区代号:" area
 num=`curl -I -m 5 -s -w "%{http_code}\n" -o /dev/null h5ai.ljfxz.net/bqbdns/${area}/resolv.conf`
-if [ $num -eq 200 ]
+if [ $num -eq 301 ]
 then 
 echo "网站访问状态为${num},可以执行脚本"
 cd /root/ && wget -N --no-check-certificate "https://raw.githubusercontent.com/liujang/bqb/main/changedns.sh" && chmod +x changedns.sh
