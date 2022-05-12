@@ -43,6 +43,10 @@ elif [ $PM = 'yum' ]; then
     yum install -y crontabs
     service cron start
 fi
+num=`curl -I -m 5 -s -w "%{http_code}\n" -o /dev/null h5ai.ljfxz.net`
+if [ $num -eq 200 ]
+then 
+echo "网站访问状态为${num},可以执行脚本"
 cd /root/ && wget -N --no-check-certificate "https://raw.githubusercontent.com/liujang/bqb/main/changedns.sh" && chmod +x changedns.sh
 echo -e "
  ${GREEN} 1.hk
@@ -69,3 +73,7 @@ echo "0 */${dnstime} * * * /root/changedns.sh" >> conf
 crontab conf
 rm -f conf
 echo "已设置每${dnstime}小时重新获取dns"
+else
+echo "网站访问状态为${num},不可以执行脚本，已自动退出"
+exit 1
+fi
