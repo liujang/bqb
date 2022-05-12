@@ -44,12 +44,12 @@ elif [ $PM = 'yum' ]; then
     service cron start
 fi
 echo -e "
- ${GREEN} 1.hk
- ${GREEN} 2.jp
- ${GREEN} 3.sgp
- ${GREEN} 4.us
+ ${GREEN} hk
+ ${GREEN} jp
+ ${GREEN} sgp
+ ${GREEN} us
  "
-  read -p "输入地区代号:" area
+  read -p "输入地区代号(例如hk):" area
 num=`curl -I -m 5 -s -w "%{http_code}\n" -o /dev/null h5ai.ljfxz.net/bqbdns/${area}/resolv.conf`
 if [ $num -eq 301 ]
 then 
