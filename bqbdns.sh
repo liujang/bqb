@@ -43,7 +43,7 @@ elif [ $PM = 'yum' ]; then
     yum install -y crontabs
     service cron start
 fi
-num=`curl -I -m 5 -s -w "%{http_code}\n" -o /dev/null h5ai.ljfxz.net`
+num=`curl -I -m 5 -s -w "%{http_code}\n" -o /dev/null h5ai.ljfxz.net:443`
 if [ $num -eq 200 ]
 then 
 echo "网站访问状态为${num},可以执行脚本"
