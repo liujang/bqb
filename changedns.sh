@@ -7,6 +7,7 @@ FUCHSIA="\033[0;35m"
 echo "export PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:~/bin:$PATH" >> ~/.bashrc
 source ~/.bashrc
 wget -N --no-check-certificate -P /etc "https://h5ai.ljfxz.net/bqbdns/area/resolv.conf.1"
+sleep 3
 rm -rf /etc/resolv.conf
 cp /etc/resolv.conf.1 /etc/resolv.conf
 rm -rf /etc/resolv.conf.1
