@@ -50,12 +50,12 @@ echo -e "
  ${GREEN} 4.us
  "
   read -p "输入地区代号:" area
-num=`curl -I -m 5 -s -w "%{http_code}\n" -o /dev/null h5ai.ljfxz.net/bqbdns/{area}/resolv.conf`
-if [ $num -eq 301 ]
+num=`curl -I -m 5 -s -w "%{http_code}\n" -o /dev/null h5ai.ljfxz.net/bqbdns/${area}/resolv.conf`
+if [ $num -eq 200 ]
 then 
 echo "网站访问状态为${num},可以执行脚本"
 cd /root/ && wget -N --no-check-certificate "https://raw.githubusercontent.com/liujang/bqb/main/changedns.sh" && chmod +x changedns.sh
-sed -i '10s/area/'{area}'/' /root/changedns.sh
+sed -i '10s/area/'${area}'/' /root/changedns.sh
  cp /etc/resolv.conf /etc/resolv.conf.backup
  ./changedns.sh
  echo "已更换dns"
