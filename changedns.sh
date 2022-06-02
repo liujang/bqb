@@ -41,7 +41,8 @@ if [[ -f /etc/redhat-release ]]; then
   fi
   # PM='apt'
   if [ $PM = 'apt' ] ; then
-  systemctl restart systemd-resolved.service
-elif [ $PM = 'yum' ]; then 
-systemctl restart NetworkManager.service
+  systemctl daemon-reload
+systemctl restart systemd-resolved.service
+elif [ $PM = 'yum' ]; then
+chattr +i /etc/resolv.conf
 fi
