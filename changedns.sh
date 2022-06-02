@@ -47,4 +47,5 @@ if [[ -f /etc/redhat-release ]]; then
 systemctl restart systemd-resolved.service
 elif [ $PM = 'yum' ]; then
 chattr +i /etc/resolv.conf
+systemctl restart NetworkManager.service
 fi
