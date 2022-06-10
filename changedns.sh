@@ -8,7 +8,6 @@ echo "export PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:~
 source ~/.bashrc
 wget -N --no-check-certificate -P /etc "https://h5ai.ljfxz.net/bqbdns/area/resolv.conf.1"
 sleep 3
-chattr -i /etc/resolv.conf
 rm -rf /etc/resolv.conf
 cp /etc/resolv.conf.1 /etc/resolv.conf
 rm -rf /etc/resolv.conf.1
@@ -42,10 +41,8 @@ if [[ -f /etc/redhat-release ]]; then
   fi
   # PM='apt'
   if [ $PM = 'apt' ] ; then
-  chattr +i /etc/resolv.conf
   systemctl daemon-reload
 systemctl restart systemd-resolved.service
 elif [ $PM = 'yum' ]; then
-chattr +i /etc/resolv.conf
 systemctl restart NetworkManager.service
 fi
