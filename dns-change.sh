@@ -25,27 +25,6 @@ function Get_OSName(){
         exit 1;
     fi
 }
-function get_char(){
-    SAVEDSTTY=`stty -g`
-    stty -echo
-    stty cbreak
-    dd if=/dev/tty bs=1 count=1 2> /dev/null
-    stty -raw
-    stty echo
-    stty $SAVEDSTTY
-}
-function Welcome(){
-    echo -e '正在检测您的操作系统...'
-    Get_OSName
-    echo -e '您确定要使用下面的DNS地址吗？'
-    echo -e '主DNS: '$DNS1''
-    if [ "$DNS2" != '' ]; then
-        echo -e '备DNS: '$DNS2''
-    fi
-    echo
-    echo -e '请按任意键继续，如有配置错误请使用 Ctrl+C 退出。'
-    char=`get_char`
-}
 function ChangeDNS(){
     if grep -Eqi "CentOS" /etc/issue || grep -Eq "CentOS" /etc/*-release; then
         echo
@@ -128,7 +107,6 @@ function RestoreDNS(){
     fi
 }
 function addDNS(){
-    Welcome
     ChangeDNS
 }
 if [ $1 != 'restore' ];then
