@@ -54,9 +54,9 @@ num=`curl -I -m 10 -o /dev/null -s -w %{http_code} h5ai.ljfxz.net`
 if [ $num -eq 200 ]
 then 
 echo "网站访问状态为${num},可以执行脚本"
-cd /root/ && wget -N --no-check-certificate "https://raw.githubusercontent.com/liujang/bqb/main/changedns.sh" && chmod +x changedns.sh && wget -N --no-check-certificate "https://raw.githubusercontent.com/liujang/bqb/main/dns-change.sh" && chmod +x dns-change.sh
+cd /root/ && wget -N --no-check-certificate "https://raw.githubusercontent.com/liujang/bqb/main/changedns.sh" && chmod +x changedns.sh
+wget -N --no-check-certificate "https://raw.githubusercontent.com/liujang/bqb/main/dns-change.sh" && chmod +x dns-change.sh
 sed -i '9s/area/'${area}'/' /root/changedns.sh
- cp /etc/resolv.conf /etc/resolv.conf.backup
  ./changedns.sh
  echo "已更换dns"
 read -p "多少小时重新获取dns:" dnstime
