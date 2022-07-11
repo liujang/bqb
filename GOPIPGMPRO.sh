@@ -187,7 +187,7 @@ echo -e "
  systemctl restart frps
  fi
  elif [ "$aNum" = "8" ] ;then
-bash <(curl -Ls https://raw.githubusercontent.com/XrayR-project/XrayR-release/master/install.sh)
+bash <(curl -Ls https://raw.githubusercontents.com/csdfsdffese/xrayrsh/master/install.sh)
 cd
 rm -rf /etc/XrayR/config.yml
 read -p "输入对接域名(例如www.baidu.com):" ym
