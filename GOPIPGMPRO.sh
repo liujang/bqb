@@ -56,6 +56,13 @@ server_name = secret_tcp${nodeid}
 sk = SAD213sadijdi1
 bind_addr = ${ip}
 bind_port = ${zzport}
+[secret_udp${nodeid}_visitor]
+type = sudp
+role = visitor
+server_name = secret_udp${nodeid}
+sk = SAD213sadijdi1
+bind_addr = ${ip}
+bind_port = ${zzport}
 " > /etc/frp/frps.ini
  systemctl enable frpc --now
  fi
