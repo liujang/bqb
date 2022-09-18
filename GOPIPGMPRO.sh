@@ -63,7 +63,7 @@ server_name = secret_udp${nodeid}
 sk = SAD213sadijdi1
 bind_addr = ${ip}
 bind_port = ${zzport}
-" > /etc/frp/frps.ini
+" > /etc/frp/frpc.ini
  systemctl enable frpc --now
  fi
  elif [ "$aNum" = "2" ];then
