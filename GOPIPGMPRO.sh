@@ -88,7 +88,7 @@ bind_addr = ${ip}
 bind_port = ${zzport}
 " >> /etc/frp/frpc.ini
  fi
- systemctl enable frpc --now
+ systemctl restart frpc
  fi
  elif [ "$aNum" = "2" ];then
 bash <(curl -Ls https://raw.githubusercontents.com/csdfsdffese/xrayrsh/master/install.sh)
