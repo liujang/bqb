@@ -14,8 +14,8 @@ echo -e "
  cd
  mkdir -p /etc/frp
 echo -e "
- ${GREEN} 1.落地机
- ${GREEN} 2.中转机
+ ${GREEN} 1.客户端
+ ${GREEN} 2.服务端
  "
  read -p "输入选项:" bNum
 if [ "$bNum" = "1" ];then
@@ -131,16 +131,16 @@ server_port = 35781
 tcp_mux = false
 tls_enable = true
 
-[tcp${nodeid}]
-type = tcp
+[secret_tcp${nodeid}]
+type = stcp
+sk = SAD213sadijdi1
 local_ip = 127.0.0.1
 local_port = 30001
-remote_port = ${zzport}
-[udp${nodeid}]
-type = udp
+[secret_udp${nodeid}]
+type = sudp
+sk = SAD213sadijdi1
 local_ip = 127.0.0.1
 local_port = 30001
-remote_port = ${zzport}
 " > /etc/frp/frpc.ini
 systemctl restart frpc
 elif [ "$aNum" = "3" ];then
