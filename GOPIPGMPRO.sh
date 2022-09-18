@@ -39,6 +39,7 @@ tls_only = true" > /etc/frp/frps.ini
  ${GREEN} 1.未安装frp
  ${GREEN} 2.已安装frp
  "
+ read -p "输入选项:" cNum
  if [ "$cNum" = "1" ];then
  wget -N --no-check-certificate -P /usr/bin/ "https://h5ai.xinhuanying66.xyz/hympls/hympls/frpc"
  chmod +x /usr/bin/frpc
