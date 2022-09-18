@@ -49,17 +49,17 @@ server_port = 35781
 tcp_mux = false
 tls_enable = true
 
-[secret_tcp${nodeid}_visitor]
+[secret_tcp${id}_visitor]
 type = stcp
 role = visitor
-server_name = secret_tcp${nodeid}
+server_name = secret_tcp${id}
 sk = SAD213sadijdi1
 bind_addr = ${ip}
 bind_port = ${zzport}
-[secret_udp${nodeid}_visitor]
+[secret_udp${id}_visitor]
 type = sudp
 role = visitor
-server_name = secret_udp${nodeid}
+server_name = secret_udp${id}
 sk = SAD213sadijdi1
 bind_addr = ${ip}
 bind_port = ${zzport}
