@@ -45,7 +45,7 @@ read -p "输入中转端口(不可重复):" zzport
  echo "
 [common]
 server_addr = ${serverip}
-bind_port = 35781
+server_port = 35781
 tcp_mux = false
 tls_enable = true
 
