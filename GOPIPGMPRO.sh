@@ -35,6 +35,10 @@ tcp_mux = false
 tls_only = true" > /etc/frp/frps.ini
  systemctl enable frps --now
  elif [ "$bNum" = "3" ];then
+read -p "输入输入服务端ip:" serverip
+read -p "输入节点id:" id
+read -p "输入中转机ip:" ip
+read -p "输入中转端口(不可重复):" zzport
  echo -e "
  ${GREEN} 1.未安装frp
  ${GREEN} 2.已安装frp
@@ -44,14 +48,7 @@ tls_only = true" > /etc/frp/frps.ini
  wget -N --no-check-certificate -P /usr/bin/ "https://h5ai.xinhuanying66.xyz/hympls/hympls/frpc"
  chmod +x /usr/bin/frpc
  wget -N --no-check-certificate -P /etc/systemd/system/ "https://h5ai.xinhuanying66.xyz/hympls/hympls/frpc.service"
- elif [ "$cNum" = "2" ];then
- echo "不做安装，进行下一步"
- fi
-read -p "输入输入服务端ip:" serverip
-read -p "输入节点id:" id
-read -p "输入中转机ip:" ip
-read -p "输入中转端口(不可重复):" zzport
- echo "
+  echo "
 [common]
 server_addr = ${serverip}
 server_port = 35781
@@ -73,6 +70,24 @@ sk = SAD213sadijdi1
 bind_addr = ${ip}
 bind_port = ${zzport}
 " >> /etc/frp/frpc.ini
+ elif [ "$cNum" = "2" ];then
+ echo "不做安装，进行下一步"
+[secret_tcp${id}_visitor]
+type = stcp
+role = visitor
+server_name = secret_tcp${id}
+sk = SAD213sadijdi1
+bind_addr = ${ip}
+bind_port = ${zzport}
+[secret_udp${id}_visitor]
+type = sudp
+role = visitor
+server_name = secret_udp${id}
+sk = SAD213sadijdi1
+bind_addr = ${ip}
+bind_port = ${zzport}
+" >> /etc/frp/frpc.ini
+ fi
  systemctl enable frpc --now
  fi
  elif [ "$aNum" = "2" ];then
