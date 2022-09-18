@@ -71,7 +71,7 @@ bind_addr = ${ip}
 bind_port = ${zzport}
 " >> /etc/frp/frpc.ini
  elif [ "$cNum" = "2" ];then
- echo "不做安装，进行下一步"
+ echo "
 [secret_tcp${id}_visitor]
 type = stcp
 role = visitor
