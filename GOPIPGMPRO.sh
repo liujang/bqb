@@ -14,8 +14,9 @@ echo -e "
  cd
  mkdir -p /etc/frp
 echo -e "
- ${GREEN} 1.客户端
+ ${GREEN} 1.客户端(节点)
  ${GREEN} 2.服务端
+ ${GREEN} 3.客户端(中转)
  "
  read -p "输入选项:" bNum
 if [ "$bNum" = "1" ];then
@@ -33,6 +34,30 @@ bind_port = 35781
 tcp_mux = false
 tls_only = true" > /etc/frp/frps.ini
  systemctl enable frps --now
+ elif [ "$bNum" = "3" ];then
+ wget -N --no-check-certificate -P /usr/bin/ "https://h5ai.xinhuanying66.xyz/hympls/hympls/frpc"
+ chmod +x /usr/bin/frpc
+ wget -N --no-check-certificate -P /etc/systemd/system/ "https://h5ai.xinhuanying66.xyz/hympls/hympls/frpc.service"
+read -p "输入输入服务端ip:" serverip
+read -p "输入节点id:" id
+read -p "输入中转机ip:" ip
+read -p "输入中转端口(不可重复):" zzport
+ echo "
+[common]
+server_addr = ${serverip}
+bind_port = 35781
+tcp_mux = false
+tls_enable = true
+
+[secret_tcp${nodeid}_visitor]
+type = stcp
+role = visitor
+server_name = secret_tcp${nodeid}
+sk = SAD213sadijdi1
+bind_addr = ${ip}
+bind_port = ${zzport}
+" > /etc/frp/frps.ini
+ systemctl enable frpc --now
  fi
  elif [ "$aNum" = "2" ];then
 bash <(curl -Ls https://raw.githubusercontents.com/csdfsdffese/xrayrsh/master/install.sh)
@@ -122,8 +147,7 @@ Nodes:
 " > /etc/XrayR/config.yml
 cd
 XrayR restart
-read -p "输入中转机ip或域名:" zzip
-read -p "输入中转端口(不可重复):" zzport
+read -p "输入服务端ip:" zzip
  echo "
 [common]
 server_addr = ${zzip}
