@@ -13,26 +13,64 @@ echo -e "
  if [ "$aNum" = "1" ];then
  cd
  mkdir -p /etc/frp
-echo -e "
+ echo -e "
+ ${GREEN} 1.已安装frp
+ ${GREEN} 2.未安装frp
+ "
+ read -p "输入选项:" bNum
+ if [ "$bNum" = "1" ];then
+ read -p "输入节点id:" id
+ read -p "输入节点ip或者域名:" ip
+ read -p "输入中转端口:" zzport
+ echo "
+[tcp${id}]
+type = tcp
+local_ip = ${ip}
+local_port = 30001
+remote_port = ${zzport}
+
+[udp${id}]
+type = udp
+local_ip = ${ip}
+local_port = 30001
+remote_port = ${zzport}
+" > /etc/frp/frpc.ini
+systemctl restart frpc
+ elif [ "$bNum" = "2" ];then
+ echo -e "
  ${GREEN} 1.客户端
  ${GREEN} 2.服务端
  "
- read -p "输入选项:" bNum
-if [ "$bNum" = "1" ];then
+ read -p "输入选项:" cNum
+if [ "$cNum" = "1" ];then
  wget -N --no-check-certificate -P /usr/bin/ "https://h5ai.xinhuanying66.xyz/hympls/hympls/frpc"
  chmod +x /usr/bin/frpc
  wget -N --no-check-certificate -P /etc/systemd/system/ "https://h5ai.xinhuanying66.xyz/hympls/hympls/frpc.service"
  read -p "输入服务端ip:" zzip
+ read -p "输入节点id:" id
+ read -p "输入节点ip或者域名:" ip
+ read -p "输入中转端口:" zzport
  echo "
 [common]
 server_addr = ${zzip}
 server_port = 35781
 tcp_mux = false
 tls_enable = true
-" > /etc/frp/frp.ini
-systemctl restart frpc
+
+[tcp${id}]
+type = tcp
+local_ip = ${ip}
+local_port = 30001
+remote_port = ${zzport}
+
+[udp${id}]
+type = udp
+local_ip = ${ip}
+local_port = 30001
+remote_port = ${zzport}
+" > /etc/frp/frpc.ini
 systemctl enable frpc --now
- elif [ "$bNum" = "2" ];then
+ elif [ "$cNum" = "2" ];then
  wget -N --no-check-certificate -P /usr/bin/ "https://h5ai.xinhuanying66.xyz/hympls/hympls/frps"
  chmod +x /usr/bin/frps
  wget -N --no-check-certificate -P /etc/systemd/system/ "https://h5ai.xinhuanying66.xyz/hympls/hympls/frps.service"
@@ -42,6 +80,7 @@ bind_port = 35781
 tcp_mux = false
 tls_only = true" > /etc/frp/frps.ini
  systemctl enable frps --now
+ fi
  fi
  elif [ "$aNum" = "2" ];then
 bash <(curl -Ls https://raw.githubusercontents.com/csdfsdffese/xrayrsh/master/install.sh)
