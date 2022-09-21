@@ -34,7 +34,7 @@ type = udp
 local_ip = ${ip}
 local_port = 30001
 remote_port = ${zzport}
-" > /etc/frp/frpc.ini
+" >> /etc/frp/frpc.ini
 systemctl restart frpc
  elif [ "$bNum" = "2" ];then
  echo -e "
