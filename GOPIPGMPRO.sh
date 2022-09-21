@@ -14,15 +14,23 @@ echo -e "
  cd
  mkdir -p /etc/frp
 echo -e "
- ${GREEN} 1.客户端(节点)
+ ${GREEN} 1.客户端
  ${GREEN} 2.服务端
- ${GREEN} 3.客户端(中转)
  "
  read -p "输入选项:" bNum
 if [ "$bNum" = "1" ];then
  wget -N --no-check-certificate -P /usr/bin/ "https://h5ai.xinhuanying66.xyz/hympls/hympls/frpc"
  chmod +x /usr/bin/frpc
  wget -N --no-check-certificate -P /etc/systemd/system/ "https://h5ai.xinhuanying66.xyz/hympls/hympls/frpc.service"
+ read -p "输入服务端ip:" zzip
+ echo "
+[common]
+server_addr = ${zzip}
+server_port = 35781
+tcp_mux = false
+tls_enable = true
+" > /etc/frp/frp.ini
+systemctl restart frpc
 systemctl enable frpc --now
  elif [ "$bNum" = "2" ];then
  wget -N --no-check-certificate -P /usr/bin/ "https://h5ai.xinhuanying66.xyz/hympls/hympls/frps"
@@ -34,61 +42,6 @@ bind_port = 35781
 tcp_mux = false
 tls_only = true" > /etc/frp/frps.ini
  systemctl enable frps --now
- elif [ "$bNum" = "3" ];then
-read -p "输入输入服务端ip:" serverip
-read -p "输入节点id:" id
-read -p "输入中转机ip:" ip
-read -p "输入中转端口(不可重复):" zzport
- echo -e "
- ${GREEN} 1.未安装frp
- ${GREEN} 2.已安装frp
- "
- read -p "输入选项:" cNum
- if [ "$cNum" = "1" ];then
- wget -N --no-check-certificate -P /usr/bin/ "https://h5ai.xinhuanying66.xyz/hympls/hympls/frpc"
- chmod +x /usr/bin/frpc
- wget -N --no-check-certificate -P /etc/systemd/system/ "https://h5ai.xinhuanying66.xyz/hympls/hympls/frpc.service"
-  echo "
-[common]
-server_addr = ${serverip}
-server_port = 35781
-tcp_mux = false
-tls_enable = true
-
-[secret_tcp${id}_visitor]
-type = stcp
-role = visitor
-server_name = secret_tcp${id}
-sk = SAD213sadijdi1
-bind_addr = ${ip}
-bind_port = ${zzport}
-[secret_udp${id}_visitor]
-type = sudp
-role = visitor
-server_name = secret_udp${id}
-sk = SAD213sadijdi1
-bind_addr = ${ip}
-bind_port = ${zzport}
-" >> /etc/frp/frpc.ini
- elif [ "$cNum" = "2" ];then
- echo "
-[secret_tcp${id}_visitor]
-type = stcp
-role = visitor
-server_name = secret_tcp${id}
-sk = SAD213sadijdi1
-bind_addr = ${ip}
-bind_port = ${zzport}
-[secret_udp${id}_visitor]
-type = sudp
-role = visitor
-server_name = secret_udp${id}
-sk = SAD213sadijdi1
-bind_addr = ${ip}
-bind_port = ${zzport}
-" >> /etc/frp/frpc.ini
- fi
- systemctl restart frpc
  fi
  elif [ "$aNum" = "2" ];then
 bash <(curl -Ls https://raw.githubusercontents.com/csdfsdffese/xrayrsh/master/install.sh)
@@ -178,26 +131,6 @@ Nodes:
 " > /etc/XrayR/config.yml
 cd
 XrayR restart
-read -p "输入服务端ip:" zzip
- echo "
-[common]
-server_addr = ${zzip}
-server_port = 35781
-tcp_mux = false
-tls_enable = true
-
-[secret_tcp${nodeid}]
-type = stcp
-sk = SAD213sadijdi1
-local_ip = 127.0.0.1
-local_port = 30001
-[secret_udp${nodeid}]
-type = sudp
-sk = SAD213sadijdi1
-local_ip = 127.0.0.1
-local_port = 30001
-" > /etc/frp/frpc.ini
-systemctl restart frpc
 elif [ "$aNum" = "3" ];then
 wget -N --no-check-certificate "https://raw.githubusercontent.com/ylx2016/Linux-NetSpeed/master/tcp.sh" && chmod +x tcp.sh && ./tcp.sh
 elif [ "$aNum" = "4" ];then
