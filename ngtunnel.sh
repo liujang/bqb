@@ -73,6 +73,7 @@ stream {
 include /etc/nginx/tunnelconf/*.conf;
 }
 " > /etc/nginx/nginx.conf
+ngtunnel_menu
 }
 
 #卸载nginx
@@ -84,6 +85,7 @@ apt-get purge nginx -y
 apt-get autoremove nginx -y
 rm -rf /etc/apt/sources.list
 mv /etc/apt/sources.list.backup /etc/apt/sources.list
+ngtunnel_menu
 }
 
 #生成自签ssl证书
@@ -135,6 +137,7 @@ elif [ "${aNum}" = "2" ];then
 echo "国内机ca证书为:"
 cat /etc/nginx/ssl/ca.crt
 fi
+ngtunnel_menu
 }
 
 #设置nginx规则
@@ -208,6 +211,7 @@ read -e -p "是否继续 添加端口转发配置？[Y/n]:" addyn
                 add_tunnelconf
             fi
 fi
+ngtunnel_menu
 }
 
 #删除nginx规则
@@ -215,6 +219,7 @@ delete_tunnelconf(){
 read -p "输入要删除的端口:" delete_port
 rm -rf /etc/nginx/tunnelconf/${delete_port}.conf
 systemctl reload nginx
+ngtunnel_menu
 }
 
 #管理nginx
@@ -238,6 +243,7 @@ systemctl reload nginx
 elif [ "$bNum" = "5" ];then
 systemctl status nginx
 fi
+ngtunnel_menu
 }
 
 #ngtunnel菜单
@@ -249,8 +255,9 @@ echo -e "
  ${GREEN} 4.添加nginx规则
  ${GREEN} 5.删除nginx规则
  ${GREEN} 6.管理nginx
+ ${GREEN} 0.退出脚本
  "
-read -p " 请输入数字后[1-6] 按回车键:
+read -p " 请输入数字后[0-6] 按回车键:
 " num
 case "$num" in
 	1)
@@ -277,9 +284,12 @@ case "$num" in
 	6)
 	manage_ng
 	;;	
+	0)
+	exit 1
+	;;
 	*)	
 	clear
-	echo "请输入正确数字 [1-6] 按回车键"
+	echo "请输入正确数字 [0-6] 按回车键"
 	sleep 1s
 	ngtunnel_menu
 	;;
