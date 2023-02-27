@@ -17,13 +17,14 @@ read -p "输入选项:" aNum
 if [[ $aNum -eq 1 || $aNum -eq 2 ]];then
 
 #检测nginx安装情况
+check_install(){
 if test -a /usr/sbin/nginx -a /etc/nginx/nginx.conf;then
         echo "--------nginx已安装--------"
 	nginx -v
     else
         echo "--------nginx未安装---------"
     fi
-    
+} 
 #源安装nginx
 install_nginx(){
 mv /etc/apt/sources.list /etc/apt/sources.list.backup
@@ -261,6 +262,7 @@ ngtunnel_menu
 
 #ngtunnel菜单
 ngtunnel_menu(){
+check_install
 echo -e "
  ${GREEN} 1.安装nginx
  ${GREEN} 2.卸载nginx
