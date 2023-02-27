@@ -215,7 +215,6 @@ read -e -p "是否继续 添加端口转发配置？[Y/n]:" addyn
                 add_tunnelconf
             fi
 fi
-ngtunnel_menu
 }
 
 #删除nginx规则
