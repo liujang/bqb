@@ -69,7 +69,9 @@ events {
     use epoll;
 }
 
+stream {
 include /etc/nginx/tunnelconf/*.conf;
+}
 " > /etc/nginx/nginx.conf
 }
 
@@ -129,5 +131,53 @@ openssl x509 -req -days 365 -sha256 \
 }
 
 set_tunnelconf(){
-
+read -p "输入监听地址:" listen_ip
+read -p "输入监听端口:" listen_port
+read -p "输入转发地址:" remote_ip
+read -p "输入转发端口:" remote_port
+echo -e "
+ ${GREEN} 1.海外机
+ ${GREEN} 2.国内机
+ "
+read -p "输入选项:" aNum
+if [ "$aNum" = "1" ];then
+echo "
+server {
+        listen ${listen_ip}:${listen_port} ssl;
+        listen ${listen_ip}:${listen_port} udp;
+        ssl_protocols TLSv1.3;
+        ssl_certificate /etc/nginx/ssl/server.crt; # 证书地址
+        ssl_certificate_key /etc/nginx/ssl/server.key; # 秘钥地址
+        ssl_client_certificate /etc/nginx/ssl/clientca.crt;
+        ssl_verify_client on;
+        ssl_session_cache shared:SSL:10m;
+        ssl_session_timeout 2h;
+        ssl_session_tickets off;
+        tcp_nodelay on;
+        proxy_pass ${remote_ip}:${remote_port};
+        proxy_protocol off;
+        access_log off;
+}
+" > /etc/nginx/tunnelconf/${listen_port}.conf
+elif [ "$aNum" = "2" ];then
+echo "
+server {
+        listen ${listen_ip}:${listen_port};
+        listen ${listen_ip}:${listen_port} udp;
+        proxy_ssl_certificate /etc/nginx/ssl/server.crt;
+        proxy_ssl_certificate_key /etc/nginx/ssl/server.key;
+        proxy_ssl on;
+        proxy_ssl_protocols TLSv1.3;
+        proxy_ssl_server_name on;
+        ssl_session_cache shared:SSL:10m;
+        ssl_session_timeout 2h;
+        ssl_session_tickets off;
+        tcp_nodelay on;
+        proxy_ssl_name ${remote_ip};
+        proxy_pass ${remote_ip}:${remote_port};
+        proxy_protocol off;
+        access_log off;
+}
+" > /etc/nginx/tunnelconf/${listen_port}.conf
+fi
 }
