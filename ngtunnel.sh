@@ -14,7 +14,9 @@ echo -e "
  ${GREEN} 2.国内机
  "
 read -p "输入选项:" aNum
-
+if [ "${aNum}" != "1" || "${aNum}" != "2"];then
+echo "输入错误" && exit 1
+else
 #检测nginx安装情况
 if test -a /usr/sbin/nginx -a /etc/nginx/nginx.conf;then
         echo "--------nginx已安装--------"
@@ -287,3 +289,4 @@ case "$num" in
 esac
 }
 ngtunnel_menu
+fi
