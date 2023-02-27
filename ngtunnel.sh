@@ -137,11 +137,8 @@ cat /etc/nginx/ssl/ca.crt
 fi
 }
 
+#设置nginx规则
 set_tunnelconf(){
-read -p "输入监听地址:" listen_ip
-read -p "输入监听端口:" listen_port
-read -p "输入转发地址:" remote_ip
-read -p "输入转发端口:" remote_port
 if [ "${aNum}" = "1" ];then
 echo "
 server {
@@ -190,6 +187,33 @@ server {
 fi
 }
 
+#添加nginx规则
+add_tunnelconf(){
+read -p "输入监听地址:" listen_ip
+read -p "输入监听端口:" listen_port
+if test -a /etc/nginx/tunnelconf/${listen_port}.conf;then
+echo "已检测到监听端口重复，即将退出" && exit 1
+else
+read -p "输入转发地址:" remote_ip
+read -p "输入转发端口:" remote_port
+set_tunnelconf
+read -e -p "是否继续 添加端口转发配置？[Y/n]:" addyn
+            [[ -z ${addyn} ]] && addyn="y"
+            if [[ ${addyn} == [Nn] ]]; then
+	        systemctl restart nginx
+            else
+                echo -e "${Info} 继续 添加端口转发配置..."
+		systemctl reload nginx
+                add_tunnelconf
+            fi
+}
+
+#删除nginx规则
+read -p "输入要删除的端口:" delete_port
+rm -rf /etc/nginx/tunnelconf/${delete_port}.conf
+systemctl reload nginx
+
+#管理nginx
 manage_ng(){
 echo -e "
  ${GREEN} 1.停止nginx
