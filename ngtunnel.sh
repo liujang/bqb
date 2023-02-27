@@ -14,7 +14,7 @@ echo -e "
  ${GREEN} 2.国内机
  "
 read -p "输入选项:" aNum
-if [ $aNum -ne 1 || $aNum -ne 2 ];then
+if [[ $aNum -ne 1 || $aNum -ne 2 ]];then
 echo "输入错误" && exit 1
 else
 #检测nginx安装情况
