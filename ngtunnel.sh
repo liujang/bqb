@@ -262,6 +262,103 @@ echo -e "${listen_iplist}\t ${listen_portlist}\t ${remote_iplist}\t ${remote_por
 ngtunnel_menu
 }
 
+xrayr_ss(){
+bash <(curl -Ls https://raw.githubusercontent.com/XrayR-project/XrayR-release/master/install.sh)
+cd
+rm -rf /etc/XrayR/config.yml
+read -p "输入对接域名(例如www.baidu.com):" ym
+read -p "输入节点id:" nodeid
+read -p "输入mukey:" mukey
+echo "
+Log:
+  Level: none # Log level: none, error, warning, info, debug 
+  AccessPath: # /etc/XrayR/access.Log
+  ErrorPath: # /etc/XrayR/error.log
+DnsConfigPath: # /etc/XrayR/dns.json # Path to dns config, check https://xtls.github.io/config/base/dns/ for help
+RouteConfigPath: # /etc/XrayR/route.json # Path to route config, check https://xtls.github.io/config/base/route/ for help
+OutboundConfigPath: # /etc/XrayR/custom_outbound.json # Path to custom outbound config, check https://xtls.github.io/config/base/outbound/ for help
+ConnetionConfig:
+  Handshake: 4 # Handshake time limit, Second
+  ConnIdle: 30 # Connection idle time limit, Second
+  UplinkOnly: 2 # Time limit when the connection downstream is closed, Second
+  DownlinkOnly: 4 # Time limit when the connection is closed after the uplink is closed, Second
+  BufferSize: 64 # The internal cache size of each connection, kB 
+Nodes:
+  -
+    PanelType: "V2board" # Panel type: SSpanel, V2board, PMpanel, , Proxypanel
+    ApiConfig:
+      ApiHost: "https://${ym}"
+      ApiKey: "${mukey}"
+      NodeID: ${nodeid}
+      NodeType: Shadowsocks # Node type: V2ray, Shadowsocks, Trojan, Shadowsocks-Plugin
+      Timeout: 30 # Timeout for the api request
+      EnableVless: false # Enable Vless for V2ray Type
+      EnableXTLS: false # Enable XTLS for V2ray and Trojan
+      SpeedLimit: 0 # Mbps, Local settings will replace remote settings, 0 means disable
+      DeviceLimit: 0 # Local settings will replace remote settings, 0 means disable
+      RuleListPath: # ./rulelist Path to local rulelist file
+    ControllerConfig:
+      ListenIP: 0.0.0.0 # IP address you want to listen
+      SendIP: 0.0.0.0 # IP address you want to send pacakage
+      UpdatePeriodic: 60 # Time to update the nodeinfo, how many sec.
+      EnableDNS: false # Use custom DNS config, Please ensure that you set the dns.json well
+      DNSType: AsIs # AsIs, UseIP, UseIPv4, UseIPv6, DNS strategy
+      EnableProxyProtocol: false # Only works for WebSocket and TCP
+      EnableFallback: false # Only support for Trojan and Vless
+      FallBackConfigs:  # Support multiple fallbacks
+        -
+          SNI: # TLS SNI(Server Name Indication), Empty for any
+          Path: # HTTP PATH, Empty for any
+          Dest: 80 # Required, Destination of fallback, check https://xtls.github.io/config/fallback/ for details.
+          ProxyProtocolVer: 0 # Send PROXY protocol version, 0 for dsable
+      CertConfig:
+        CertMode: none # Option about how to get certificate: none, file, http, dns. Choose "none" will forcedly disable the tls config.
+        CertDomain: "node1.test.com" # Domain to cert
+        CertFile: ./cert/node1.test.com.cert # Provided if the CertMode is file
+        KeyFile: ./cert/node1.test.com.key
+        Provider: alidns # DNS cert provider, Get the full support list here: https://go-acme.github.io/lego/dns/
+        Email: test@me.com
+        DNSEnv: # DNS ENV option used by DNS provider
+          ALICLOUD_ACCESS_KEY: aaa
+          ALICLOUD_SECRET_KEY: bbb
+" > /etc/XrayR/config.yml
+XrayR restart
+}
+
+delete_firewall(){
+ -ne 0 ]]; then
+    echo "false"
+  else
+    echo "true"
+  fi
+if [[ -f /etc/redhat-release ]]; then
+		release="centos"
+	elif cat /etc/issue | grep -q -E -i "debian"; then
+		release="debian"
+	elif cat /etc/issue | grep -q -E -i "ubuntu"; then
+		release="ubuntu"
+	elif cat /etc/issue | grep -q -E -i "centos|red hat|redhat"; then
+		release="centos"
+	elif cat /proc/version | grep -q -E -i "debian"; then
+		release="debian"
+	elif cat /proc/version | grep -q -E -i "ubuntu"; then
+		release="ubuntu"
+	elif cat /proc/version | grep -q -E -i "centos|red hat|redhat"; then
+		release="centos"
+    fi
+    
+     if [[ $release = "ubuntu" || $release = "debian" ]]; then
+ufw disable
+apt-get remove ufw
+apt-get purge ufw
+  elif [[ $release = "centos" ]]; then
+  systemctl stop firewalld.service
+  systemctl disable firewalld.service 
+  else
+    exit 1
+  fi
+}
+
 #ngtunnel菜单
 ngtunnel_menu(){
 check_install
@@ -273,9 +370,11 @@ echo -e "
  ${GREEN} 5.删除nginx规则
  ${GREEN} 6.查看nginx规则
  ${GREEN} 7.管理nginx
+ ${GREEN} 8.对接ss
+ ${GREEN} 9.删除防火墙
  ${GREEN} 0.退出脚本
  "
-read -p " 请输入数字后[0-7] 按回车键:" num
+read -p " 请输入数字后[0-9] 按回车键:" num
 case "$num" in
 	1)
 	install_nginx
@@ -297,13 +396,19 @@ case "$num" in
 	;;
 	7)
 	manage_ng
-	;;	
+	;;
+	8)
+	xrayr_ss
+	;;
+	9)
+	delete_firewall
+	;;
 	0)
 	exit 1
 	;;
 	*)	
 	clear
-	echo "请输入正确数字 [0-7] 按回车键"
+	echo "请输入正确数字 [0-9] 按回车键"
 	sleep 1s
 	ngtunnel_menu
 	;;
