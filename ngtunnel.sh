@@ -249,6 +249,10 @@ fi
 ngtunnel_menu
 }
 
+#查看nginx规则
+check_tunnelconf(){
+}
+
 #ngtunnel菜单
 ngtunnel_menu(){
 echo -e "
@@ -257,10 +261,11 @@ echo -e "
  ${GREEN} 3.自签ssl
  ${GREEN} 4.添加nginx规则
  ${GREEN} 5.删除nginx规则
- ${GREEN} 6.管理nginx
+ ${GREEN} 6.查看nginx规则
+ ${GREEN} 7.管理nginx
  ${GREEN} 0.退出脚本
  "
-read -p " 请输入数字后[0-6] 按回车键:
+read -p " 请输入数字后[0-7] 按回车键:
 " num
 case "$num" in
 	1)
@@ -278,13 +283,10 @@ case "$num" in
 	5)
 	delete_tunnelconf
 	;;
-	y)
-	Rewrite_RealM
-	;;	
-	5)
-	Restart_RealM
-	;;
 	6)
+	check_tunnelconf
+	;;
+	7)
 	manage_ng
 	;;	
 	0)
@@ -292,7 +294,7 @@ case "$num" in
 	;;
 	*)	
 	clear
-	echo "请输入正确数字 [0-6] 按回车键"
+	echo "请输入正确数字 [0-7] 按回车键"
 	sleep 1s
 	ngtunnel_menu
 	;;
