@@ -220,7 +220,7 @@ ngtunnel_menu
 delete_tunnelconf(){
 read -p "输入要删除的端口:" delete_port
 rm -rf /etc/nginx/tunnelconf/${delete_port}.conf
-sed -i -e '/${delete_port}/d' /etc/nginx/tunnelconf/allconf.txt
+sed -i '/${delete_port}/d' /etc/nginx/tunnelconf/allconf.txt
 systemctl reload nginx
 ngtunnel_menu
 }
