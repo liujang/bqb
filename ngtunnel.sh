@@ -202,7 +202,7 @@ read -p "输入转发地址:" remote_ip
 read -p "输入转发端口:" remote_port
 echo "
 ${remote_ip} ${listen_port} ${remote_ip} ${remote_port}
-" > /etc/nginx/tunnelconf/allconf.txt
+" >> /etc/nginx/tunnelconf/allconf.txt
 set_tunnelconf
 read -e -p "是否继续 添加端口转发配置？[Y/n]:" addyn
             [[ -z ${addyn} ]] && addyn="y"
