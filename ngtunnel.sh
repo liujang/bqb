@@ -253,12 +253,15 @@ ngtunnel_menu
 
 #查看nginx规则
 check_tunnelconf(){
-listen_iplist=`awk '{print $1}' /etc/nginx/tunnelconf/allconf.txt`
-listen_portlist=`awk '{print $2}' /etc/nginx/tunnelconf/allconf.txt`
-remote_iplist=`awk '{print $3}' /etc/nginx/tunnelconf/allconf.txt`
-remote_portlist=`awk '{print $4}' /etc/nginx/tunnelconf/allconf.txt`
+#listen_iplist=`awk '{print $1}' /etc/nginx/tunnelconf/allconf.txt`
+3listen_portlist=`awk '{print $2}' /etc/nginx/tunnelconf/allconf.txt`
+#remote_iplist=`awk '{print $3}' /etc/nginx/tunnelconf/allconf.txt`
+3remote_portlist=`awk '{print $4}' /etc/nginx/tunnelconf/allconf.txt`
 echo "监听地址:   监听端口:   转发地址:   转发端口:"
-echo -e "${listen_iplist}\t ${listen_portlist}\t ${remote_iplist}\t ${remote_portlist}"
+for line in `cat filename(allconf.txt)`
+do
+    echo $line
+done
 ngtunnel_menu
 }
 
