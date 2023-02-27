@@ -200,9 +200,7 @@ echo "已检测到监听端口重复，即将退出" && exit 1
 else
 read -p "输入转发地址:" remote_ip
 read -p "输入转发端口:" remote_port
-echo "
-${remote_ip} ${listen_port} ${remote_ip} ${remote_port}
-" >> /etc/nginx/tunnelconf/allconf.txt
+echo "${remote_ip} ${listen_port} ${remote_ip} ${remote_port}" >> /etc/nginx/tunnelconf/allconf.txt
 set_tunnelconf
 read -e -p "是否继续 添加端口转发配置？[Y/n]:" addyn
             [[ -z ${addyn} ]] && addyn="y"
@@ -256,7 +254,8 @@ listen_iplist=`awk '{print $1}' /etc/nginx/tunnelconf/allconf.txt`
 listen_portlist=`awk '{print $2}' /etc/nginx/tunnelconf/allconf.txt`
 remote_iplist=`awk '{print $3}' /etc/nginx/tunnelconf/allconf.txt`
 remote_portlist=`awk '{print $4}' /etc/nginx/tunnelconf/allconf.txt`
-echo "监听地址:${listen_iplist}  监听端口 ${listen_portlist} 转发地址:${remote_iplist} 转发端口:${remote_portlist}"
+echo "监听地址:      监听端口:          转发地址:        转发端口:
+ ${listen_iplist} ${listen_portlist} ${remote_iplist} ${remote_portlist}"
 ngtunnel_menu
 }
 
