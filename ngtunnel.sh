@@ -278,7 +278,7 @@ case "$num" in
 	;;	
 	*)	
 	clear
-	echo -e "${Error}:请输入正确数字 [1-6] 按回车键"
+	echo "请输入正确数字 [1-6] 按回车键"
 	sleep 1s
 	ngtunnel_menu
 	;;
