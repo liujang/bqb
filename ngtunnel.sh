@@ -16,7 +16,7 @@ echo -e "
 read -p "输入选项:" aNum
 
 #检测nginx安装情况
-if test -a /usr/sbin -a /etc/nginx/nginx.conf;then
+if test -a /usr/sbin/nginx -a /etc/nginx/nginx.conf;then
         echo "--------nginx未安装--------"
     else
         echo "--------nginx已安装---------"
