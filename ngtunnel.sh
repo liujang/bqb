@@ -23,6 +23,7 @@ if test -a /usr/sbin -a /etc/nginx/nginx.conf;then
 #源安装nginx
 install_nginx(){
 mv /etc/apt/sources.list /etc/apt/sources.list.backup
+rm -rf /etc/apt/sources.list
 echo -e "
  ${GREEN} 1.海外机
  ${GREEN} 2.国内机
@@ -74,5 +75,11 @@ include /etc/nginx/tunnelconf/*.conf;
 
 #卸载nginx
 uninstall_nginx(){
-
+service nginx stop
+rm -rf /etc/nginx
+apt-get remove nginx -y
+apt-get purge nginx -y
+apt-get autoremove nginx -y
+rm -rf /etc/apt/sources.list
+mv /etc/apt/sources.list.backup /etc/apt/sources.list
 }
