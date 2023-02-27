@@ -160,7 +160,7 @@ server {
         proxy_pass \$node;
         resolver 1.1.1.1 8.8.8.8 valid=30s;
         resolver_timeout 3s;
-        set \$node \"${remote_ip}:${remote_port}\";
+        set \$node ${remote_ip}:${remote_port};
 	proxy_protocol off;
         access_log off;
 }
@@ -183,7 +183,7 @@ server {
         proxy_pass \$node;
         resolver 223.5.5.5 119.29.29.29 valid=30s;
         resolver_timeout 3s;
-        set \$node \"${remote_ip}:${remote_port}\";
+        set \$node ${remote_ip}:${remote_port};
 	proxy_protocol off;
         access_log off;
 }
