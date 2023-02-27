@@ -9,6 +9,11 @@ GREEN="\033[32m\033[01m"
 BLUE="\033[0;36m"
 FUCHSIA="\033[0;35m"
 codename=`grep -Po 'VERSION="[0-9]+ \(\K[^)]+' /etc/os-release`
+echo -e "
+ ${GREEN} 1.海外机
+ ${GREEN} 2.国内机
+ "
+read -p "输入选项:" aNum
 
 #检测nginx安装情况
 check_nginx(){
@@ -24,12 +29,7 @@ if test -a /usr/sbin -a /etc/nginx/nginx.conf;then
 install_nginx(){
 mv /etc/apt/sources.list /etc/apt/sources.list.backup
 rm -rf /etc/apt/sources.list
-echo -e "
- ${GREEN} 1.海外机
- ${GREEN} 2.国内机
- "
-read -p "输入选项:" aNum
-if [ "$aNum" = "1" ];then
+if [ "${aNum}" = "1" ];then
 echo "
 deb http://deb.debian.org/debian ${codename} main
 deb-src http://deb.debian.org/debian ${codename} main
@@ -40,7 +40,7 @@ deb-src http://deb.debian.org/debian ${codename}-updates main
 deb http://deb.debian.org/debian ${codename}-backports main
 deb-src http://deb.debian.org/debian ${codename}-backports main
 " > /etc/apt/sources.list
-elif [ "$aNum" = "2" ];then
+elif [ "${aNum}" = "2" ];then
 echo "
 deb https://mirrors.tuna.tsinghua.edu.cn/debian/ ${codename} main contrib non-free
 deb https://mirrors.tuna.tsinghua.edu.cn/debian/ ${codename}-updates main contrib non-free
@@ -135,12 +135,7 @@ read -p "输入监听地址:" listen_ip
 read -p "输入监听端口:" listen_port
 read -p "输入转发地址:" remote_ip
 read -p "输入转发端口:" remote_port
-echo -e "
- ${GREEN} 1.海外机
- ${GREEN} 2.国内机
- "
-read -p "输入选项:" aNum
-if [ "$aNum" = "1" ];then
+if [ "${aNum}" = "1" ];then
 echo "
 server {
         listen ${listen_ip}:${listen_port} ssl;
@@ -162,7 +157,7 @@ server {
         access_log off;
 }
 " > /etc/nginx/tunnelconf/${listen_port}.conf
-elif [ "$aNum" = "2" ];then
+elif [ "${aNum}" = "2" ];then
 echo "
 server {
         listen ${listen_ip}:${listen_port};
