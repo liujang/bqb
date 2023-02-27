@@ -17,10 +17,10 @@ read -p "输入选项:" aNum
 
 #检测nginx安装情况
 if test -a /usr/sbin/nginx -a /etc/nginx/nginx.conf;then
-        echo "--------nginx未安装--------"
-    else
-        echo "--------nginx已安装---------"
+        echo "--------nginx已安装--------"
 	nginx -v
+    else
+        echo "--------nginx未安装---------"
     fi
     
 #源安装nginx
@@ -192,11 +192,11 @@ add_tunnelconf(){
 read -p "输入监听地址:" listen_ip
 read -p "输入监听端口:" listen_port
 if test -a /etc/nginx/tunnelconf/${listen_port}.conf;then
+echo "已检测到监听端口重复，即将退出" && exit 1
+else
 read -p "输入转发地址:" remote_ip
 read -p "输入转发端口:" remote_port
 set_tunnelconf
-else
-echo "已检测到监听端口重复，即将退出" && exit 1
 read -e -p "是否继续 添加端口转发配置？[Y/n]:" addyn
             [[ -z ${addyn} ]] && addyn="y"
             if [[ ${addyn} == [Nn] ]]; then
