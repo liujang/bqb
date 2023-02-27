@@ -209,9 +209,11 @@ read -e -p "是否继续 添加端口转发配置？[Y/n]:" addyn
 }
 
 #删除nginx规则
+delete_tunnelconf(){
 read -p "输入要删除的端口:" delete_port
 rm -rf /etc/nginx/tunnelconf/${delete_port}.conf
 systemctl reload nginx
+}
 
 #管理nginx
 manage_ng(){
@@ -235,3 +237,50 @@ elif [ "$bNum" = "5" ];then
 systemctl status nginx
 fi
 }
+
+#ngtunnel菜单
+ngtunnel_menu(){
+echo -e "
+ ${GREEN} 1.安装nginx
+ ${GREEN} 2.卸载nginx
+ ${GREEN} 3.自签ssl
+ ${GREEN} 4.添加nginx规则
+ ${GREEN} 5.删除nginx规则
+ ${GREEN} 6.管理nginx
+ "
+read -p " 请输入数字后[1-6] 按回车键:
+" num
+case "$num" in
+	1)
+	install_nginx
+	;;
+	2)
+	uninstall_nginx
+	;;
+	3)
+	create_ssl
+	;;
+	4)
+	add_tunnelconf
+	;;
+	5)
+	delete_tunnelconf
+	;;
+	y)
+	Rewrite_RealM
+	;;	
+	5)
+	Restart_RealM
+	;;
+	6)
+	manage_ng
+	;;	
+	*)	
+	clear
+	echo -e "${Error}:请输入正确数字 [1-6] 按回车键"
+	sleep 1s
+	ngtunnel_menu
+	;;
+esac
+}
+ngtunnel_menu
