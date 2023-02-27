@@ -188,5 +188,4 @@ server {
 }
 " > /etc/nginx/tunnelconf/${listen_port}.conf
 fi
-systemctl reload nginx
 }
