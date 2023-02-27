@@ -254,10 +254,10 @@ ngtunnel_menu
 #查看nginx规则
 check_tunnelconf(){
 echo "监听地址:   监听端口:   转发地址:   转发端口:"
-for line in `cat filename(/etc/nginx/tunnelconf/allconf.txt)`
+while read rows
 do
-    echo $line
-done
+  echo "$rows"
+done < /etc/nginx/tunnelconf/allconf.txt
 ngtunnel_menu
 }
 
