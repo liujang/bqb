@@ -135,10 +135,10 @@ if [ "${aNum}" = "1" ];then
 echo "请复制国内机ca证书并粘贴，3秒后进入vim编辑器" && sleep 3 
 vim /etc/nginx/ssl/clientca.crt
 elif [ "${aNum}" = "2" ];then
+clear
 echo "国内机ca证书为:"
 cat /etc/nginx/ssl/ca.crt
 fi
-ngtunnel_menu
 }
 
 #设置nginx规则
