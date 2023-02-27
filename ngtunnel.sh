@@ -83,3 +83,51 @@ apt-get autoremove nginx -y
 rm -rf /etc/apt/sources.list
 mv /etc/apt/sources.list.backup /etc/apt/sources.list
 }
+
+#生成自签ssl证书
+create_ssl(){
+mkdir -p /etc/nginx/ssl
+cd /etc/nginx/ssl
+servername=`curl -s http://ipv4.icanhazip.com`
+cat > my-openssl.cnf << EOF
+[ ca ]
+default_ca = CA_default
+[ CA_default ]
+x509_extensions = usr_cert
+[ req ]
+default_bits        = 2048
+default_md          = sha256
+default_keyfile     = privkey.pem
+distinguished_name  = req_distinguished_name
+attributes          = req_attributes
+x509_extensions     = v3_ca
+string_mask         = utf8only
+[ req_distinguished_name ]
+[ req_attributes ]
+[ usr_cert ]
+basicConstraints       = CA:FALSE
+nsComment              = "OpenSSL Generated Certificate"
+subjectKeyIdentifier   = hash
+authorityKeyIdentifier = keyid,issuer
+[ v3_ca ]
+subjectKeyIdentifier   = hash
+authorityKeyIdentifier = keyid:always,issuer
+basicConstraints       = CA:true
+EOF
+openssl genrsa -out ca.key 2048
+openssl req -x509 -new -nodes -key ca.key -subj "/CN=${servername}" -days 5000 -out ca.crt
+openssl genrsa -out server.key 2048
+openssl req -new -sha256 -key server.key \
+    -subj "/C=CN/ST=lj/L=lj/O=ljfxz/CN=${servername}" \
+    -reqexts SAN \
+    -config <(cat my-openssl.cnf <(printf "\n[SAN]\nsubjectAltName=DNS:${servername},IP:${servername}")) \
+    -out server.csr
+openssl x509 -req -days 365 -sha256 \
+	-in server.csr -CA ca.crt -CAkey ca.key -CAcreateserial \
+	-extfile <(printf "subjectAltName=DNS:${servername},IP:${servername}") \
+	-out server.crt
+}
+
+set_tunnelconf(){
+
+}
