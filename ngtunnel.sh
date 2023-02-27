@@ -264,7 +264,6 @@ ngtunnel_menu
 
 xrayr_ss(){
 bash <(curl -Ls https://raw.githubusercontent.com/XrayR-project/XrayR-release/master/install.sh)
-cd
 rm -rf /etc/XrayR/config.yml
 read -p "输入对接域名(例如www.baidu.com):" ym
 read -p "输入节点id:" nodeid
@@ -326,7 +325,7 @@ XrayR restart
 }
 
 delete_firewall(){
- -ne 0 ]]; then
+if [[ "$EUID" -ne 0 ]]; then
     echo "false"
   else
     echo "true"
