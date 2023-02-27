@@ -325,11 +325,6 @@ XrayR restart
 }
 
 delete_firewall(){
-if [[ "$EUID" -ne 0 ]]; then
-    echo "false"
-  else
-    echo "true"
-  fi
 if [[ -f /etc/redhat-release ]]; then
 		release="centos"
 	elif cat /etc/issue | grep -q -E -i "debian"; then
