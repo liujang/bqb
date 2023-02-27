@@ -258,7 +258,6 @@ while read rows
 do
   echo "$rows"
 done < /etc/nginx/tunnelconf/allconf.txt
-ngtunnel_menu
 }
 
 xrayr_ss(){
