@@ -189,3 +189,25 @@ server {
 " > /etc/nginx/tunnelconf/${listen_port}.conf
 fi
 }
+
+manage_ng(){
+echo -e "
+ ${GREEN} 1.停止nginx
+ ${GREEN} 2.启动nginx
+ ${GREEN} 3.重启nginx
+ ${GREEN} 4.重载nginx
+ ${GREEN} 5.查看nginx状态
+"
+read -p "请输入选项:" bNum
+if [ "$bNum" = "1" ];then
+systemctl stop nginx
+elif [ "$bNum" = "2" ];then
+systemctl start nginx
+elif [ "$bNum" = "3" ];then
+systemctl restart nginx
+elif [ "$bNum" = "4" ];then
+systemctl reload nginx
+elif [ "$bNum" = "5" ];then
+systemctl status nginx
+fi
+}
