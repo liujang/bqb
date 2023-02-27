@@ -255,8 +255,8 @@ listen_iplist=`awk '{print $1}' /etc/nginx/tunnelconf/allconf.txt`
 listen_portlist=`awk '{print $2}' /etc/nginx/tunnelconf/allconf.txt`
 remote_iplist=`awk '{print $3}' /etc/nginx/tunnelconf/allconf.txt`
 remote_portlist=`awk '{print $4}' /etc/nginx/tunnelconf/allconf.txt`
-echo "监听地址:      监听端口:          转发地址:        转发端口:
- ${listen_iplist} ${listen_portlist} ${remote_iplist} ${remote_portlist}"
+echo "监听地址:      监听端口:      转发地址:      转发端口:"
+echo " ${listen_iplist}      ${listen_portlist}      ${remote_iplist}      ${remote_portlist}"
 ngtunnel_menu
 }
 
