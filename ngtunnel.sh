@@ -16,15 +16,13 @@ echo -e "
 read -p "输入选项:" aNum
 
 #检测nginx安装情况
-check_nginx(){
 if test -a /usr/sbin -a /etc/nginx/nginx.conf;then
         echo "--------nginx已安装--------"
         nginx -v
     else
         echo "--------nginx未安装---------"
     fi
-}
-
+    
 #源安装nginx
 install_nginx(){
 mv /etc/apt/sources.list /etc/apt/sources.list.backup
