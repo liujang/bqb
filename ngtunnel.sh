@@ -128,7 +128,7 @@ openssl x509 -req -days 365 -sha256 \
 	-out server.crt
 if [ "${aNum}" = "1" ];then
 read -p "输入国内机ca证书:" ca
-echo -e "
+echo -n "
 ${ca}
 " > /etc/nginx/ssl/clientca.crt
 elif [ "${aNum}" = "2" ];then
