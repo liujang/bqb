@@ -140,7 +140,7 @@ fi
 
 #设置nginx规则
 set_tunnelconf(){
-$node="$node"
+node="$node"
 if [ "${aNum}" = "1" ];then
 echo "
 server {
