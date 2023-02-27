@@ -47,7 +47,7 @@ deb https://mirrors.tuna.tsinghua.edu.cn/debian/ ${codename}-backports main cont
 deb https://mirrors.tuna.tsinghua.edu.cn/debian-security ${codename}-security main contrib non-free
 " > /etc/apt/sources.list
 fi
-apt update -y
+apt update -y && apt install vim -y
 echo deb http://nginx.org/packages/debian/ ${codename} nginx | tee /etc/apt/sources.list.d/nginx.list
 apt install gnupg2 -y
 wget http://nginx.org/keys/nginx_signing.key
@@ -129,10 +129,8 @@ openssl x509 -req -days 365 -sha256 \
 	-extfile <(printf "subjectAltName=DNS:${servername},IP:${servername}") \
 	-out server.crt
 if [ "${aNum}" = "1" ];then
-read -p "输入国内机ca证书:" ca
-echo "
-${ca}
-" > /etc/nginx/ssl/clientca.crt
+echo "请复制国内机ca证书并粘贴，3秒后进入vim编辑器" && sleep 3 
+vim /etc/nginx/ssl/clientca.crt
 elif [ "${aNum}" = "2" ];then
 echo "国内机ca证书为:"
 cat /etc/nginx/ssl/ca.crt
