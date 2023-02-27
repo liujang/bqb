@@ -128,6 +128,15 @@ openssl x509 -req -days 365 -sha256 \
 	-in server.csr -CA ca.crt -CAkey ca.key -CAcreateserial \
 	-extfile <(printf "subjectAltName=DNS:${servername},IP:${servername}") \
 	-out server.crt
+if [ "${aNum}" = "1" ];then
+read -p "输入国内机ca证书:" ca
+echo"
+${ca}
+" > /etc/nginx/ssl/clientca.crt
+elif [ "${aNum}" = "2" ];then
+echo "国内机ca证书为:"
+cat /etc/nginx/ssl/ca.crt
+fi
 }
 
 set_tunnelconf(){
