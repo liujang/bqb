@@ -74,6 +74,8 @@ stream {
 include /etc/nginx/tunnelconf/*.conf;
 }
 " > /etc/nginx/nginx.conf
+clear
+systemctl start nginx
 ngtunnel_menu
 }
 
