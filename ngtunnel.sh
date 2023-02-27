@@ -220,7 +220,7 @@ ngtunnel_menu
 delete_tunnelconf(){
 read -p "输入要删除的端口:" delete_port
 rm -rf /etc/nginx/tunnelconf/${delete_port}.conf
-sed -i '/${delete_port}/d' /etc/nginx/tunnelconf/allconf.txt
+sed -i -e "/${delete_port}/d" /etc/nginx/tunnelconf/allconf.txt
 systemctl reload nginx
 ngtunnel_menu
 }
@@ -255,8 +255,7 @@ listen_iplist=`awk '{print $1}' /etc/nginx/tunnelconf/allconf.txt`
 listen_portlist=`awk '{print $2}' /etc/nginx/tunnelconf/allconf.txt`
 remote_iplist=`awk '{print $3}' /etc/nginx/tunnelconf/allconf.txt`
 remote_portlist=`awk '{print $4}' /etc/nginx/tunnelconf/allconf.txt`
-echo "监听地址:      监听端口:      转发地址:      转发端口:"
-echo " ${listen_iplist}      ${listen_portlist}      ${remote_iplist}      ${remote_portlist}"
+echo -e "监听地址:\n ${listen_iplist}      监听端口:\n ${listen_portlist}      转发地址:\n ${remote_iplist}      转发端口:\n ${remote_portlist}"
 ngtunnel_menu
 }
 
