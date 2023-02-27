@@ -68,6 +68,11 @@ events {
     use epoll;
 }
 
-include /etc/nginx/tunnel/*.conf;
+include /etc/nginx/tunnelconf/*.conf;
 " > /etc/nginx/nginx.conf
+}
+
+#卸载nginx
+uninstall_nginx(){
+
 }
