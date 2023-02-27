@@ -53,7 +53,7 @@ wget http://nginx.org/keys/nginx_signing.key
 apt-key add nginx_signing.key
 apt update -y && apt install nginx -y
 rm -rf etc/nginx/nginx.conf
-mkdir -p /etc/nginx/tunneconf/
+mkdir -p /etc/nginx/tunnelconf
 echo "
 worker_priority -20;
 worker_processes auto;
