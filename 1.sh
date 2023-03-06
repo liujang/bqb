@@ -27,6 +27,13 @@ if test -a /usr/sbin/nginx -a /etc/nginx/nginx.conf;then
 } 
 #源安装nginx
 install_nginx(){
+echo'
+[nginx]
+name=nginx repo
+baseurl=http://nginx.org/packages/centos/$releasever/$basearch/
+gpgcheck=0
+enabled=1
+' > /etc/yum.repos.d/nginx.repo
 yum install nginx vim curl -y
 rm -rf etc/nginx/nginx.conf
 mkdir -p /etc/nginx/tunnelconf
@@ -277,7 +284,7 @@ echo -e "
  ${GREEN} 8.删除防火墙
  ${GREEN} 0.退出脚本
  "
-read -p " 请输入数字后[0-8] 按回车键:" num
+read -p " 请输入数字后[0-9] 按回车键:" num
 case "$num" in
 	1)
 	install_nginx
@@ -308,7 +315,7 @@ case "$num" in
 	;;
 	*)	
 	clear
-	echo "请输入正确数字 [0-8] 按回车键"
+	echo "请输入正确数字 [0-9] 按回车键"
 	sleep 1s
 	ngtunnel_menu
 	;;
