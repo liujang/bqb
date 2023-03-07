@@ -83,7 +83,7 @@ ExecReload=/bin/sh -c "/bin/kill -s HUP $(/bin/cat /var/run/nginx.pid)"
 ExecStop=/bin/sh -c "/bin/kill -s TERM $(/bin/cat /var/run/nginx.pid)"
 
 [Install]
-WantedBy=multi-user.target ' >/usr/lib/systemd/system nginx.service
+WantedBy=multi-user.target ' >/usr/lib/systemd/system/nginx.service
 systemctl enable nginx --now
 systemctl daemon-reload
 rm -rf etc/nginx/nginx.conf
