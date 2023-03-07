@@ -122,8 +122,6 @@ rm -rf /etc/nginx
 apt-get remove nginx -y
 apt-get purge nginx -y
 apt-get autoremove nginx -y
-rm -rf /etc/apt/sources.list
-mv /etc/apt/sources.list.backup /etc/apt/sources.list
 ngtunnel_menu
 }
 
