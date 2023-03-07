@@ -28,7 +28,7 @@ if test -a /usr/sbin/nginx -a /etc/nginx/nginx.conf;then
 #编译安装nginx
 install_nginx(){
 apt update -y && apt install vim curl lsof wget -y
-apt install build-essential libpcre3 libpcre3-dev install -y zlib1g-dev openssl libssl-dev -y
+apt install build-essential libpcre3 libpcre3-dev zlib1g-dev openssl libssl-dev -y
 wget http://nginx.org/download/nginx-1.23.3.tar.gz && tar -xvzf nginx-1.23.3.tar.gz
 cd nginx-1.23.3
 ./configure \
