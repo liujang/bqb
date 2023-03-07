@@ -8,7 +8,7 @@ NO_COLOR="\033[0m"
 GREEN="\033[32m\033[01m"
 BLUE="\033[0;36m"
 FUCHSIA="\033[0;35m"
-
+codename=`grep -Po 'VERSION="[0-9]+ \(\K[^)]+' /etc/os-release`
 echo -e "
  ${GREEN} 1.海外机
  ${GREEN} 2.国内机
@@ -27,14 +27,33 @@ if test -a /usr/sbin/nginx -a /etc/nginx/nginx.conf;then
 } 
 #源安装nginx
 install_nginx(){
-echo'
-[nginx]
-name=nginx repo
-baseurl=http://nginx.org/packages/centos/$releasever/$basearch/
-gpgcheck=0
-enabled=1
-' > /etc/yum.repos.d/nginx.repo
-yum install nginx vim curl -y
+mv /etc/apt/sources.list /etc/apt/sources.list.backup
+rm -rf /etc/apt/sources.list
+if [ "${aNum}" = "1" ];then
+echo "
+deb http://deb.debian.org/debian ${codename} main
+deb-src http://deb.debian.org/debian ${codename} main
+deb http://security.debian.org/debian-security ${codename}-security main
+deb-src http://security.debian.org/debian-security ${codename}-security main
+deb http://deb.debian.org/debian ${codename}-updates main
+deb-src http://deb.debian.org/debian ${codename}-updates main
+deb http://deb.debian.org/debian ${codename}-backports main
+deb-src http://deb.debian.org/debian ${codename}-backports main
+" > /etc/apt/sources.list
+elif [ "${aNum}" = "2" ];then
+echo "
+deb https://mirrors.tuna.tsinghua.edu.cn/debian/ ${codename} main contrib non-free
+deb https://mirrors.tuna.tsinghua.edu.cn/debian/ ${codename}-updates main contrib non-free
+deb https://mirrors.tuna.tsinghua.edu.cn/debian/ ${codename}-backports main contrib non-free
+deb https://mirrors.tuna.tsinghua.edu.cn/debian-security ${codename}-security main contrib non-free
+" > /etc/apt/sources.list
+fi
+apt update -y && apt install vim -y
+echo deb http://nginx.org/packages/debian/ ${codename} nginx | tee /etc/apt/sources.list.d/nginx.list
+apt install gnupg2 -y
+wget http://nginx.org/keys/nginx_signing.key
+apt-key add nginx_signing.key
+apt update -y && apt install nginx -y
 rm -rf etc/nginx/nginx.conf
 mkdir -p /etc/nginx/tunnelconf
 echo "
@@ -62,9 +81,11 @@ ngtunnel_menu
 uninstall_nginx(){
 service nginx stop
 rm -rf /etc/nginx
-yum remove nginx -y
-yum purge nginx -y
-yum autoremove nginx -y
+apt-get remove nginx -y
+apt-get purge nginx -y
+apt-get autoremove nginx -y
+rm -rf /etc/apt/sources.list
+mv /etc/apt/sources.list.backup /etc/apt/sources.list
 ngtunnel_menu
 }
 
@@ -284,7 +305,7 @@ echo -e "
  ${GREEN} 8.删除防火墙
  ${GREEN} 0.退出脚本
  "
-read -p " 请输入数字后[0-9] 按回车键:" num
+read -p " 请输入数字后[0-8] 按回车键:" num
 case "$num" in
 	1)
 	install_nginx
@@ -315,7 +336,7 @@ case "$num" in
 	;;
 	*)	
 	clear
-	echo "请输入正确数字 [0-9] 按回车键"
+	echo "请输入正确数字 [0-8] 按回车键"
 	sleep 1s
 	ngtunnel_menu
 	;;
