@@ -27,27 +27,6 @@ if test -a /usr/sbin/nginx -a /etc/nginx/nginx.conf;then
 } 
 #编译安装nginx
 install_nginx(){
-mv /etc/apt/sources.list /etc/apt/sources.list.backup
-rm -rf /etc/apt/sources.list
-if [ "${aNum}" = "1" ];then
-echo "
-deb http://deb.debian.org/debian ${codename} main
-deb-src http://deb.debian.org/debian ${codename} main
-deb http://security.debian.org/debian-security ${codename}-security main
-deb-src http://security.debian.org/debian-security ${codename}-security main
-deb http://deb.debian.org/debian ${codename}-updates main
-deb-src http://deb.debian.org/debian ${codename}-updates main
-deb http://deb.debian.org/debian ${codename}-backports main
-deb-src http://deb.debian.org/debian ${codename}-backports main
-" > /etc/apt/sources.list
-elif [ "${aNum}" = "2" ];then
-echo "
-deb https://mirrors.tuna.tsinghua.edu.cn/debian/ ${codename} main contrib non-free
-deb https://mirrors.tuna.tsinghua.edu.cn/debian/ ${codename}-updates main contrib non-free
-deb https://mirrors.tuna.tsinghua.edu.cn/debian/ ${codename}-backports main contrib non-free
-deb https://mirrors.tuna.tsinghua.edu.cn/debian-security ${codename}-security main contrib non-free
-" > /etc/apt/sources.list
-fi
 apt update -y && apt install vim curl lsof wget -y
 apt install build-essential libpcre3 libpcre3-dev install -y zlib1g-dev openssl libssl-dev -y
 wget http://nginx.org/download/nginx-1.23.3.tar.gz && tar -xvzf nginx-1.23.3.tar.gz
