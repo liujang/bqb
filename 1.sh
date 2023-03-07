@@ -25,7 +25,7 @@ if test -a /usr/sbin/nginx -a /etc/nginx/nginx.conf;then
         echo "--------nginx未安装---------"
     fi
 } 
-#源安装nginx
+#编译安装nginx
 install_nginx(){
 mv /etc/apt/sources.list /etc/apt/sources.list.backup
 rm -rf /etc/apt/sources.list
@@ -48,12 +48,63 @@ deb https://mirrors.tuna.tsinghua.edu.cn/debian/ ${codename}-backports main cont
 deb https://mirrors.tuna.tsinghua.edu.cn/debian-security ${codename}-security main contrib non-free
 " > /etc/apt/sources.list
 fi
-apt update -y && apt install vim -y
-echo deb http://nginx.org/packages/debian/ ${codename} nginx | tee /etc/apt/sources.list.d/nginx.list
-apt install gnupg2 -y
-wget http://nginx.org/keys/nginx_signing.key
-apt-key add nginx_signing.key
-apt update -y && apt install nginx -y
+apt update -y && apt install vim curl lsof wget -y
+apt install build-essential libpcre3 libpcre3-dev install -y zlib1g-dev openssl libssl-dev -y
+wget http://nginx.org/download/nginx-1.23.3.tar.gz && tar -xvzf nginx-1.23.3.tar.gz
+cd nginx-1.23.3
+./configure \
+--prefix=/etc/nginx \
+--sbin-path=/usr/sbin/nginx \
+--conf-path=/etc/nginx/nginx.conf \
+--error-log-path=/var/log/nginx/error.log \
+--http-log-path=/var/log/nginx/access.log \
+--pid-path=/var/run/nginx.pid \
+--lock-path=/var/run/nginx.lock \
+--http-client-body-temp-path=/var/cache/nginx/client_temp \
+--http-proxy-temp-path=/var/cache/nginx/proxy_temp \
+--http-fastcgi-temp-path=/var/cache/nginx/fastcgi_temp \
+--http-uwsgi-temp-path=/var/cache/nginx/uwsgi_temp \
+--http-scgi-temp-path=/var/cache/nginx/scgi_temp \
+--with-file-aio \
+--with-threads \
+--with-http_addition_module \
+--with-http_auth_request_module \
+--with-http_dav_module \
+--with-http_flv_module \
+--with-http_gunzip_module \
+--with-http_gzip_static_module \
+--with-http_mp4_module \
+--with-http_random_index_module \
+--with-http_realip_module \
+--with-http_secure_link_module \
+--with-http_slice_module \
+--with-http_ssl_module \
+--with-http_stub_status_module \
+--with-http_sub_module \
+--with-http_v2_module \
+--with-mail \
+--with-mail_ssl_module \
+--with-stream \
+--with-stream_realip_module \
+--with-stream_ssl_module \
+--with-stream_ssl_preread_module
+make && make install 
+echo '
+[Unit]
+Description=nginx - high performance web server
+Documentation=https://nginx.org/en/docs/
+After=network-online.target remote-fs.target nss-lookup.target
+Wants=network-online.target
+
+[Service]
+Type=forking
+PIDFile=/var/run/nginx.pid
+ExecStart=/usr/sbin/nginx -c /etc/nginx/nginx.conf
+ExecReload=/bin/sh -c "/bin/kill -s HUP $(/bin/cat /var/run/nginx.pid)"
+ExecStop=/bin/sh -c "/bin/kill -s TERM $(/bin/cat /var/run/nginx.pid)"
+
+[Install]
+WantedBy=multi-user.target ' >/usr/lib/systemd/system nginx.service
 rm -rf etc/nginx/nginx.conf
 mkdir -p /etc/nginx/tunnelconf
 echo "
@@ -74,6 +125,12 @@ include /etc/nginx/tunnelconf/*.conf;
 " > /etc/nginx/nginx.conf
 clear
 systemctl start nginx
+apt-get install iptables-persistent -y
+iptables -P INPUT ACCEPT
+iptables -P OUTPUT ACCEPT
+iptables -P FORWARD ACCEPT
+netfilter-persistent save
+netfilter-persistent reload
 ngtunnel_menu
 }
 
