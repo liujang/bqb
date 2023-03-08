@@ -104,7 +104,7 @@ include /etc/nginx/tunnelconf/*.conf;
 " > /etc/nginx/nginx.conf
 clear
 systemctl start nginx
-apt-get install iptables-persistent -y
+apt-get install iptables-persistent
 iptables -P INPUT ACCEPT
 iptables -P OUTPUT ACCEPT
 iptables -P FORWARD ACCEPT
