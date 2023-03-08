@@ -83,7 +83,7 @@ ExecReload=/bin/sh -c "/bin/kill -s HUP $(/bin/cat /var/run/nginx.pid)"
 ExecStop=/bin/sh -c "/bin/kill -s TERM $(/bin/cat /var/run/nginx.pid)"
 
 [Install]
-WantedBy=multi-user.target ' >/usr/lib/systemd/system/nginx.service
+WantedBy=multi-user.target ' > /usr/lib/systemd/system/nginx.service
 systemctl enable nginx --now
 systemctl daemon-reload
 rm -rf etc/nginx/nginx.conf
@@ -119,9 +119,8 @@ ngtunnel_menu
 uninstall_nginx(){
 service nginx stop
 rm -rf /etc/nginx
-apt-get remove nginx -y
-apt-get purge nginx -y
-apt-get autoremove nginx -y
+rm -rf /usr/sbin/nginx
+rm -rf /usr/lib/systemd/system/nginx.service
 ngtunnel_menu
 }
 
