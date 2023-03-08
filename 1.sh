@@ -328,9 +328,9 @@ apt-get purge ufw
 
 #ngtunnel菜单
 ngtunnel_menu(){
-echo -e "
- check_install
- ${GREEN} 1.安装nginx
+clear
+check_install
+echo -e " ${GREEN} 1.安装nginx
  ${GREEN} 2.卸载nginx
  ${GREEN} 3.自签ssl
  ${GREEN} 4.添加nginx规则
@@ -338,8 +338,7 @@ echo -e "
  ${GREEN} 6.查看nginx规则
  ${GREEN} 7.管理nginx
  ${GREEN} 8.删除防火墙
- ${GREEN} 0.退出脚本
- "
+ ${GREEN} 0.退出脚本"
 read -p " 请输入数字后[0-8] 按回车键:" num
 case "$num" in
 	1)
