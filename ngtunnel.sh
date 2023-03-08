@@ -25,35 +25,65 @@ if test -a /usr/sbin/nginx -a /etc/nginx/nginx.conf;then
         echo "--------nginx未安装---------"
     fi
 } 
-#源安装nginx
+#编译安装nginx
 install_nginx(){
-mv /etc/apt/sources.list /etc/apt/sources.list.backup
-rm -rf /etc/apt/sources.list
-if [ "${aNum}" = "1" ];then
-echo "
-deb http://deb.debian.org/debian ${codename} main
-deb-src http://deb.debian.org/debian ${codename} main
-deb http://security.debian.org/debian-security ${codename}-security main
-deb-src http://security.debian.org/debian-security ${codename}-security main
-deb http://deb.debian.org/debian ${codename}-updates main
-deb-src http://deb.debian.org/debian ${codename}-updates main
-deb http://deb.debian.org/debian ${codename}-backports main
-deb-src http://deb.debian.org/debian ${codename}-backports main
-" > /etc/apt/sources.list
-elif [ "${aNum}" = "2" ];then
-echo "
-deb https://mirrors.tuna.tsinghua.edu.cn/debian/ ${codename} main contrib non-free
-deb https://mirrors.tuna.tsinghua.edu.cn/debian/ ${codename}-updates main contrib non-free
-deb https://mirrors.tuna.tsinghua.edu.cn/debian/ ${codename}-backports main contrib non-free
-deb https://mirrors.tuna.tsinghua.edu.cn/debian-security ${codename}-security main contrib non-free
-" > /etc/apt/sources.list
-fi
-apt update -y && apt install vim -y
-echo deb http://nginx.org/packages/debian/ ${codename} nginx | tee /etc/apt/sources.list.d/nginx.list
-apt install gnupg2 -y
-wget http://nginx.org/keys/nginx_signing.key
-apt-key add nginx_signing.key
-apt update -y && apt install nginx -y
+apt update -y && apt install vim curl lsof wget -y
+apt install build-essential libpcre3 libpcre3-dev zlib1g-dev openssl libssl-dev -y
+wget http://nginx.org/download/nginx-1.23.3.tar.gz && tar -xvzf nginx-1.23.3.tar.gz
+cd nginx-1.23.3
+./configure \
+--prefix=/etc/nginx \
+--sbin-path=/usr/sbin/nginx \
+--conf-path=/etc/nginx/nginx.conf \
+--error-log-path=/var/log/nginx/error.log \
+--http-log-path=/var/log/nginx/access.log \
+--pid-path=/var/run/nginx.pid \
+--lock-path=/var/run/nginx.lock \
+--http-client-body-temp-path=/var/cache/nginx/client_temp \
+--http-proxy-temp-path=/var/cache/nginx/proxy_temp \
+--http-fastcgi-temp-path=/var/cache/nginx/fastcgi_temp \
+--http-uwsgi-temp-path=/var/cache/nginx/uwsgi_temp \
+--http-scgi-temp-path=/var/cache/nginx/scgi_temp \
+--with-file-aio \
+--with-threads \
+--with-http_addition_module \
+--with-http_auth_request_module \
+--with-http_dav_module \
+--with-http_flv_module \
+--with-http_gunzip_module \
+--with-http_gzip_static_module \
+--with-http_mp4_module \
+--with-http_random_index_module \
+--with-http_realip_module \
+--with-http_secure_link_module \
+--with-http_slice_module \
+--with-http_ssl_module \
+--with-http_stub_status_module \
+--with-http_sub_module \
+--with-http_v2_module \
+--with-mail \
+--with-mail_ssl_module \
+--with-stream \
+--with-stream_realip_module \
+--with-stream_ssl_module \
+--with-stream_ssl_preread_module
+make && make install 
+echo '
+[Unit]
+Description=nginx - high performance web server
+Documentation=https://nginx.org/en/docs/
+After=network-online.target remote-fs.target nss-lookup.target
+Wants=network-online.target
+[Service]
+Type=forking
+PIDFile=/var/run/nginx.pid
+ExecStart=/usr/sbin/nginx -c /etc/nginx/nginx.conf
+ExecReload=/bin/sh -c "/bin/kill -s HUP $(/bin/cat /var/run/nginx.pid)"
+ExecStop=/bin/sh -c "/bin/kill -s TERM $(/bin/cat /var/run/nginx.pid)"
+[Install]
+WantedBy=multi-user.target ' > /usr/lib/systemd/system/nginx.service
+systemctl enable nginx --now
+systemctl daemon-reload
 rm -rf etc/nginx/nginx.conf
 mkdir -p /etc/nginx/tunnelconf
 echo "
@@ -62,20 +92,24 @@ worker_processes auto;
 worker_cpu_affinity auto;
 worker_rlimit_nofile 131072;
 error_log /dev/null;
-
 events {
     worker_connections  131072;
     multi_accept on;
     accept_mutex off;
     use epoll;
 }
-
 stream {
 include /etc/nginx/tunnelconf/*.conf;
 }
 " > /etc/nginx/nginx.conf
 clear
 systemctl start nginx
+apt-get install iptables-persistent -y
+iptables -P INPUT ACCEPT
+iptables -P OUTPUT ACCEPT
+iptables -P FORWARD ACCEPT
+netfilter-persistent save
+netfilter-persistent reload
 ngtunnel_menu
 }
 
@@ -83,11 +117,8 @@ ngtunnel_menu
 uninstall_nginx(){
 service nginx stop
 rm -rf /etc/nginx
-apt-get remove nginx -y
-apt-get purge nginx -y
-apt-get autoremove nginx -y
-rm -rf /etc/apt/sources.list
-mv /etc/apt/sources.list.backup /etc/apt/sources.list
+rm -rf /usr/sbin/nginx
+rm -rf /usr/lib/systemd/system/nginx.service
 ngtunnel_menu
 }
 
@@ -164,7 +195,7 @@ server {
         resolver 1.1.1.1 8.8.8.8 valid=30s;
         resolver_timeout 3s;
         set \$node \"${remote_ip}:${remote_port}\";
-	proxy_protocol off;
+	    proxy_protocol off;
         access_log off;
 }
 " > /etc/nginx/tunnelconf/${listen_port}.conf
@@ -187,7 +218,7 @@ server {
         resolver 223.5.5.5 119.29.29.29 valid=30s;
         resolver_timeout 3s;
         set \$node \"${remote_ip}:${remote_port}\";
-	proxy_protocol off;
+	    proxy_protocol off;
         access_log off;
 }
 " > /etc/nginx/tunnelconf/${listen_port}.conf
@@ -357,9 +388,9 @@ apt-get purge ufw
 
 #ngtunnel菜单
 ngtunnel_menu(){
+clear
 check_install
-echo -e "
- ${GREEN} 1.安装nginx
+echo -e " ${GREEN} 1.安装nginx
  ${GREEN} 2.卸载nginx
  ${GREEN} 3.自签ssl
  ${GREEN} 4.添加nginx规则
@@ -368,8 +399,7 @@ echo -e "
  ${GREEN} 7.管理nginx
  ${GREEN} 8.对接ss
  ${GREEN} 9.删除防火墙
- ${GREEN} 0.退出脚本
- "
+ ${GREEN} 0.退出脚本"
 read -p " 请输入数字后[0-9] 按回车键:" num
 case "$num" in
 	1)
