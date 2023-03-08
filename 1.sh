@@ -328,8 +328,8 @@ apt-get purge ufw
 
 #ngtunnel菜单
 ngtunnel_menu(){
-check_install
 echo -e "
+ check_install
  ${GREEN} 1.安装nginx
  ${GREEN} 2.卸载nginx
  ${GREEN} 3.自签ssl
