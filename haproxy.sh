@@ -15,7 +15,7 @@ haproxy_v=2.8-dev9
 install_haproxy(){
 apt update -y && apt install vim curl lsof wget -y
 apt install build-essential libpcre3 libpcre3-dev zlib1g-dev openssl libssl-dev -y
-wget https://www.lua.org/ftp/${lua_v}.tar.gz
+wget http://www.lua.org/ftp/${lua_v}.tar.gz
 wget https://github.com/haproxy/haproxy/archive/refs/tags/v${haproxy_v}.tar.gz
 tar -xvzf ${lua_v}.tar.gz && tar -xvzf v${haproxy_v}.tar.gz
 cd /root/${lua_v}
