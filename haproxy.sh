@@ -29,3 +29,5 @@ wget -N --no-check-certificate -P /usr/lib/systemd/system/ "https://raw.githubus
 systemctl enable haproxy --now
 systemctl daemon-reload
 }
+
+install_haproxy()
