@@ -1,0 +1,17 @@
+[Unit]
+Description=HAProxy Load Balancer
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Environment="CONFIG=/usr/local/haproxy/haproxy.cfg" "PIDFILE=/run/haproxy.pid" "EXTRAOPTS=-S /run/haproxy-master.sock"
+ExecStart=/usr/local/sbin/haproxy -Ws -f $CONFIG -p $PIDFILE $EXTRAOPTS
+ExecReload=/usr/local/sbin/haproxy -Ws -f $CONFIG -c -q $EXTRAOPTS
+ExecReload=/bin/kill -USR2 $MAINPID
+KillMode=mixed
+Restart=always
+SuccessExitStatus=143
+Type=notify
+
+[Install]
+WantedBy=multi-user.target
