@@ -9,5 +9,7 @@ GREEN="\033[32m\033[01m"
 BLUE="\033[0;36m"
 FUCHSIA="\033[0;35m"
 
+lua_v=lua-5.4.5
+haproxy_v=v2.8-dev9
 lua_da=https://www.lua.org/ftp/lua-5.4.5.tar.gz
 haproxy_da=https://github.com/haproxy/haproxy/archive/refs/tags/v2.8-dev9.tar.gz
