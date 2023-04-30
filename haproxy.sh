@@ -30,4 +30,4 @@ systemctl enable haproxy --now
 systemctl daemon-reload
 }
 
-install_haproxy()
+install_haproxy
