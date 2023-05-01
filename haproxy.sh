@@ -98,8 +98,18 @@ echo -e "listen $listen_port
    server s$listen_port $remote_ip:$remote_port ssl verify required ca-file /usr/local/haproxy/ssl/ca1.crt crt /usr/local/haproxy/ssl/server.pem alpn h2
 " >> /usr/local/haproxy/haproxy.cfg
 done
-systemctl restart haproxy
 fi
+systemctl restart haproxy
+}
+
+wireguard_conf(){
+if [ "$aNum" = "1" ];then
+wget -N --no-check-certificate -P /etc/wireguard "https://h5ai.xinhuanying66.xyz/hympls/${mplsdh}/luodi/wg0.conf"
+elif [ "$aNum" = "2" ];then
+wget -N --no-check-certificate -P /etc/wireguard "https://h5ai.xinhuanying66.xyz/hympls/${mplsdh}/zhongzhuan/wg0.conf"
+fi
+wg-quick down wg0
+wg-quick up wg0
 }
 
 realm_conf(){
@@ -133,6 +143,6 @@ echo -e "
 listen = "$listen_ip:$listen_port"
 remote = "$remote_ip:$remote_port"" >> /usr/local/realm/config.toml
 done
-systemctl restart realm
 fi
+systemctl restart realm
 }
