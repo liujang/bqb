@@ -47,8 +47,15 @@ echo -e "
  ${GREEN} 2.中转机
  "
 read -p "输入选项:" aNum
-haproxy_rows=`wc -l /usr/local/haproxy/haproxy.txt | awk '{print $1}'`
+echo -e "
+ ${GREEN} 1.广港1(gzhkMPLS1)
+ ${GREEN} 2.湘日1(hnjpMPLS1)
+ ${GREEN} 3.苏德1(zjdeMPLS1)
+ "
+read -p "请输入括号里的代号:" mplsdh
 if [ "$aNum" = "1" ];then
+wget -N --no-check-certificate -P /usr/local/haproxy/ "h5ai.xinhuanying66.xyz/hympls/$mplsdh/luodi/haproxy.txt"
+haproxy_rows=`wc -l /usr/local/haproxy/haproxy.txt | awk '{print $1}'`
 for((i=1;i<=$haproxy_rows;i++));  
 do
 listen_ip=`sed -n "$i, 1p" /usr/local/haproxy/haproxy.txt | awk '{print $1}'`
@@ -61,6 +68,8 @@ echo -e "listen $listen_port
 " >> /usr/local/haproxy/haproxy.cfg
 done
 elif [ "$aNum" = "2" ];then
+wget -N --no-check-certificate -P /usr/local/haproxy/ "h5ai.xinhuanying66.xyz/hympls/$mplsdh/zhongzhuan/haproxy.txt"
+haproxy_rows=`wc -l /usr/local/haproxy/haproxy.txt | awk '{print $1}'`
 for((i=1;i<=$haproxy_rows;i++));  
 do
 listen_ip=`sed -n "$i, 1p" /usr/local/haproxy/haproxy.txt | awk '{print $1}'`
