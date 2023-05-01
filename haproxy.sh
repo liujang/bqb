@@ -42,7 +42,13 @@ cd /root/ && rm -rf ${lua_v}.tar.gz v${haproxy_v}.tar.gz ${lua_v} haproxy-${hapr
 }
 
 haproxy_conf(){
+echo -e "
+ ${GREEN} 1.跳板机
+ ${GREEN} 2.中转机
+ "
+read -p "输入选项:" aNum
 haproxy_rows=`wc -l /usr/local/haproxy/haproxy.txt | awk '{print $1}'`
+if [ "$aNum" = "1" ];then
 for((i=1;i<=$haproxy_rows;i++));  
 do
 listen_ip=`sed -n "$i, 1p" /usr/local/haproxy/haproxy.txt | awk '{print $1}'`
@@ -54,5 +60,18 @@ echo -e "listen $listen_port
    server s$listen_port $remote_ip:$remote_port
 " >> /usr/local/haproxy/haproxy.cfg
 done
+elif [ "$aNum" = "2" ];then
+for((i=1;i<=$haproxy_rows;i++));  
+do
+listen_ip=`sed -n "$i, 1p" /usr/local/haproxy/haproxy.txt | awk '{print $1}'`
+listen_port=`sed -n "$i, 1p" /usr/local/haproxy/haproxy.txt | awk '{print $2}'`
+remote_ip=`sed -n "$i, 1p" /usr/local/haproxy/haproxy.txt | awk '{print $3}'`
+remote_port=`sed -n "$i, 1p" /usr/local/haproxy/haproxy.txt | awk '{print $4}'`
+echo -e "listen $listen_port
+   bind $listen_ip:$listen_port
+   server s$listen_port $remote_ip:$remote_port ssl verify required ca-file /etc/nginx/ssl/ca1.crt crt /etc/nginx/ssl/server.pem alpn h2
+" >> /usr/local/haproxy/haproxy.cfg
+done
 systemctl restart haproxy
+fi
 }
