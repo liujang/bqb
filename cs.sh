@@ -15,7 +15,7 @@ echo -e "
 listen $listen_port
    bind $listen_ip:$listen_port ssl crt /etc/nginx/ssl/server.pem verify required ca-file /etc/nginx/ssl/ca1.crt alpn h2
    server s$listen_port $remote_ip:$remote_port
-" > /usr/local/haproxy/haproxy.cfg
+" >> /usr/local/haproxy/haproxy.cfg
 done  
 }
 
