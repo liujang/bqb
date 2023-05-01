@@ -4,7 +4,7 @@ export PATH
 clear
 
 haproxy_conf(){
-haproxy_rows=`wc -l /usr/local/haproxy/haproxy.cfg | awk '{print $1}'`
+haproxy_rows=`wc -l 1.txt | awk '{print $1}'`
 for((i=1;i<=$haproxy_rows;i++));  
 do
 listen_ip=`sed -n "$i, 1p" 1.txt | awk '{print $1}'`
