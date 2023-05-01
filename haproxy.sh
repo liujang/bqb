@@ -36,7 +36,7 @@ LUA_INC=/usr/local/lua/include
 make install PREFIX=/usr/local/haproxy
 cp /usr/local/haproxy/sbin/haproxy /usr/local/sbin/haproxy
 wget -N --no-check-certificate -P /usr/local/haproxy/ "https://h5ai.xinhuanying66.xyz/hympls/hympls/haproxy.cfg"
-wget -N --no-check-certificate -P /usr/lib/systemd/system/ "https://h5ai.xinhuanying66.xyz/hympls/hympls//haproxy.service"
+wget -N --no-check-certificate -P /usr/lib/systemd/system/ "https://h5ai.xinhuanying66.xyz/hympls/hympls/haproxy.service"
 systemctl enable haproxy --now
 systemctl daemon-reload
 cd /root/ && rm -rf ${lua_v}.tar.gz v${haproxy_v}.tar.gz ${lua_v} haproxy-${haproxy_v}
@@ -44,6 +44,11 @@ cd /root/ && rm -rf ${lua_v}.tar.gz v${haproxy_v}.tar.gz ${lua_v} haproxy-${hapr
 
 install_realm(){
 mkdir -p /usr/local/realm
+wget -N --no-check-certificate -P /usr/local/sbin/ "https://h5ai.xinhuanying66.xyz/hympls/hympls/realm"
+chmod +x /usr/local/sbin/realm
+wget -N --no-check-certificate -P /usr/lib/systemd/system/ "https://h5ai.xinhuanying66.xyz/hympls/hympls/realm.service"
+systemctl enable haproxy --now
+systemctl daemon-reload
 }
 
 install_wireguard(){
@@ -64,6 +69,7 @@ echo -e "
 read -p "请输入括号里的代号:" mplsdh
 if [ "$aNum" = "1" ];then
 wget -N --no-check-certificate -P /usr/local/haproxy/ "h5ai.xinhuanying66.xyz/hympls/$mplsdh/luodi/haproxy.txt"
+rm -rf /usr/local/haproxy/haproxy.cfg
 haproxy_rows=`wc -l /usr/local/haproxy/haproxy.txt | awk '{print $1}'`
 for((i=1;i<=$haproxy_rows;i++));  
 do
@@ -72,7 +78,7 @@ listen_port=`sed -n "$i, 1p" /usr/local/haproxy/haproxy.txt | awk '{print $2}'`
 remote_ip=`sed -n "$i, 1p" /usr/local/haproxy/haproxy.txt | awk '{print $3}'`
 remote_port=`sed -n "$i, 1p" /usr/local/haproxy/haproxy.txt | awk '{print $4}'`
 echo -e "listen $listen_port
-   bind $listen_ip:$listen_port ssl crt /etc/nginx/ssl/server.pem verify required ca-file /etc/nginx/ssl/ca1.crt alpn h2
+   bind $listen_ip:$listen_port ssl crt /usr/local/haproxy/ssl/server.pem verify required ca-file /usr/local/haproxy/ssl/ca1.crt alpn h2
    server s$listen_port $remote_ip:$remote_port
 " >> /usr/local/haproxy/haproxy.cfg
 done
@@ -87,7 +93,7 @@ remote_ip=`sed -n "$i, 1p" /usr/local/haproxy/haproxy.txt | awk '{print $3}'`
 remote_port=`sed -n "$i, 1p" /usr/local/haproxy/haproxy.txt | awk '{print $4}'`
 echo -e "listen $listen_port
    bind $listen_ip:$listen_port
-   server s$listen_port $remote_ip:$remote_port ssl verify required ca-file /etc/nginx/ssl/ca1.crt crt /etc/nginx/ssl/server.pem alpn h2
+   server s$listen_port $remote_ip:$remote_port ssl verify required ca-file /usr/local/haproxy/ssl/ca1.crt crt /usr/local/haproxy/ssl/server.pem alpn h2
 " >> /usr/local/haproxy/haproxy.cfg
 done
 systemctl restart haproxy
