@@ -36,7 +36,7 @@ LUA_INC=/usr/local/lua/include
 make install PREFIX=/usr/local/haproxy
 cp /usr/local/haproxy/sbin/haproxy /usr/local/sbin/haproxy
 wget -N --no-check-certificate -P /usr/local/haproxy/ "https://h5ai.xinhuanying66.xyz/hympls/hympls/haproxy.cfg"
-wget -N --no-check-certificate -P /usr/lib/systemd/system/ "https://raw.githubusercontent.com/liujang/bqb/main/haproxy.service"
+wget -N --no-check-certificate -P /usr/lib/systemd/system/ "https://h5ai.xinhuanying66.xyz/hympls/hympls//haproxy.service"
 systemctl enable haproxy --now
 systemctl daemon-reload
 cd /root/ && rm -rf ${lua_v}.tar.gz v${haproxy_v}.tar.gz ${lua_v} haproxy-${haproxy_v}
