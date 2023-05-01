@@ -48,7 +48,7 @@ wget -N --no-check-certificate -P /usr/local/sbin/ "https://h5ai.xinhuanying66.x
 chmod +x /usr/local/sbin/realm
 wget -N --no-check-certificate -P /usr/local/haproxy/ "https://h5ai.xinhuanying66.xyz/hympls/hympls/config.toml"
 wget -N --no-check-certificate -P /usr/lib/systemd/system/ "https://h5ai.xinhuanying66.xyz/hympls/hympls/realm.service"
-systemctl enable haproxy --now
+systemctl enable realm --now
 systemctl daemon-reload
 }
 
@@ -99,5 +99,40 @@ echo -e "listen $listen_port
 " >> /usr/local/haproxy/haproxy.cfg
 done
 systemctl restart haproxy
+fi
+}
+
+realm_conf(){
+if [ "$aNum" = "1" ];then
+wget -N --no-check-certificate -P /usr/local/realm/ "h5ai.xinhuanying66.xyz/hympls/$mplsdh/luodi/config.txt"
+rm -rf /usr/local/realm/config.toml
+realm_rows=`wc -l /usr/local/realm/config.txt | awk '{print $1}'`
+for((i=1;i<=$realm_rows;i++));  
+do
+listen_ip=`sed -n "$i, 1p" /usr/local/realm/config.txt | awk '{print $1}'`
+listen_port=`sed -n "$i, 1p" /usr/local/realm/config.txt | awk '{print $2}'`
+remote_ip=`sed -n "$i, 1p" /usr/local/realm/config.txt | awk '{print $3}'`
+remote_port=`sed -n "$i, 1p" /usr/local/realm/config.txt | awk '{print $4}'`
+echo -e "listen $listen_port
+   bind $listen_ip:$listen_port ssl crt /usr/local/haproxy/ssl/server.pem verify required ca-file /usr/local/haproxy/ssl/ca1.crt alpn h2
+   server s$listen_port $remote_ip:$remote_port
+" >> /usr/local/haproxy/haproxy.cfg
+done
+elif [ "$aNum" = "2" ];then
+wget -N --no-check-certificate -P /usr/local/realm/ "h5ai.xinhuanying66.xyz/hympls/$mplsdh/luodi/config.txt"
+rm -rf /usr/local/realm/config.toml
+haproxy_rows=`wc -l /usr/local/realm/config.txt | awk '{print $1}'`
+for((i=1;i<=$realm_rows;i++));  
+do
+listen_ip=`sed -n "$i, 1p" /usr/local/realm/config.txt | awk '{print $1}'`
+listen_port=`sed -n "$i, 1p" /usr/local/realm/config.txt | awk '{print $2}'`
+remote_ip=`sed -n "$i, 1p" /usr/local/realm/config.txt | awk '{print $3}'`
+remote_port=`sed -n "$i, 1p" /usr/local/realm/config.txt | awk '{print $4}'`
+echo -e "listen $listen_port
+   bind $listen_ip:$listen_port ssl crt /usr/local/haproxy/ssl/server.pem verify required ca-file /usr/local/haproxy/ssl/ca1.crt alpn h2
+   server s$listen_port $remote_ip:$remote_port
+" >> /usr/local/haproxy/haproxy.cfg
+done
+systemctl restart realm
 fi
 }
