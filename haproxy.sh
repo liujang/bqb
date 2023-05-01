@@ -42,6 +42,14 @@ systemctl daemon-reload
 cd /root/ && rm -rf ${lua_v}.tar.gz v${haproxy_v}.tar.gz ${lua_v} haproxy-${haproxy_v}
 }
 
+install_realm(){
+mkdir -p /usr/local/realm
+}
+
+install_wireguard(){
+
+}
+
 haproxy_conf(){
 echo -e "
  ${GREEN} 1.跳板机
