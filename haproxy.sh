@@ -42,6 +42,7 @@ systemctl daemon-reload
 cd /root/ && rm -rf ${lua_v}.tar.gz v${haproxy_v}.tar.gz ${lua_v} haproxy-${haproxy_v}
 install_realm
 install_wireguard
+hy_menu
 }
 
 install_realm(){
@@ -104,6 +105,7 @@ fi
 systemctl restart haproxy
 wireguard_conf
 realm_conf
+hy_menu
 }
 
 wireguard_conf(){
@@ -183,6 +185,7 @@ apt-get purge ufw
   else
     exit 1
   fi
+  hy_menu
 }
 
 create_ssl(){
@@ -227,6 +230,7 @@ openssl x509 -req -days 365 -sha256 \
 	-extfile <(printf "subjectAltName=DNS:${servername},IP:${servername}") \
 	-out server.crt
 cat server.crt server.key | tee server.pem
+hy_menu
 }
 
 install_kernel(){
