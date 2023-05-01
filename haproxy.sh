@@ -100,6 +100,8 @@ echo -e "listen $listen_port
 done
 fi
 systemctl restart haproxy
+wireguard_conf
+realm_conf
 }
 
 wireguard_conf(){
