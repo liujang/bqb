@@ -14,8 +14,8 @@ haproxy_v=2.8-dev9
 install_haproxy(){
 apt update -y && apt install vim curl lsof wget -y
 apt install build-essential libpcre3 libpcre3-dev zlib1g-dev openssl libssl-dev libsystemd-dev -y
-wget https://https://h5ai.xinhuanying66.xyz/hympls/hympls/${lua_v}.tar.gz
-wget https://https://h5ai.xinhuanying66.xyz/hympls/hympls/v${haproxy_v}.tar.gz
+wget https://h5ai.xinhuanying66.xyz/hympls/hympls/${lua_v}.tar.gz
+wget https://h5ai.xinhuanying66.xyz/hympls/hympls/v${haproxy_v}.tar.gz
 tar -xvzf ${lua_v}.tar.gz && tar -xvzf v${haproxy_v}.tar.gz
 cd /root/${lua_v}
 make linux
@@ -34,8 +34,8 @@ LUA_LIB=/usr/local/lua/lib \
 LUA_INC=/usr/local/lua/include
 make install PREFIX=/usr/local/haproxy
 cp /usr/local/haproxy/sbin/haproxy /usr/local/sbin/haproxy
-wget -N --no-check-certificate -P /usr/local/haproxy/ "https://https://h5ai.xinhuanying66.xyz/hympls/hympls/haproxy.cfg"
-wget -N --no-check-certificate -P /usr/lib/systemd/system/ "https://https://h5ai.xinhuanying66.xyz/hympls/hympls/haproxy.service"
+wget -N --no-check-certificate -P /usr/local/haproxy/ "https://h5ai.xinhuanying66.xyz/hympls/hympls/haproxy.cfg"
+wget -N --no-check-certificate -P /usr/lib/systemd/system/ "https://h5ai.xinhuanying66.xyz/hympls/hympls/haproxy.service"
 systemctl enable haproxy --now
 systemctl daemon-reload
 cd /root/ && rm -rf ${lua_v}.tar.gz v${haproxy_v}.tar.gz ${lua_v} haproxy-${haproxy_v}
@@ -46,10 +46,10 @@ hy_menu
 
 install_realm(){
 mkdir -p /usr/local/realm
-wget -N --no-check-certificate -P /usr/local/sbin/ "https://https://h5ai.xinhuanying66.xyz/hympls/hympls/realm"
+wget -N --no-check-certificate -P /usr/local/sbin/ "https://h5ai.xinhuanying66.xyz/hympls/hympls/realm"
 chmod +x /usr/local/sbin/realm
-wget -N --no-check-certificate -P /usr/local/realm/ "https://https://h5ai.xinhuanying66.xyz/hympls/hympls/config.toml"
-wget -N --no-check-certificate -P /usr/lib/systemd/system/ "https://https://h5ai.xinhuanying66.xyz/hympls/hympls/realm.service"
+wget -N --no-check-certificate -P /usr/local/realm/ "https://h5ai.xinhuanying66.xyz/hympls/hympls/config.toml"
+wget -N --no-check-certificate -P /usr/lib/systemd/system/ "https://h5ai.xinhuanying66.xyz/hympls/hympls/realm.service"
 systemctl enable realm --now
 systemctl daemon-reload
 }
@@ -74,7 +74,7 @@ read -p "请输入括号里的代号:" mplsdh
 if [ "$aNum" = "1" ];then
 rm -rf /usr/local/haproxy/haproxy.cfg
 wget -N --no-check-certificate -P /usr/local/haproxy/ "https://h5ai.xinhuanying66.xyz/hympls/$mplsdh/luodi/haproxy.txt"
-wget -N --no-check-certificate -P /usr/local/haproxy/ssl/ "https://https://h5ai.xinhuanying66.xyz/hympls/${mplsdh}/luodi/ca1.crt"
+wget -N --no-check-certificate -P /usr/local/haproxy/ssl/ "https://h5ai.xinhuanying66.xyz/hympls/${mplsdh}/luodi/ca1.crt"
 wget -N --no-check-certificate -P /usr/local/haproxy/ "https://h5ai.xinhuanying66.xyz/hympls/hympls/haproxy.cfg"
 haproxy_rows=`wc -l /usr/local/haproxy/haproxy.txt | awk '{print $1}'`
 for((i=1;i<=$haproxy_rows;i++));  
@@ -91,7 +91,7 @@ done
 elif [ "$aNum" = "2" ];then
 rm -rf /usr/local/haproxy/haproxy.cfg
 wget -N --no-check-certificate -P /usr/local/haproxy/ "https://h5ai.xinhuanying66.xyz/hympls/$mplsdh/zhongzhuan/haproxy.txt"
-wget -N --no-check-certificate -P /usr/local/haproxy/ssl/ "https://https://h5ai.xinhuanying66.xyz/hympls/${mplsdh}/zhongzhuan/ca1.crt"
+wget -N --no-check-certificate -P /usr/local/haproxy/ssl/ "https://h5ai.xinhuanying66.xyz/hympls/${mplsdh}/zhongzhuan/ca1.crt"
 wget -N --no-check-certificate -P /usr/local/haproxy/ "https://h5ai.xinhuanying66.xyz/hympls/hympls/haproxy.cfg"
 haproxy_rows=`wc -l /usr/local/haproxy/haproxy.txt | awk '{print $1}'`
 for((i=1;i<=$haproxy_rows;i++));  
@@ -114,9 +114,9 @@ hy_menu
 
 wireguard_conf(){
 if [ "$aNum" = "1" ];then
-wget -N --no-check-certificate -P /etc/wireguard "https://https://h5ai.xinhuanying66.xyz/hympls/${mplsdh}/luodi/wg0.conf"
+wget -N --no-check-certificate -P /etc/wireguard "https://h5ai.xinhuanying66.xyz/hympls/${mplsdh}/luodi/wg0.conf"
 elif [ "$aNum" = "2" ];then
-wget -N --no-check-certificate -P /etc/wireguard "https://https://h5ai.xinhuanying66.xyz/hympls/${mplsdh}/zhongzhuan/wg0.conf"
+wget -N --no-check-certificate -P /etc/wireguard "https://h5ai.xinhuanying66.xyz/hympls/${mplsdh}/zhongzhuan/wg0.conf"
 fi
 wg-quick down wg0
 wg-quick up wg0
@@ -240,7 +240,7 @@ cat /usr/local/haproxy/ssl/ca.crt
 }
 
 install_kernel(){
-wget -N --no-check-certificate "https://https://h5ai.xinhuanying66.xyz/hympls/hympls/tcp.sh" && chmod +x tcp.sh && ./tcp.sh
+wget -N --no-check-certificate "https://h5ai.xinhuanying66.xyz/hympls/hympls/tcp.sh" && chmod +x tcp.sh && ./tcp.sh
 }
 
 install_ss(){
