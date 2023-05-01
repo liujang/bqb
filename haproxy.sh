@@ -1,7 +1,6 @@
 #!/bin/bash
 PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:~/bin
 export PATH
-clear
 
 RED_COLOR="\033[0;31m"
 NO_COLOR="\033[0m"
@@ -371,7 +370,6 @@ case "$num" in
 	exit 1
 	;;
 	*)	
-	clear
 	echo "请输入正确数字 [0-7] 按回车键"
 	sleep 1s
 	hy_menu
