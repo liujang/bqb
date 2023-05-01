@@ -131,7 +131,7 @@ listen = "$listen_ip:$listen_port"
 remote = "$remote_ip:$remote_port"" >> /usr/local/realm/config.toml
 done
 elif [ "$aNum" = "2" ];then
-wget -N --no-check-certificate -P /usr/local/realm/ "h5ai.xinhuanying66.xyz/hympls/$mplsdh/luodi/config.txt"
+wget -N --no-check-certificate -P /usr/local/realm/ "h5ai.xinhuanying66.xyz/hympls/$mplsdh/zhongzhuan/config.txt"
 rm -rf /usr/local/realm/config.toml
 realm_rows=`wc -l /usr/local/realm/config.txt | awk '{print $1}'`
 for((i=1;i<=$realm_rows;i++));  
