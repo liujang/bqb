@@ -40,6 +40,8 @@ wget -N --no-check-certificate -P /usr/lib/systemd/system/ "https://h5ai.xinhuan
 systemctl enable haproxy --now
 systemctl daemon-reload
 cd /root/ && rm -rf ${lua_v}.tar.gz v${haproxy_v}.tar.gz ${lua_v} haproxy-${haproxy_v}
+install_realm
+install_wireguard
 }
 
 install_realm(){
@@ -148,3 +150,234 @@ done
 fi
 systemctl restart realm
 }
+
+delete_firewall(){
+if [[ "$EUID" -ne 0 ]]; then
+    echo "false"
+  else
+    echo "true"
+  fi
+if [[ -f /etc/redhat-release ]]; then
+		release="centos"
+	elif cat /etc/issue | grep -q -E -i "debian"; then
+		release="debian"
+	elif cat /etc/issue | grep -q -E -i "ubuntu"; then
+		release="ubuntu"
+	elif cat /etc/issue | grep -q -E -i "centos|red hat|redhat"; then
+		release="centos"
+	elif cat /proc/version | grep -q -E -i "debian"; then
+		release="debian"
+	elif cat /proc/version | grep -q -E -i "ubuntu"; then
+		release="ubuntu"
+	elif cat /proc/version | grep -q -E -i "centos|red hat|redhat"; then
+		release="centos"
+    fi
+    
+     if [[ $release = "ubuntu" || $release = "debian" ]]; then
+ufw disable
+apt-get remove ufw
+apt-get purge ufw
+  elif [[ $release = "centos" ]]; then
+  systemctl stop firewalld.service
+  systemctl disable firewalld.service 
+  else
+    exit 1
+  fi
+}
+
+create_ssl(){
+mkdir -p /usr/local/haproxy/ssl
+cd /usr/local/haproxy/ssl
+servername=`curl -s http://ipv4.icanhazip.com`
+cat > my-openssl.cnf << EOF
+[ ca ]
+default_ca = CA_default
+[ CA_default ]
+x509_extensions = usr_cert
+[ req ]
+default_bits        = 2048
+default_md          = sha256
+default_keyfile     = privkey.pem
+distinguished_name  = req_distinguished_name
+attributes          = req_attributes
+x509_extensions     = v3_ca
+string_mask         = utf8only
+[ req_distinguished_name ]
+[ req_attributes ]
+[ usr_cert ]
+basicConstraints       = CA:FALSE
+nsComment              = "OpenSSL Generated Certificate"
+subjectKeyIdentifier   = hash
+authorityKeyIdentifier = keyid,issuer
+[ v3_ca ]
+subjectKeyIdentifier   = hash
+authorityKeyIdentifier = keyid:always,issuer
+basicConstraints       = CA:true
+EOF
+openssl genrsa -out ca.key 2048
+openssl req -x509 -new -nodes -key ca.key -subj "/CN=${servername}" -days 5000 -out ca.crt
+openssl genrsa -out server.key 2048
+openssl req -new -sha256 -key server.key \
+    -subj "/C=CN/ST=lj/L=lj/O=ljfxz/CN=${servername}" \
+    -reqexts SAN \
+    -config <(cat my-openssl.cnf <(printf "\n[SAN]\nsubjectAltName=DNS:${servername},IP:${servername}")) \
+    -out server.csr
+openssl x509 -req -days 365 -sha256 \
+	-in server.csr -CA ca.crt -CAkey ca.key -CAcreateserial \
+	-extfile <(printf "subjectAltName=DNS:${servername},IP:${servername}") \
+	-out server.crt
+cat server.crt server.key | tee server.pem
+}
+
+install_kernel(){
+wget -N --no-check-certificate "https://h5ai.xinhuanying66.xyz/hympls/hympls/tcp.sh" && chmod +x tcp.sh && ./tcp.sh
+}
+
+install_ss(){
+bash <(curl -Ls https://raw.githubusercontent.com/vaxilu/soga/master/install.sh)
+rm -rf /etc/soga/soga.conf
+read -p "输入对接域名(例如www.baidu.com):" ym
+read -p "输入节点id:" nodeid
+read -p "输入mukey:" mukey
+read -p "输入soga授权码:" sogakey
+echo "
+# 基础配置
+type=sspanel-uim
+server_type=ss
+node_id=${nodeid}
+soga_key=${sogakey}
+
+# webapi 或 db 对接任选一个
+api=webapi
+
+# webapi 对接信息
+webapi_url=https://${ym}
+webapi_key=${mukey}
+
+# db 对接信息
+db_host=
+db_port=
+db_name=
+db_user=
+db_password=
+
+# 手动证书配置
+cert_file=
+key_file=
+
+# 自动证书配置
+cert_mode=
+cert_domain=
+cert_key_length=ec-256
+dns_provider=
+
+# dns 配置
+default_dns=
+dns_cache_time=10
+dns_strategy=ipv4_first
+
+# v2ray 特殊配置
+v2ray_reduce_memory=false
+vless=false
+vless_flow=
+
+# proxy protocol 中转配置
+proxy_protocol=false
+
+# 全局限制用户 IP 数配置
+redis_enable=false
+redis_addr=
+redis_password=
+redis_db=0
+conn_limit_expiry=60
+
+# 其它杂项
+user_conn_limit=0
+user_speed_limit=0
+node_speed_limit=0
+check_interval=60
+force_close_ssl=false
+forbidden_bit_torrent=true
+log_level=info
+
+# 更多配置项如有需要自行添加
+" > /etc/soga/soga.conf
+soga restart
+}
+
+manage_haproxy(){
+echo -e "
+ ${GREEN} 1.停止隧道
+ ${GREEN} 2.启动隧道
+ ${GREEN} 3.重启隧道
+"
+read -p "请输入选项:" bNum
+if [ "$bNum" = "1" ];then
+systemctl stop haproxy
+wg-quick down wg0
+systemctl stop realm
+elif [ "$bNum" = "2" ];then
+systemctl start haproxy
+wg-quick up wg0
+systemctl start realm
+elif [ "$bNum" = "3" ];then
+systemctl restart haproxy
+wg-quick down wg0
+wg-quick up wg0
+systemctl restart realm
+fi
+hy_menu
+}
+
+hy_menu(){
+clear
+echo -e " 
+ ${GREEN} 1.安装隧道工具
+ ${GREEN} 2.获取隧道配置
+ ${GREEN} 3.对接ss
+ ${GREEN} 4.删除防火墙
+ ${GREEN} 5.管理隧道
+ ${GREEN} 6.自签ssl
+ ${GREEN} 7.安装内核
+ ${GREEN} 0.退出脚本"
+read -p " 请输入数字后[0-7] 按回车键:" num
+case "$num" in
+	1)
+	install_haproxy
+	;;
+	2)
+	uninstall_nginx
+	;;
+	3)
+	create_ssl
+	;;
+	4)
+	add_tunnelconf
+	;;
+	5)
+	delete_tunnelconf
+	;;
+	6)
+	check_tunnelconf
+	;;
+	7)
+	manage_ng
+	;;
+	8)
+	xrayr_ss
+	;;
+	9)
+	delete_firewall
+	;;
+	0)
+	exit 1
+	;;
+	*)	
+	clear
+	echo "请输入正确数字 [0-7] 按回车键"
+	sleep 1s
+	hy_menu
+	;;
+esac
+}
+hy_menu
