@@ -22,7 +22,16 @@ cd /root/${lua_v}
 make linux
 make install INSTALL_TOP=/usr/local/lua
 cd /root/haproxy-${haproxy_v}
-make TARGET=linux-glibc USE_PCRE=1 USE_OPENSSL=1 USE_ZLIB=1 USE_SYSTEMD=1 USE_CPU_AFFINITY=1 USE_LUA=1 LUA_INC=/usr/local/lua/include LUA_LIB=/usr/local/lua/lib
+make TARGET=linux \
+USE_DL=1 \
+USE_PCRE=1 \
+USE_OPENSSL=1 \
+USE_ZLIB=1 \
+USE_SYSTEMD=1 \
+USE_CPU_AFFINITY=1 \
+USE_LUA=1 \
+LUA_LIB=/usr/local/lua/lib \
+LUA_INC=/usr/local/lua/include
 make install PREFIX=/usr/local/haproxy
 cp /usr/local/haproxy/sbin/haproxy /usr/local/sbin/haproxy
 wget -N --no-check-certificate -P /usr/lib/systemd/system/ "https://raw.githubusercontent.com/liujang/bqb/main/haproxy.service"
