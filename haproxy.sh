@@ -53,7 +53,7 @@ systemctl daemon-reload
 }
 
 install_wireguard(){
-apt install linux-image-amd64 -y
+apt install linux-image-amd64 -y $$ apt install wireguard -y
 systemctl enable wg-quick@wg0
 }
 
