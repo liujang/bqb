@@ -49,14 +49,14 @@ install_realm(){
 mkdir -p /usr/local/realm
 wget -N --no-check-certificate -P /usr/local/sbin/ "https://h5ai.xinhuanying66.xyz/hympls/hympls/realm"
 chmod +x /usr/local/sbin/realm
-wget -N --no-check-certificate -P /usr/local/haproxy/ "https://h5ai.xinhuanying66.xyz/hympls/hympls/config.toml"
+wget -N --no-check-certificate -P /usr/local/realm/ "https://h5ai.xinhuanying66.xyz/hympls/hympls/config.toml"
 wget -N --no-check-certificate -P /usr/lib/systemd/system/ "https://h5ai.xinhuanying66.xyz/hympls/hympls/realm.service"
 systemctl enable realm --now
 systemctl daemon-reload
 }
 
 install_wireguard(){
-apt install linux-image-amd64 -y $$ apt install wireguard -y
+apt install linux-image-amd64 -y && apt install wireguard -y
 systemctl enable wg-quick@wg0
 }
 
