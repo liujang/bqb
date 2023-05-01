@@ -22,7 +22,7 @@ cd /root/${lua_v}
 make linux
 make install INSTALL_TOP=/usr/local/lua
 cd /root/haproxy-${haproxy_v}
-make TARGET=linux \
+make TARGET=linux-glibc \
 USE_OPENSSL=1 \
 USE_ZLIB=1 \
 USE_SYSTEMD=1 \
