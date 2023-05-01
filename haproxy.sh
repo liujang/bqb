@@ -346,28 +346,22 @@ case "$num" in
 	install_haproxy
 	;;
 	2)
-	uninstall_nginx
+	haproxy_conf
 	;;
 	3)
-	create_ssl
+	install_ss
 	;;
 	4)
-	add_tunnelconf
+	delete_firewall
 	;;
 	5)
-	delete_tunnelconf
+	manage_haproxy
 	;;
 	6)
-	check_tunnelconf
+	create_ssl
 	;;
 	7)
-	manage_ng
-	;;
-	8)
-	xrayr_ss
-	;;
-	9)
-	delete_firewall
+	install_kernel
 	;;
 	0)
 	exit 1
