@@ -23,14 +23,13 @@ make linux
 make install INSTALL_TOP=/usr/local/lua
 cd /root/haproxy-${haproxy_v}
 make TARGET=linux \
-USE_DL=1 \
-USE_PCRE=1 \
 USE_OPENSSL=1 \
 USE_ZLIB=1 \
 USE_SYSTEMD=1 \
 USE_CPU_AFFINITY=1 \
 USE_PCRE2=1 \
 USE_PCRE2_JIT=1 \
+USE_THREAD=1 \
 USE_LUA=1 \
 LUA_LIB=/usr/local/lua/lib \
 LUA_INC=/usr/local/lua/include
