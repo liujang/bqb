@@ -10,21 +10,8 @@ BLUE="\033[0;36m"
 FUCHSIA="\033[0;35m"
 
 XrayR_install(){
- apt-get update
- apt-get install \
-    apt-transport-https \
-    ca-certificates \
-    curl \
-    gnupg-agent \
-    software-properties-common -y
-curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-sudo add-apt-repository \
-   "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
-   $(lsb_release -cs) \
-   stable"
-sudo apt-get install docker-ce docker-ce-cli containerd.io -y
-systemctl start docker
-systemctl enable docker
+git clone https://github.com/XrayR-project/XrayR-release
+cd XrayR-release
 echo -e "
  ${GREEN} 1.SSpanel
  ${GREEN} 2.NewV2board
@@ -139,6 +126,6 @@ Nodes:
           ALICLOUD_ACCESS_KEY: aaa
           ALICLOUD_SECRET_KEY: bbb
 " > config.yml
-docker pull ghcr.io/xrayr-project/xrayr:latest && docker run --restart=always --name $api$nodeid -d -v /config.yml --network=host ghcr.io/xrayr-project/xrayr:latest
+docker-compose up -d
 }
 XrayR_install
