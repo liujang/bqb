@@ -84,10 +84,10 @@ ConnectionConfig:
   BufferSize: 64 # The internal cache size of each connection, kB 
 Nodes:
   -
-    PanelType: "\"$panel""\ # Panel type: SSpanel, NewV2board, V2board, PMpanel, Proxypanel
+    PanelType: "\"$panel\"" # Panel type: SSpanel, NewV2board, V2board, PMpanel, Proxypanel
     ApiConfig:
-      ApiHost: "\"$hhh://$api""\
-      ApiKey: "\"$mukey""\
+      ApiHost: "\"$hhh://$api\""
+      ApiKey: "\"$mukey\""
       NodeID: $nodeid
       NodeType: $node_type # Node type: V2ray, Trojan, Shadowsocks, Shadowsocks-Plugin
       Timeout: 30 # Timeout for the api request
