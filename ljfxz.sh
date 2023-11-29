@@ -66,7 +66,7 @@ node_type = V2ray
 else
 echo "输入错误"
 fi
-echo '
+echo "
 Log:
   Level: none # Log level: none, error, warning, info, debug 
   AccessPath: # /etc/XrayR/access.Log
@@ -137,7 +137,7 @@ Nodes:
         DNSEnv: # DNS ENV option used by DNS provider
           ALICLOUD_ACCESS_KEY: aaa
           ALICLOUD_SECRET_KEY: bbb
-' > config.yml
+" > config.yml
 docker pull ghcr.io/xrayr-project/xrayr:latest && docker run --restart=always --name $api$node -d -v /config.yml --network=host ghcr.io/xrayr-project/xrayr:latest
 }
 ssr_install(){
