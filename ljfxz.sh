@@ -8,6 +8,7 @@ NO_COLOR="\033[0m"
 GREEN="\033[32m\033[01m"
 BLUE="\033[0;36m"
 FUCHSIA="\033[0;35m"
+
 XrayR_install(){
  apt-get update
  apt-get install \
@@ -140,6 +141,4 @@ Nodes:
 ' > config.yml
 docker pull ghcr.io/xrayr-project/xrayr:latest && docker run --restart=always --name $api$node -d -v /config.yml --network=host ghcr.io/xrayr-project/xrayr:latest
 }
-ssr_install(){
-
-}
+XrayR_install
