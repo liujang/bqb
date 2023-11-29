@@ -59,7 +59,7 @@ echo -e "
  ${GREEN} 1.Shadowsocks
  ${GREEN} 2.V2ray
 "
-read -p "输入节点类型:" node_type
+read -p "输入节点类型:" bNum
 if [ "$bNum" = "1" ];then
 node_type="Shadowsocks"
 elif [ "$bNum" = "2" ];then
