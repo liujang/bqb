@@ -8,7 +8,7 @@ NO_COLOR="\033[0m"
 GREEN="\033[32m\033[01m"
 BLUE="\033[0;36m"
 FUCHSIA="\033[0;35m"
-
+XrayR_install(){
  apt-get update
  apt-get install \
     apt-transport-https \
