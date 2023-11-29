@@ -32,11 +32,11 @@ echo -e "
 "
 read -p "请输入选项:" aNum
 if [ "$aNum" = "1" ];then
-$panel = SSpanel
+$panel = 'SSpanel'
 elif [ "$aNum" = "2" ];then
-$panel = NewV2board
+$panel = 'NewV2board'
 elif [ "$aNum" = "3" ];then
-$panel = V2board
+$panel = 'V2board'
 else
 echo "输入错误"
 fi
@@ -47,9 +47,9 @@ echo -e "
 "
 read -p "请输入选项:" bNum
 if [ "$bNum" = "1" ];then
-$hhh = https
+$hhh = 'https'
 elif [ "$bNum" = "2" ];then
-$hhh = http
+$hhh = 'http'
 else
 echo "输入错误"
 fi
@@ -61,9 +61,9 @@ echo -e "
 "
 read -p "输入节点类型:" node_type
 if [ "$bNum" = "1" ];then
-$node_type = Shadowsocks
+$node_type = 'Shadowsocks'
 elif [ "$bNum" = "2" ];then
-$node_type = V2ray
+$node_type = 'V2ray'
 else
 echo "输入错误"
 fi
