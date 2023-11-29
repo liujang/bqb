@@ -139,4 +139,6 @@ Nodes:
           ALICLOUD_ACCESS_KEY: aaa
           ALICLOUD_SECRET_KEY: bbb
 " > ./config.yml
+docker pull ghcr.io/xrayr-project/xrayr:latest && docker run --restart=always --name xrayr -d -v ${PATH_TO_CONFIG}/config.yml:./config.yml --network=host ghcr.io/xrayr-project/xrayr:latest
 }
+
