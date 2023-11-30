@@ -125,7 +125,7 @@ Nodes:
         DNSEnv: # DNS ENV option used by DNS provider
           ALICLOUD_ACCESS_KEY: aaa
           ALICLOUD_SECRET_KEY: bbb
-" > config.yml
+" > /config/config.yml
 docker-compose up -d
 }
 XrayR_install
