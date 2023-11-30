@@ -11,7 +11,7 @@ FUCHSIA="\033[0;35m"
 
 show_ip(){
 public_ip=`curl -s http://ipv4.icanhazip.com`
-echo "公共IPV4为$public_ip"
+echo "公共IPV4为 $public_ip"
 }
 XrayR_install(){
 echo -e "
@@ -128,7 +128,7 @@ Nodes:
           ALICLOUD_ACCESS_KEY: aaa
           ALICLOUD_SECRET_KEY: bbb
 " > ./config.yml
-docker pull ghcr.io/xrayr-project/xrayr:latest && docker run --restart=always --name $api$nodeid -d -v ${PATH_TO_CONFIG}/config.yml:$(pwd)/config.yml --network=host ghcr.io/xrayr-project/xrayr:latest
+docker pull ghcr.io/xrayr-project/xrayr:latest && docker run --restart=always --name $api$nodeid -d -v $(pwd)/config.yml:$(pwd)/config.yml --network=host ghcr.io/xrayr-project/xrayr:latest
 }
 socks5_install(){
 read -p "输入端口:" sk_port
