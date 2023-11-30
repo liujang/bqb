@@ -14,8 +14,6 @@ public_ip=`curl -s http://ipv4.icanhazip.com`
 echo "公共IPV4为$public_ip"
 }
 XrayR_install(){
-git clone https://github.com/XrayR-project/XrayR-release
-cd XrayR-release
 echo -e "
  ${GREEN} 1.SSpanel
  ${GREEN} 2.NewV2board
@@ -129,8 +127,8 @@ Nodes:
         DNSEnv: # DNS ENV option used by DNS provider
           ALICLOUD_ACCESS_KEY: aaa
           ALICLOUD_SECRET_KEY: bbb
-" > ./config/config.yml
-docker-compose up -d
+" > ./config.yml
+docker pull ghcr.io/xrayr-project/xrayr:latest && docker run --restart=always --name $api$nodeid -d -v ${PATH_TO_CONFIG}/config.yml:$(pwd)/config.yml --network=host ghcr.io/xrayr-project/xrayr:latest
 }
 socks5_install(){
 read -p "输入端口:" sk_port
