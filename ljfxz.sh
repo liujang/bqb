@@ -9,6 +9,9 @@ GREEN="\033[32m\033[01m"
 BLUE="\033[0;36m"
 FUCHSIA="\033[0;35m"
 
+show_ip(){
+public_ip=`curl -s http://ipv4.icanhazip.com`
+}
 XrayR_install(){
 git clone https://github.com/XrayR-project/XrayR-release
 cd XrayR-release
@@ -128,4 +131,18 @@ Nodes:
 " > /config/config.yml
 docker-compose up -d
 }
-XrayR_install
+socks5_install(){
+read -p "输入端口:" sk_port
+read -p "输入用户名:" sk_user
+read -p "输入密码:" sk_passwd
+docker run -d --name socks5$sk_port -p $sk_port:$sk_port -e PROXY_USER=$sk_user -e PROXY_PASSWORD=$sk_passwd  serjs/go-socks5-proxy
+echo "
+IP：    $public_ip
+PORT:   $sk_port
+USER:   $sk_user
+PASSWD: $sk_passwd
+"
+}
+ss(){
+
+}
