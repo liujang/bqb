@@ -11,6 +11,7 @@ FUCHSIA="\033[0;35m"
 
 show_ip(){
 public_ip=`curl -s http://ipv4.icanhazip.com`
+echo "公共IPV4为$public_ip"
 }
 XrayR_install(){
 git clone https://github.com/XrayR-project/XrayR-release
@@ -143,7 +144,7 @@ USER:   $sk_user
 PASSWD: $sk_passwd
 "
 }
-ss(){
+ss_install(){
 read -p "输入端口:" ss_port
 read -p "输入密码:" ss_passwd
 echo "
@@ -159,3 +160,28 @@ echo "
 " > /shadowsocks-libev/config.json
 docker run -d -p $ss_port:$ss_port -p $ss_port:$ss_port/udp --name $ss_port -v $(pwd)/shadowsocks-libev:$(pwd)/shadowsocks-libev appso/shadowsocks-libev
 }
+menu(){
+show_ip
+echo -e " 
+ ${GREEN} 1.搭建XrayR
+ ${GREEN} 2.搭建socks5
+ ${GREEN} 3.搭建ss
+read -p " 请输入数字后[0-3] 按回车键:" num
+case "$num" in
+	1)
+	XrayR_install
+	;;
+	2)
+	socks5_install
+	;;
+	3)
+	ss_install
+	;;
+	*)	
+	echo "请输入正确数字 [0-3] 按回车键"
+	sleep 1s
+ menu
+	;;
+esac
+}
+menu
