@@ -129,7 +129,7 @@ Nodes:
         DNSEnv: # DNS ENV option used by DNS provider
           ALICLOUD_ACCESS_KEY: aaa
           ALICLOUD_SECRET_KEY: bbb
-" > /config/config.yml
+" > ./config/config.yml
 docker-compose up -d
 }
 socks5_install(){
@@ -157,7 +157,7 @@ echo "
     "\"fast_open\"":false,
     "\"mode\"":"\"tcp_and_udp\""
 }
-" > /shadowsocks-libev/config.json
+" > ./shadowsocks-libev/config.json
 docker run -d -p $ss_port:$ss_port -p $ss_port:$ss_port/udp --name $ss_port -v $(pwd)/shadowsocks-libev:$(pwd)/shadowsocks-libev appso/shadowsocks-libev
 }
 menu(){
