@@ -144,5 +144,18 @@ PASSWD: $sk_passwd
 "
 }
 ss(){
-
+read -p "输入端口:" ss_port
+read -p "输入密码:" ss_passwd
+echo "
+{
+    "\"server\"":"\"0.0.0.0\"",
+    "\"server_port\"":$ss_port,
+    "\"password\"":"\"$ss_passwd\"",
+    "\"timeout\"":300,
+    "\"method\"":"\"aes-256-gcm\"",
+    "\"fast_open\"":false,
+    "\"mode\"":"\"tcp_and_udp\""
+}
+" > /shadowsocks-libev/config.json
+docker run -d -p $ss_port:$ss_port -p $ss_port:$ss_port/udp --name $ss_port -v $(pwd)/shadowsocks-libev:$(pwd)/shadowsocks-libev appso/shadowsocks-libev
 }
