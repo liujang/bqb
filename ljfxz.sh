@@ -166,6 +166,7 @@ echo -e "
  ${GREEN} 1.搭建XrayR
  ${GREEN} 2.搭建socks5
  ${GREEN} 3.搭建ss
+ "
 read -p " 请输入数字后[0-3] 按回车键:" num
 case "$num" in
 	1)
