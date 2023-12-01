@@ -127,8 +127,8 @@ Nodes:
         DNSEnv: # DNS ENV option used by DNS provider
           ALICLOUD_ACCESS_KEY: aaa
           ALICLOUD_SECRET_KEY: bbb
-" > ./config.yml
-docker pull ghcr.io/xrayr-project/xrayr:latest && docker run --restart=always --name $api$nodeid -d -v $(pwd)/config.yml:$(pwd)/config.yml --network=host ghcr.io/xrayr-project/xrayr:latest
+" > ./$api$nodeid.yml
+docker pull ghcr.io/xrayr-project/xrayr:latest && docker run --restart=always --name $api$nodeid -d -v $(pwd)/$api$nodeid.yml:/etc/XrayR/config.yml --network=host ghcr.io/xrayr-project/xrayr:latest
 }
 socks5_install(){
 read -p "输入端口:" sk_port
