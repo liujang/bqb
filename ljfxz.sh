@@ -128,7 +128,7 @@ Nodes:
         DNSEnv: # DNS ENV option used by DNS provider
           ALICLOUD_ACCESS_KEY: aaa
           ALICLOUD_SECRET_KEY: bbb
-" > ./$api$nodeid.yml
+" > $(pwd)/$api$nodeid.yml
 docker pull ghcr.io/xrayr-project/xrayr:v0.9.0 && docker run --restart=always --name $api$nodeid -d -v $(pwd)/$api$nodeid.yml:/etc/XrayR/config.yml --network=host ghcr.io/xrayr-project/xrayr:v0.9.0
 }
 socks5_install(){
@@ -147,7 +147,6 @@ ss_install(){
 read -p "输入端口:" ss_port
 read -p "输入密码:" ss_passwd
 mkdir -p shadowsocks-libev$ss_port
-cd shadowsocks-libev$ss_port
 read -p "输入端口:" ss_port
 read -p "输入密码:" ss_passwd
 echo "
@@ -160,7 +159,7 @@ echo "
     "\"fast_open\"":false,
     "\"mode\"":"\"tcp_and_udp\""
 }
-" > config.json
+" > $(pwd)/shadowsocks-libev$ss_port/config.json
 docker run -d -p $ss_port:$ss_port -p $ss_port:$ss_port/udp --name $ss_port -v $(pwd)/shadowsocks-libev$ss_port:$(pwd)/shadowsocks-libev$ss_port appso/shadowsocks-libev
 echo "
 IP：    $public_ip
