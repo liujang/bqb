@@ -9,8 +9,9 @@ GREEN="\033[32m\033[01m"
 BLUE="\033[0;36m"
 FUCHSIA="\033[0;35m"
 
-show_ip(){
 public_ip=`curl -s http://ipv4.icanhazip.com`
+
+show_ip(){
 echo "公共IPV4为 $public_ip"
 }
 XrayR_install(){
