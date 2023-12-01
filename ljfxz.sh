@@ -146,6 +146,10 @@ PASSWD: $sk_passwd
 ss_install(){
 read -p "输入端口:" ss_port
 read -p "输入密码:" ss_passwd
+mkdir -p shadowsocks-libev$ss_port
+cd shadowsocks-libev$ss_port
+read -p "输入端口:" ss_port
+read -p "输入密码:" ss_passwd
 echo "
 {
     "\"server\"":"\"0.0.0.0\"",
@@ -156,8 +160,14 @@ echo "
     "\"fast_open\"":false,
     "\"mode\"":"\"tcp_and_udp\""
 }
-" > ./shadowsocks-libev/config.json
-docker run -d -p $ss_port:$ss_port -p $ss_port:$ss_port/udp --name $ss_port -v $(pwd)/shadowsocks-libev:$(pwd)/shadowsocks-libev appso/shadowsocks-libev
+" > config.json
+docker run -d -p $ss_port:$ss_port -p $ss_port:$ss_port/udp --name $ss_port -v $(pwd)/shadowsocks-libev$ss_port:$(pwd)/shadowsocks-libev$ss_port appso/shadowsocks-libev
+echo "
+IP：    $public_ip
+PORT:   $ss_port
+PASSWD: $ss_passwd
+METHOD: aes-256-gcm
+"
 }
 menu(){
 show_ip
