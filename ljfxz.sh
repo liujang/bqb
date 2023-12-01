@@ -180,12 +180,16 @@ read -p " 请输入数字后[0-3] 按回车键:" num
 case "$num" in
 	1)
 	XrayR_install
+        clear
+	menu
 	;;
 	2)
 	socks5_install
+        menu
 	;;
 	3)
 	ss_install
+        menu
 	;;
 	*)	
 	echo "请输入正确数字 [0-3] 按回车键"
