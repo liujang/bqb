@@ -31,6 +31,7 @@ iptables -P OUTPUT ACCEPT
 iptables -P FORWARD ACCEPT
 iptables-save > /etc/iptables.up.rules
 iptables-restore < /etc/iptables.up.rules
+fi
 }
 
 gre_over_ipsec_set1(){
