@@ -94,7 +94,8 @@ iptables -t nat -A PREROUTING -d ${LISTEN_IP}/32 -p tcp -m tcp --dport ${LISTEN_
 iptables -t nat -A PREROUTING -d ${LISTEN_IP}/32 -p udp -m udp --dport ${LISTEN_PORT} -j DNAT --to-destination ${REMOTE_VIRTUAL_IP}:${REMOTE_PORT}
 iptables -t nat -A POSTROUTING -d ${REMOTE_VIRTUAL_IP}/32 -p tcp -m tcp --dport ${REMOTE_PORT} -j SNAT --to-source ${LOCAL_VIRTUAL_IP}
 iptables -t nat -A POSTROUTING -d ${REMOTE_VIRTUAL_IP}/32 -p udp -m udp --dport ${REMOTE_PORT} -j SNAT --to-source ${LOCAL_VIRTUAL_IP}
-echo "${LISTEN_IP}:${LISTEN_PORT}:${REMOTE_VIRTUAL_IP}:${REMOTE_PORT}" >> /root/iptables.txt
+echo "${LISTEN_IP} ${LISTEN_PORT} ${REMOTE_VIRTUAL_IP} ${REMOTE_PORT}
+" >> /root/iptables.txt
 }
 
 iptables_set2(){
@@ -107,7 +108,23 @@ iptables -t nat -A PREROUTING -d ${LOCAL_VIRTUAL_IP}/32 -p tcp -m tcp --dport ${
 iptables -t nat -A PREROUTING -d ${LOCAL_VIRTUAL_IP}/32 -p udp -m udp --dport ${LISTEN_PORT} -j DNAT --to-destination ${REMOTE_IP}:${REMOTE_PORT}
 iptables -t nat -A POSTROUTING -d ${REMOTE_IP}/32 -p tcp -m tcp --dport ${REMOTE_PORT} -j SNAT --to-source ${LOCAL_IP}
 iptables -t nat -A POSTROUTING -d ${REMOTE_IP}/32 -p udp -m udp --dport ${REMOTE_PORT} -j SNAT --to-source ${LOCAL_IP}
-echo "${LOCAL_VIRTUAL_IP}:${LISTEN_PORT}:${REMOTE_IP}:${REMOTE_PORT}" >> /root/iptables.txt
+echo "${LOCAL_VIRTUAL_IP} ${LISTEN_PORT} ${REMOTE_IP} ${REMOTE_PORT}
+" >> /root/iptables.txt
+}
+
+view_iptables_list(){
+iptables_rows=`wc -l /root/iptables.txt | awk '{print $1}'`
+for((i=1;i<=$iptables_rows;i++));
+do
+listen_ip=`sed -n "$i, 1p" /etc/nginx/nginx.txt | awk '{print $1}'`
+listen_port=`sed -n "$i, 1p" /etc/nginx/nginx.txt | awk '{print $2}'`
+remote_ip=`sed -n "$i, 1p" /etc/nginx/nginx.txt | awk '{print $3}'`
+remote_port=`sed -n "$i, 1p" /etc/nginx/nginx.txt | awk '{print $4}'`
+echo -e "
+监听IP---监听端口---转发ip---转发端口
+${listen_ip}---${listen_port}---${remote_ip}---${remote_port}
+"
+done
 }
 
 add_gre_over_ipsec(){
