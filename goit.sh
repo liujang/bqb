@@ -1,7 +1,10 @@
 #!/bin/bash
 PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:~/bin
 export PATH
-echo -e "------------------tg:@ljfxz------------------"
+echo -e "------------------特别声明------------------
+本脚本采用 GRE OVER IPSEC TUNNEL的方式来加密流量数据，加密方式为AES-128-GCM
+--------------------write by tg:@ljfxz--------------------
+"
 
 gre_open(){
 modprobe ip_gre
