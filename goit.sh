@@ -127,6 +127,10 @@ ${listen_ip}---${listen_port}---${remote_ip}---${remote_port}
 done
 }
 
+delete_iptables(){
+
+}
+
 add_gre_over_ipsec(){
 gre_open
 echo -e "
