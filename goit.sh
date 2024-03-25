@@ -40,6 +40,9 @@ ip xfrm policy add src ${LOCAL_IP} dst ${REMOTE_IP} dir out tmpl src ${LOCAL_IP}
 ip xfrm policy add src ${REMOTE_IP} dst ${LOCAL_IP} dir in tmpl src ${REMOTE_IP} dst ${LOCAL_IP} proto esp reqid 0x622a73b4 mode transport
 ip xfrm policy add src ${REMOTE_IP} dst ${LOCAL_IP} dir fwd tmpl src ${REMOTE_IP} dst ${LOCAL_IP} proto esp reqid 0x622a73b4 mode transport
 cat > /root/goitzq.sh << EOF
+#!/bin/bash
+PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:~/bin
+export PATH
 ip tunnel add gre1 mode gre local ${LOCAL_IP} remote ${REMOTE_IP} ttl 255
 ip addr add ${LOCAL_VIRTUAL_IP} dev gre1 peer ${REMOTE_VIRTUAL_IP}
 ip link set gre1 up
@@ -48,6 +51,7 @@ ip xfrm state add src ${REMOTE_IP} dst ${LOCAL_IP} proto esp spi 0x622a73b4 reqi
 ip xfrm policy add src ${LOCAL_IP} dst ${REMOTE_IP} dir out tmpl src ${LOCAL_IP} dst ${REMOTE_IP} proto esp reqid 0x28f39549 mode transport
 ip xfrm policy add src ${REMOTE_IP} dst ${LOCAL_IP} dir in tmpl src ${REMOTE_IP} dst ${LOCAL_IP} proto esp reqid 0x622a73b4 mode transport
 ip xfrm policy add src ${REMOTE_IP} dst ${LOCAL_IP} dir fwd tmpl src ${REMOTE_IP} dst ${LOCAL_IP} proto esp reqid 0x622a73b4 mode transport
+iptables-restore < /etc/iptables.up.rules
 EOF
 }
 
@@ -65,6 +69,9 @@ ip xfrm policy add src ${LOCAL_IP} dst ${REMOTE_IP} dir out tmpl src ${LOCAL_IP}
 ip xfrm policy add src ${REMOTE_IP} dst ${LOCAL_IP} dir in tmpl src ${REMOTE_IP} dst ${LOCAL_IP} proto esp reqid 0x28f39549 mode transport 
 ip xfrm policy add src ${REMOTE_IP} dst ${LOCAL_IP} dir fwd tmpl src ${REMOTE_IP} dst ${LOCAL_IP} proto esp reqid 0x28f39549 mode transport 
 cat > /root/goitzq.sh << EOF
+#!/bin/bash
+PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:~/bin
+export PATH
 ip tunnel add gre1 mode gre local ${LOCAL_IP} remote ${REMOTE_IP} ttl 255
 ip addr add ${LOCAL_VIRTUAL_IP} dev gre1 peer ${REMOTE_VIRTUAL_IP}
 ip link set gre1 up
@@ -73,6 +80,7 @@ ip xfrm state add src ${LOCAL_IP} dst ${REMOTE_IP} proto esp spi 0x622a73b4 reqi
 ip xfrm policy add src ${LOCAL_IP} dst ${REMOTE_IP} dir out tmpl src ${LOCAL_IP} dst ${REMOTE_IP} proto esp reqid 0x622a73b4 mode transport 
 ip xfrm policy add src ${REMOTE_IP} dst ${LOCAL_IP} dir in tmpl src ${REMOTE_IP} dst ${LOCAL_IP} proto esp reqid 0x28f39549 mode transport 
 ip xfrm policy add src ${REMOTE_IP} dst ${LOCAL_IP} dir fwd tmpl src ${REMOTE_IP} dst ${LOCAL_IP} proto esp reqid 0x28f39549 mode transport 
+iptables-restore < /etc/iptables.up.rules
 EOF
 }
 
@@ -86,6 +94,8 @@ iptables -t nat -A PREROUTING -d ${LISTEN_IP}/32 -p tcp -m tcp --dport ${LISTEN_
 iptables -t nat -A PREROUTING -d ${LISTEN_IP}/32 -p udp -m udp --dport ${LISTEN_PORT} -j DNAT --to-destination ${REMOTE_VIRTUAL_IP}:${REMOTE_PORT}
 iptables -t nat -A POSTROUTING -d ${REMOTE_VIRTUAL_IP}/32 -p tcp -m tcp --dport ${REMOTE_PORT} -j SNAT --to-source ${LOCAL_VIRTUAL_IP}
 iptables -t nat -A POSTROUTING -d ${REMOTE_VIRTUAL_IP}/32 -p udp -m udp --dport ${REMOTE_PORT} -j SNAT --to-source ${LOCAL_VIRTUAL_IP}
+iptables-save > /etc/iptables.up.rules
+iptables-restore < /etc/iptables.up.rules
 }
 
 iptables_set2(){
@@ -98,6 +108,8 @@ iptables -t nat -A PREROUTING -d ${LOCAL_VIRTUAL_IP}/32 -p tcp -m tcp --dport ${
 iptables -t nat -A PREROUTING -d ${LOCAL_VIRTUAL_IP}/32 -p udp -m udp --dport ${LISTEN_PORT} -j DNAT --to-destination ${REMOTE_IP}:${REMOTE_PORT}
 iptables -t nat -A POSTROUTING -d ${REMOTE_IP}/32 -p tcp -m tcp --dport ${REMOTE_PORT} -j SNAT --to-source ${LOCAL_IP}
 iptables -t nat -A POSTROUTING -d ${REMOTE_IP}/32 -p udp -m udp --dport ${REMOTE_PORT} -j SNAT --to-source ${LOCAL_IP}
+iptables-save > /etc/iptables.up.rules
+iptables-restore < /etc/iptables.up.rules
 }
 
 add_gre_over_ipsec(){
