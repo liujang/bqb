@@ -94,8 +94,6 @@ iptables -t nat -A PREROUTING -d ${LISTEN_IP}/32 -p tcp -m tcp --dport ${LISTEN_
 iptables -t nat -A PREROUTING -d ${LISTEN_IP}/32 -p udp -m udp --dport ${LISTEN_PORT} -j DNAT --to-destination ${REMOTE_VIRTUAL_IP}:${REMOTE_PORT}
 iptables -t nat -A POSTROUTING -d ${REMOTE_VIRTUAL_IP}/32 -p tcp -m tcp --dport ${REMOTE_PORT} -j SNAT --to-source ${LOCAL_VIRTUAL_IP}
 iptables -t nat -A POSTROUTING -d ${REMOTE_VIRTUAL_IP}/32 -p udp -m udp --dport ${REMOTE_PORT} -j SNAT --to-source ${LOCAL_VIRTUAL_IP}
-echo "${LISTEN_IP} ${LISTEN_PORT} ${REMOTE_VIRTUAL_IP} ${REMOTE_PORT}
-" >> /root/iptables.txt
 }
 
 iptables_set2(){
@@ -108,22 +106,19 @@ iptables -t nat -A PREROUTING -d ${LOCAL_VIRTUAL_IP}/32 -p tcp -m tcp --dport ${
 iptables -t nat -A PREROUTING -d ${LOCAL_VIRTUAL_IP}/32 -p udp -m udp --dport ${LISTEN_PORT} -j DNAT --to-destination ${REMOTE_IP}:${REMOTE_PORT}
 iptables -t nat -A POSTROUTING -d ${REMOTE_IP}/32 -p tcp -m tcp --dport ${REMOTE_PORT} -j SNAT --to-source ${LOCAL_IP}
 iptables -t nat -A POSTROUTING -d ${REMOTE_IP}/32 -p udp -m udp --dport ${REMOTE_PORT} -j SNAT --to-source ${LOCAL_IP}
-echo "${LOCAL_VIRTUAL_IP} ${LISTEN_PORT} ${REMOTE_IP} ${REMOTE_PORT}
-" >> /root/iptables.txt
 }
 
 view_iptables_list(){
-iptables_rows=`wc -l /root/iptables.txt | awk '{print $1}'`
+iptables_list_rows=$(iptables -t nat -n -L PREROUTING --line-number | tail -n +3 | wc -l)
 for((i=1;i<=$iptables_rows;i++));
 do
-listen_ip=`sed -n "$i, 1p" /etc/nginx/nginx.txt | awk '{print $1}'`
-listen_port=`sed -n "$i, 1p" /etc/nginx/nginx.txt | awk '{print $2}'`
-remote_ip=`sed -n "$i, 1p" /etc/nginx/nginx.txt | awk '{print $3}'`
-remote_port=`sed -n "$i, 1p" /etc/nginx/nginx.txt | awk '{print $4}'`
-echo -e "
-监听IP---监听端口---转发ip---转发端口
-${listen_ip}---${listen_port}---${remote_ip}---${remote_port}
-"
+num=`iptables -t nat -n -L PREROUTING --line-number | grep "$i    DNAT" | awk '{print $1}'`
+type=`iptables -t nat -n -L PREROUTING --line-number | grep "$i    DNAT" | awk '{print $3}'`
+listen_ip=`iptables -t nat -n -L PREROUTING --line-number | grep "$i    DNAT" | awk '{print $6}'`
+listen_port=`iptables -t nat -n -L PREROUTING --line-number | grep "$i    DNAT" | awk '{print $8}' | awk -F "dpt:" '{print $2}'`
+remote_ipandport=`iptables -t nat -n -L PREROUTING --line-number | grep "$i    DNAT" | awk '{print $9}' | awk -F "to:" '{print $2}'`
+echo "序号:${num} 监听类型:${type} 监听ip/监听端口:"${listen_ip}:${listen_port} 转发ip/转发端口:${remote_ipandport}
+iptables -t nat -n -L PREROUTING --line-number
 done
 }
 
