@@ -238,9 +238,5 @@ case "$num" in
 	goit_menu
 	;;
 esac
-goit_menu
-else
-echo "输入错误" && exit 1
-fi
 }
 goit_menu
