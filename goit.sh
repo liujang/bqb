@@ -2,7 +2,7 @@
 PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:~/bin
 export PATH
 
-echo -e "
+echo -e"
 ----------------------------------特别声明----------------------------------
 --本脚本采用 GRE OVER IPSEC TUNNEL的方式来加密流量数据，加密方式为AES-128-GCM--
 ----------本脚本只支持debian，在debian10/debian11/debian12上测试通过----------
@@ -196,13 +196,13 @@ fi
 }
 
 goit_menu(){
-
 echo -e " 
  ${GREEN} 1.配置gre over ipsec
  ${GREEN} 2.安装iptables
  ${GREEN} 3.添加转发规则
  ${GREEN} 4.删除转发规则
- ${GREEN} 0.退出脚本"
+ ${GREEN} 0.退出脚本
+ "
 read -p " 请输入数字后[0-4] 按回车键:" num
 case "$num" in
 	1)
@@ -230,4 +230,3 @@ goit_menu
 else
 echo "输入错误" && exit 1
 fi
-goit_menu
