@@ -218,7 +218,7 @@ case "$num" in
 	add_gre_over_ipsec
 	;;
 	2)
-	install_iptables
+	iptables_install
 	;;
 	3)
 	add_iptables
