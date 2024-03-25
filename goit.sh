@@ -1,9 +1,11 @@
 #!/bin/bash
 PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:~/bin
 export PATH
-echo -e "------------------特别声明------------------
-本脚本采用 GRE OVER IPSEC TUNNEL的方式来加密流量数据，加密方式为AES-128-GCM
---------------------write by tg:@ljfxz--------------------
+echo -e "
+----------------------------------特别声明----------------------------------
+--本脚本采用 GRE OVER IPSEC TUNNEL的方式来加密流量数据，加密方式为AES-128-GCM--
+----------本脚本只支持debian，在debian10/debian11/debian12上测试通过----------
+-----------------------------write by tg:@ljfxz-----------------------------
 "
 
 gre_open(){
