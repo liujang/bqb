@@ -155,6 +155,8 @@ delete_iptables
 else
 goit_menu
 fi
+iptables-save > /etc/iptables.up.rules
+iptables-restore < /etc/iptables.up.rules
 }
 
 add_gre_over_ipsec(){
