@@ -111,7 +111,6 @@ iptables_set1
 else
 goit_menu
 fi
-iptables_set1
 }
 
 iptables_set2(){
@@ -133,7 +132,6 @@ iptables_set2
 else
 goit_menu
 fi
-iptables_set2
 }
 
 view_iptables_list(){
@@ -150,6 +148,7 @@ done
 }
 
 delete_iptables(){
+view_iptables_list
 read -p "输入要删除的序号:" Num
 iptables -t nat -D PREROUTING ${Num}
 iptables -t nat -D POSTROUTING ${Num}
@@ -160,7 +159,6 @@ delete_iptables
 else
 goit_menu
 fi
-delete_iptables
 }
 
 add_gre_over_ipsec(){
@@ -189,6 +187,7 @@ WantedBy=multi-user.target
 EOF
 systemctl enable goitzq --now
 systemctl daemon-reload
+goit_menu
 }
 
 add_iptables(){
