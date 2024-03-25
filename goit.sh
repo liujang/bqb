@@ -94,6 +94,15 @@ iptables -t nat -A PREROUTING -d ${LISTEN_IP}/32 -p tcp -m tcp --dport ${LISTEN_
 iptables -t nat -A PREROUTING -d ${LISTEN_IP}/32 -p udp -m udp --dport ${LISTEN_PORT} -j DNAT --to-destination ${REMOTE_VIRTUAL_IP}:${REMOTE_PORT}
 iptables -t nat -A POSTROUTING -d ${REMOTE_VIRTUAL_IP}/32 -p tcp -m tcp --dport ${REMOTE_PORT} -j SNAT --to-source ${LOCAL_VIRTUAL_IP}
 iptables -t nat -A POSTROUTING -d ${REMOTE_VIRTUAL_IP}/32 -p udp -m udp --dport ${REMOTE_PORT} -j SNAT --to-source ${LOCAL_VIRTUAL_IP}
+iptables-save > /etc/iptables.up.rules
+iptables-restore < /etc/iptables.up.rules
+read -e -p "是否继续 添加端口转发配置？[Y/n]:" addyn
+[[ -z ${addyn} ]] && addyn="y"
+if [[ ${addyn} == [Yy] ]]; then
+else
+goit_menu
+fi
+iptables_set1
 }
 
 iptables_set2(){
@@ -106,6 +115,15 @@ iptables -t nat -A PREROUTING -d ${LOCAL_VIRTUAL_IP}/32 -p tcp -m tcp --dport ${
 iptables -t nat -A PREROUTING -d ${LOCAL_VIRTUAL_IP}/32 -p udp -m udp --dport ${LISTEN_PORT} -j DNAT --to-destination ${REMOTE_IP}:${REMOTE_PORT}
 iptables -t nat -A POSTROUTING -d ${REMOTE_IP}/32 -p tcp -m tcp --dport ${REMOTE_PORT} -j SNAT --to-source ${LOCAL_IP}
 iptables -t nat -A POSTROUTING -d ${REMOTE_IP}/32 -p udp -m udp --dport ${REMOTE_PORT} -j SNAT --to-source ${LOCAL_IP}
+iptables-save > /etc/iptables.up.rules
+iptables-restore < /etc/iptables.up.rules
+read -e -p "是否继续 添加端口转发配置？[Y/n]:" addyn
+[[ -z ${addyn} ]] && addyn="y"
+if [[ ${addyn} == [Yy] ]]; then
+else
+goit_menu
+fi
+iptables_set2
 }
 
 view_iptables_list(){
@@ -122,13 +140,17 @@ done
 }
 
 delete_iptables(){
-while true
-do
-view_iptables_list
 read -p "输入要删除的序号:" Num
 iptables -t nat -D PREROUTING ${Num}
 iptables -t nat -D POSTROUTING ${Num}
-done
+read -e -p "是否继续 删除转发配置？[Y/n]:" addyn
+[[ -z ${addyn} ]] && addyn="y"
+if [[ ${addyn} == [Yy] ]]; then
+delete_iptables
+else
+goit_menu
+fi
+delete_iptables
 }
 
 add_gre_over_ipsec(){
@@ -170,6 +192,40 @@ iptables_set1
 elif [ "${aNum}" = "2" ];then
 iptables_set2
 fi
-iptables-save > /etc/iptables.up.rules
-iptables-restore < /etc/iptables.up.rules
 }
+
+goit_menu(){
+
+echo -e " 
+ ${GREEN} 1.启动gre over ipsec
+ ${GREEN} 2.安装iptables
+ ${GREEN} 3.添加转发规则
+ ${GREEN} 4.删除转发规则
+ ${GREEN} 0.退出脚本"
+read -p " 请输入数字后[0-4] 按回车键:" num
+case "$num" in
+	1)
+	install_nginx
+	;;
+	2)
+	uninstall_nginx
+	;;
+	3)
+	create_ssl
+	;;
+	4)
+	add_tunnelconf
+	;;
+	0)
+	exit 1
+	;;
+	*)	
+	echo "请输入正确数字 [0-4] 按回车键"
+	goit_menu
+	;;
+esac
+}
+goit_menu
+else
+echo "输入错误" && exit 1
+fi
