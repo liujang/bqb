@@ -117,7 +117,7 @@ type=`iptables -t nat -nL PREROUTING --line-number | grep "$i    DNAT" | awk '{p
 listen_ip=`iptables -t nat -nL PREROUTING --line-number | grep "$i    DNAT" | awk '{print $6}'`
 listen_port=`iptables -t nat -nL PREROUTING --line-number | grep "$i    DNAT" | awk '{print $8}' | awk -F "dpt:" '{print $2}'`
 remote_ipandport=`iptables -t nat -nL PREROUTING --line-number | grep "$i    DNAT" | awk '{print $9}' | awk -F "to:" '{print $2}'`
-echo "序号:${num}   类型:${type}   监听|"${listen_ip}:${listen_port}   转发|${remote_ipandport}
+echo "序号:${num}   类型:${type}   监听>${listen_ip}:${listen_port}   转发>${remote_ipandport}"
 done
 }
 
