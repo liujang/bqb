@@ -92,8 +92,8 @@ iptables_set1(){
 read -p "输入要监听的ip:" LISTEN_IP
 read -p "输入要监听的端口:" LISTEN_PORT
 read -p "输入对端虚拟ip:" REMOTE_VIRTUAL_IP
-read -p "输入要转发的端口" REMOTE_PORT
-read -p "输入本机虚拟ip" LOCAL_VIRTUAL_IP
+read -p "输入要转发的端口:" REMOTE_PORT
+read -p "输入本机虚拟ip:" LOCAL_VIRTUAL_IP
 iptables -t nat -A PREROUTING -d ${LISTEN_IP}/32 -p tcp -m tcp --dport ${LISTEN_PORT} -j DNAT --to-destination ${REMOTE_VIRTUAL_IP}:${REMOTE_PORT}
 iptables -t nat -A PREROUTING -d ${LISTEN_IP}/32 -p udp -m udp --dport ${LISTEN_PORT} -j DNAT --to-destination ${REMOTE_VIRTUAL_IP}:${REMOTE_PORT}
 iptables -t nat -A POSTROUTING -d ${REMOTE_VIRTUAL_IP}/32 -p tcp -m tcp --dport ${REMOTE_PORT} -j SNAT --to-source ${LOCAL_VIRTUAL_IP}
