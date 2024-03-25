@@ -2,7 +2,13 @@
 PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:~/bin
 export PATH
 
-echo -e"
+RED_COLOR="\033[0;31m"
+NO_COLOR="\033[0m"
+GREEN="\033[32m\033[01m"
+BLUE="\033[0;36m"
+FUCHSIA="\033[0;35m"
+
+echo -e "
 ----------------------------------特别声明----------------------------------
 --本脚本采用 GRE OVER IPSEC TUNNEL的方式来加密流量数据，加密方式为AES-128-GCM--
 ----------本脚本只支持debian，在debian10/debian11/debian12上测试通过----------
@@ -100,6 +106,7 @@ iptables-restore < /etc/iptables.up.rules
 read -e -p "是否继续 添加端口转发配置？[Y/n]:" addyn
 [[ -z ${addyn} ]] && addyn="y"
 if [[ ${addyn} == [Yy] ]]; then
+iptables_set1
 else
 goit_menu
 fi
@@ -121,6 +128,7 @@ iptables-restore < /etc/iptables.up.rules
 read -e -p "是否继续 添加端口转发配置？[Y/n]:" addyn
 [[ -z ${addyn} ]] && addyn="y"
 if [[ ${addyn} == [Yy] ]]; then
+iptables_set2
 else
 goit_menu
 fi
