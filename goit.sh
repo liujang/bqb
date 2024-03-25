@@ -210,9 +210,10 @@ echo -e "
  ${GREEN} 2.安装iptables
  ${GREEN} 3.添加转发规则
  ${GREEN} 4.删除转发规则
+ ${GREEN} 5.查看转发规则
  ${GREEN} 0.退出脚本
  "
-read -p " 请输入数字后[0-4] 按回车键:" num
+read -p " 请输入数字后[0-5p] 按回车键:" num
 case "$num" in
 	1)
 	add_gre_over_ipsec
@@ -226,11 +227,14 @@ case "$num" in
 	4)
 	delete_iptables
 	;;
+        5)
+	view_iptables_list
+	;;
 	0)
 	exit 1
 	;;
 	*)	
-	echo "请输入正确数字 [0-4] 按回车键"
+	echo "请输入正确数字 [0-5] 按回车键"
 	goit_menu
 	;;
 esac
