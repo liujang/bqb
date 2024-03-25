@@ -109,14 +109,14 @@ iptables -t nat -A POSTROUTING -d ${REMOTE_IP}/32 -p udp -m udp --dport ${REMOTE
 }
 
 view_iptables_list(){
-iptables_list_rows=$(iptables -t nat -n -L PREROUTING --line-number | tail -n +3 | wc -l)
-for((i=1;i<=$iptables_rows;i++));
+iptables_list_rows=$(iptables -t nat -vnL PREROUTING --line-number | tail -n +3 | wc -l)
+for((i=1;i<=$iptables_list_rows;i++));
 do
-num=`iptables -t nat -n -L PREROUTING --line-number | grep "$i    DNAT" | awk '{print $1}'`
-type=`iptables -t nat -n -L PREROUTING --line-number | grep "$i    DNAT" | awk '{print $3}'`
-listen_ip=`iptables -t nat -n -L PREROUTING --line-number | grep "$i    DNAT" | awk '{print $6}'`
-listen_port=`iptables -t nat -n -L PREROUTING --line-number | grep "$i    DNAT" | awk '{print $8}' | awk -F "dpt:" '{print $2}'`
-remote_ipandport=`iptables -t nat -n -L PREROUTING --line-number | grep "$i    DNAT" | awk '{print $9}' | awk -F "to:" '{print $2}'`
+num=`iptables -t nat -vnL PREROUTING --line-number | grep "$i    DNAT" | awk '{print $1}'`
+type=`iptables -t nat -vnL PREROUTING --line-number | grep "$i    DNAT" | awk '{print $3}'`
+listen_ip=`iptables -t nat -vnL PREROUTING --line-number | grep "$i    DNAT" | awk '{print $6}'`
+listen_port=`iptables -t nat -vnL PREROUTING --line-number | grep "$i    DNAT" | awk '{print $8}' | awk -F "dpt:" '{print $2}'`
+remote_ipandport=`iptables -t nat -vnL PREROUTING --line-number | grep "$i    DNAT" | awk '{print $9}' | awk -F "to:" '{print $2}'`
 echo "序号:${num} 监听类型:${type} 监听ip/监听端口:"${listen_ip}:${listen_port} 转发ip/转发端口:${remote_ipandport}
 iptables -t nat -n -L PREROUTING --line-number
 done
