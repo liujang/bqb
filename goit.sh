@@ -94,8 +94,6 @@ iptables -t nat -A PREROUTING -d ${LISTEN_IP}/32 -p tcp -m tcp --dport ${LISTEN_
 iptables -t nat -A PREROUTING -d ${LISTEN_IP}/32 -p udp -m udp --dport ${LISTEN_PORT} -j DNAT --to-destination ${REMOTE_VIRTUAL_IP}:${REMOTE_PORT}
 iptables -t nat -A POSTROUTING -d ${REMOTE_VIRTUAL_IP}/32 -p tcp -m tcp --dport ${REMOTE_PORT} -j SNAT --to-source ${LOCAL_VIRTUAL_IP}
 iptables -t nat -A POSTROUTING -d ${REMOTE_VIRTUAL_IP}/32 -p udp -m udp --dport ${REMOTE_PORT} -j SNAT --to-source ${LOCAL_VIRTUAL_IP}
-iptables-save > /etc/iptables.up.rules
-iptables-restore < /etc/iptables.up.rules
 }
 
 iptables_set2(){
@@ -108,8 +106,6 @@ iptables -t nat -A PREROUTING -d ${LOCAL_VIRTUAL_IP}/32 -p tcp -m tcp --dport ${
 iptables -t nat -A PREROUTING -d ${LOCAL_VIRTUAL_IP}/32 -p udp -m udp --dport ${LISTEN_PORT} -j DNAT --to-destination ${REMOTE_IP}:${REMOTE_PORT}
 iptables -t nat -A POSTROUTING -d ${REMOTE_IP}/32 -p tcp -m tcp --dport ${REMOTE_PORT} -j SNAT --to-source ${LOCAL_IP}
 iptables -t nat -A POSTROUTING -d ${REMOTE_IP}/32 -p udp -m udp --dport ${REMOTE_PORT} -j SNAT --to-source ${LOCAL_IP}
-iptables-save > /etc/iptables.up.rules
-iptables-restore < /etc/iptables.up.rules
 }
 
 add_gre_over_ipsec(){
@@ -138,4 +134,19 @@ WantedBy=multi-user.target
 EOF
 systemctl enable goitzq --now
 systemctl daemon-reload
+}
+
+add_iptables(){
+echo -e "
+ ${GREEN} 1.中转机(入口)
+ ${GREEN} 2.对端机(出口)
+ "
+read -p "输入选项:" aNum
+if [ "${aNum}" = "1" ];then
+iptables_set1
+elif [ "${aNum}" = "2" ];then
+iptables_set2
+fi
+iptables-save > /etc/iptables.up.rules
+iptables-restore < /etc/iptables.up.rules
 }
