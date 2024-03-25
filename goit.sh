@@ -197,7 +197,7 @@ fi
 goit_menu(){
 
 echo -e " 
- ${GREEN} 1.启动gre over ipsec
+ ${GREEN} 1.配置gre over ipsec
  ${GREEN} 2.安装iptables
  ${GREEN} 3.添加转发规则
  ${GREEN} 4.删除转发规则
@@ -205,16 +205,16 @@ echo -e "
 read -p " 请输入数字后[0-4] 按回车键:" num
 case "$num" in
 	1)
-	install_nginx
+	add_gre_over_ipsec
 	;;
 	2)
-	uninstall_nginx
+	install_iptables
 	;;
 	3)
-	create_ssl
+	add_iptables
 	;;
 	4)
-	add_tunnelconf
+	delete_iptables
 	;;
 	0)
 	exit 1
@@ -229,3 +229,4 @@ goit_menu
 else
 echo "输入错误" && exit 1
 fi
+goit_menu
