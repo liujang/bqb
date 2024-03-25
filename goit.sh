@@ -122,7 +122,13 @@ done
 }
 
 delete_iptables(){
-
+while true
+do
+view_iptables_list
+read -p "输入要删除的序号:" Num
+iptables -t nat -D PREROUTING ${Num}
+iptables -t nat -D POSTROUTING ${Num}
+done
 }
 
 add_gre_over_ipsec(){
