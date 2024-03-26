@@ -22,7 +22,7 @@ sysctl -p
 }
 
 iptables_install(){
-apt-get update && apt-get install -y iptables
+apt-get update && apt-get install -y iptables host
 iptables -P INPUT ACCEPT
 iptables -P OUTPUT ACCEPT
 iptables -P FORWARD ACCEPT
@@ -115,10 +115,20 @@ read -p "输入要监听的端口:" LISTEN_PORT
 read -p "输入本机虚拟ip:" LOCAL_VIRTUAL_IP
 read -p "输入要转发的ip:" REMOTE_IP
 read -p "输入要转发的端口:" REMOTE_PORT
+ip_regex='^([0-9]{1,3}\.){3}[0-9]{1,3}$'
+if [[ ${REMOTE_IP} =~ ${ip_regex} ]]; then
 iptables -t nat -A PREROUTING -d ${LOCAL_VIRTUAL_IP}/32 -p tcp -m tcp --dport ${LISTEN_PORT} -j DNAT --to-destination ${REMOTE_IP}:${REMOTE_PORT}
 iptables -t nat -A PREROUTING -d ${LOCAL_VIRTUAL_IP}/32 -p udp -m udp --dport ${LISTEN_PORT} -j DNAT --to-destination ${REMOTE_IP}:${REMOTE_PORT}
 iptables -t nat -A POSTROUTING -d ${REMOTE_IP}/32 -p tcp -m tcp --dport ${REMOTE_PORT} -j SNAT --to-source ${LOCAL_IP}
 iptables -t nat -A POSTROUTING -d ${REMOTE_IP}/32 -p udp -m udp --dport ${REMOTE_PORT} -j SNAT --to-source ${LOCAL_IP}
+else
+domainip=`host ${REMOTE_IP} | grep "address" | tail -n +1 | awk '{print $4}'`
+iptables -t nat -A PREROUTING -d ${LOCAL_VIRTUAL_IP}/32 -p tcp -m tcp --dport ${LISTEN_PORT} -j DNAT --to-destination ${domainip}:${REMOTE_PORT}
+iptables -t nat -A PREROUTING -d ${LOCAL_VIRTUAL_IP}/32 -p udp -m udp --dport ${LISTEN_PORT} -j DNAT --to-destination ${domainip}:${REMOTE_PORT}
+iptables -t nat -A POSTROUTING -d ${domainip}/32 -p tcp -m tcp --dport ${REMOTE_PORT} -j SNAT --to-source ${LOCAL_IP}
+iptables -t nat -A POSTROUTING -d ${domainip}/32 -p udp -m udp --dport ${REMOTE_PORT} -j SNAT --to-source ${LOCAL_IP}
+echo "${REMOTE_IP} ${domainip}" >> /root/domainlist.txt
+fi
 iptables-save > /etc/iptables.up.rules
 iptables-restore < /etc/iptables.up.rules
 read -e -p "是否继续 添加端口转发配置？[Y/n]:" addyn
