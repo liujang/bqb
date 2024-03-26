@@ -57,7 +57,7 @@ ExecStart=/usr/bin/bash /root/iptablesddns.sh
 
 [Timer]
 OnBootSec=1min
-OnUnitActiveSec=2min
+OnUnitActiveSec=1min
 
 [Install]
 WantedBy=multi-user.target
