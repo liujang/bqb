@@ -42,7 +42,7 @@ domain_now_ip=`host ${domain_ip} | grep "address" | tail -n +1 | awk '{print $4}
 if [ "${domain_ip}" = "${domain_now_ip}" ]; then
 exit 1
 else
-sed -i "s/${domain_ip}/${domain_now_ip}/g" `grep -rl "${domain_ip}" /root/domainlist.txt`
+sed -i "s/${domain_ip}/${domain_now_ip}/g" `grep -rl "${domain_ip}" /etc/iptables.up.rules`
 fi
 done
 iptables-restore < /etc/iptables.up.rules
