@@ -28,6 +28,42 @@ iptables -P OUTPUT ACCEPT
 iptables -P FORWARD ACCEPT
 iptables-save > /etc/iptables.up.rules
 iptables-restore < /etc/iptables.up.rules
+cat > /root/iptablesddns.sh << EOF
+chmod +x /root/iptablesddns.sh
+#!/bin/bash
+PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:~/bin
+export PATH
+domainlist_rows=`wc -l /root/domainlist.txt | awk '{print $1}'`
+for((i=1;i<=$nginx_rows;i++));  
+do
+domain=listen_ip=`sed -n "$i, 1p" /root/domainlist.txt | awk '{print $1}'`
+domain_ip=`sed -n "$i, 1p" /root/domainlist.txt | awk '{print $2}'`
+domain_now_ip=`host ${domain_ip} | grep "address" | tail -n +1 | awk '{print $4}'`
+if [ "${domain_ip}" = "${domain_now_ip}" ]; then
+exit 1
+else
+sed -i "s/${domain_ip}/${domain_now_ip}/g" `grep -rl "${domain_ip}" /root/domainlist.txt`
+fi
+done
+iptables-restore < /etc/iptables.up.rules
+EOF
+cat > /usr/lib/systemd/system/iptablesddns.service << EOF
+[Unit]
+Description=iptablesddns
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/bash /root/iptablesddns.sh
+
+[Timer]
+OnBootSec=1min
+OnUnitActiveSec=2min
+
+[Install]
+WantedBy=multi-user.target
+EOF
+systemctl enable iptablesddns --now
+systemctl daemon-reload
 }
 
 gre_over_ipsec_set1(){
