@@ -28,8 +28,7 @@ iptables -P OUTPUT ACCEPT
 iptables -P FORWARD ACCEPT
 iptables-save > /etc/iptables.up.rules
 iptables-restore < /etc/iptables.up.rules
-cat > /root/iptablesddns.sh << EOF
-chmod +x /root/iptablesddns.sh
+echo -e "
 #!/bin/bash
 PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:~/bin
 export PATH
@@ -45,6 +44,8 @@ else
 sed -i "s/${domain_ip}/${domain_now_ip}/g" `grep -rl "${domain_ip}" /etc/iptables.up.rules`
 sed -i "s/${domain_ip}/${domain_now_ip}/g" `grep -rl "${domain_ip}" /root/domainlist.txt`
 fi
+" > /root/iptablesddns.sh
+chmod +x /root/iptablesddns.sh
 done
 iptables-restore < /etc/iptables.up.rules
 EOF
