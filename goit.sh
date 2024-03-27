@@ -248,7 +248,7 @@ fi
 }
 
 goit_menu(){
-echo -e " ${NO_COLOR}
+echo -e "
  ${GREEN} 1.配置gre over ipsec
  ${GREEN} 2.安装iptables
  ${GREEN} 3.添加转发规则
