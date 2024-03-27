@@ -35,7 +35,7 @@ export PATH
 domainlist_rows=`wc -l /root/domainlist.txt | awk '{print $1}'`
 for((i=1;i<=${domainlist_rows};i++));  
 do
-domain=listen_ip=`sed -n "$i, 1p" /root/domainlist.txt | awk '{print $1}'`
+domain=`sed -n "$i, 1p" /root/domainlist.txt | awk '{print $1}'`
 domain_ip=`sed -n "$i, 1p" /root/domainlist.txt | awk '{print $2}'`
 domain_now_ip=`host ${domain} | grep "address" | tail -n +1 | awk '{print $4}'`
 if [ "${domain_ip}" = "${domain_now_ip}" ]; then
