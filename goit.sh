@@ -54,7 +54,7 @@ cat > /usr/lib/systemd/system/iptablesddns.service << EOF
 Description=iptablesddns
 
 [Service]
-Type=oneshot
+Type=simple
 ExecStart=/usr/bin/bash /root/iptablesddns.sh
 
 [Timer]
