@@ -181,7 +181,7 @@ iptables_list_rows=$(iptables -t nat -nL PREROUTING --line-number | tail -n +3 |
 for((i=1;i<=$iptables_list_rows;i++));
 do
 num=`iptables -t nat -nL PREROUTING --line-number | grep "$i    DNAT" | awk '{print $1}'`
-type=`iptables -t nat -nL PREROUTING --line-number | grep "$i    DNAT" | awk '{print $3}'`
+type=`iptables -t nat -nL PREROUTING --line-number | grep "$i    DNAT" | awk '{print $7}'`
 listen_ip=`iptables -t nat -nL PREROUTING --line-number | grep "$i    DNAT" | awk '{print $6}'`
 listen_port=`iptables -t nat -nL PREROUTING --line-number | grep "$i    DNAT" | awk '{print $8}' | awk -F "dpt:" '{print $2}'`
 remote_ipandport=`iptables -t nat -nL PREROUTING --line-number | grep "$i    DNAT" | awk '{print $9}' | awk -F "to:" '{print $2}'`
