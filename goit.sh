@@ -44,11 +44,11 @@ else
 sed -i "s/${domain_ip}/${domain_now_ip}/g" `grep -rl "${domain_ip}" /etc/iptables.up.rules`
 sed -i "s/${domain_ip}/${domain_now_ip}/g" `grep -rl "${domain_ip}" /root/domainlist.txt`
 fi
+done
 " > /root/iptablesddns.sh
 chmod +x /root/iptablesddns.sh
-done
 iptables-restore < /etc/iptables.up.rules
-EOF
+
 cat > /usr/lib/systemd/system/iptablesddns.service << EOF
 [Unit]
 Description=iptablesddns
