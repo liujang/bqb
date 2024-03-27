@@ -56,10 +56,8 @@ Description=iptablesddns
 [Service]
 Type=simple
 ExecStart=/usr/bin/bash /root/iptablesddns.sh
-
-[Timer]
-OnBootSec=1min
-OnUnitActiveSec=1min
+Restart=always
+RestartSec=30
 
 [Install]
 WantedBy=multi-user.target
